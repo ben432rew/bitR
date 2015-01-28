@@ -1,5 +1,5 @@
-from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from django.views.generic import View
 
@@ -32,3 +32,9 @@ class Login( View ):
             return redirect('/bitmess/' + str(user.id))
         else:
             return render ( request, 'bitrest/index.html', {'error': 'Incorrect Login', 'signup':UserCreationForm(), 'login':AuthenticationForm(), "error":"Incorrect Input"})
+
+
+class Logout( View ):
+    def get( self, request ):
+        logout( request )
+        return redirect( '/')  

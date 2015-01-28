@@ -6,4 +6,5 @@ urlpatterns = patterns('',
     url(r'^$', Index.as_view(), name="index" ),
     url(r'^signup', Signup.as_view(), name="signup" ),
     url(r'^login', Login.as_view(), name="login" ),
+    url(r'^logout', Logout.as_view(), name="logout" ),
 )

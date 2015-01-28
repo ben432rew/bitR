@@ -4,7 +4,7 @@ from django.db import models
 
 class BitKey(models.Model):
     key = models.CharField(max_length=200)
-    created_at = models.CharField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey( User )
     is_passive = models.BooleanField(default=False)
 
