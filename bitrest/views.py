@@ -34,6 +34,22 @@ class Login( View ):
             return render ( request, 'bitrest/index.html', {'error': 'Incorrect Login', 'signup':UserCreationForm(), 'login':AuthenticationForm(), "error":"Incorrect Input"})
 
 
+class About( View ):
+    pass
+
+
+class FAQ( View ):
+    pass
+
+
+class Press( View ):
+    pass
+
+
+class Blog ( View ):
+    pass
+    
+
 class Logout( View ):
     def get( self, request ):
         logout( request )
