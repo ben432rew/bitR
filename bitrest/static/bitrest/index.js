@@ -1,11 +1,11 @@
 $(document).ready(function(){
-    $( "#signup_modal" ).hide();
-    $('#signup_button').on('click', function(e) {
-        $( ".views" ).slideUp()
-        $("#signup_modal").slideDown()
+    $( ".signup" ).hide();
+    $('#signup').on('click', function(e) {
+        $( ".login" ).hide();
+        $( ".signup" ).slideUp();
     })
-    $('#login_button').on('click', function(e) {
-        $( ".views" ).slideUp()
-        $("#login_modal").slideDown()
-    })
+    $('#login').on('click', function(e) {
+        $( ".signup" ).hide();
+        $( ".login" ).slideUp();
+    })    
 });
