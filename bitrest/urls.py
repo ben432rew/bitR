@@ -2,8 +2,6 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
 urlpatterns = patterns('',
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^', include('bitrest.urls')),
-    url(r'^bitrest/', include('bitrest.urls')),
-    url(r'^bitmess/', include('bitmess.urls')),
+    url(r'^$', Index.as_view(), name="index" ),
+    url(r'^$', login_required( Index.as_view() ), name="index" ),
 )
