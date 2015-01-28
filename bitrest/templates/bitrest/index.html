@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Bitr</title>
+    </head>
+    <body>
+        <form action="/bitrest/signup" method="POST">
+            {% csrf_token %}
+            
+            {{ signup.as_p }}
+
+            <button class="btn btn-default">
+                Sign Up
+            </button>
+        </form>
+
+        <form action="/bitrest/login" method="POST">
+            {% csrf_token %}
+
+            {{ login.as_p }}
+
+            <button class="btn btn-default">
+                Login
+            </button>
+        </form>
+    </body>
+</html>
