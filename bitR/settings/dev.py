@@ -46,9 +46,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.cache.FetchFromCacheMiddleware',
 )
 
-ROOT_URLCONF = 'trading_strategy.urls'
+ROOT_URLCONF = 'bitR.urls'
 
-WSGI_APPLICATION = 'trading_strategy.wsgi.application'
+WSGI_APPLICATION = 'bitR.wsgi.application'
 
 
 # Internationalization
