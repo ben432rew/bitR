@@ -1,4 +1,5 @@
 $(document).ready(function(){
+    $.material.ripples()
     $( ".signup" ).hide();
     $('#signup').on('click', function(e) {
         $( ".login" ).hide('medium');

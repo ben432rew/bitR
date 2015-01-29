@@ -4,26 +4,37 @@
     {% load staticfiles %}
     <script src="{%static 'js/index.js' %}"></script>
     {{ error }} <br>
+    <div class="row">
+        <div class="col-md-8">
+            <img src="{%static 'images/road_rail.jpeg' %}" class="img-responsive" alt="Sailboat">
+        </div>
 
-    <form action={% url 'bitrest:signup' %} class="signup form-horizontal" method="POST">
-        {% csrf_token %}
-        
-        {{ signup|as_bootstrap }}
+        <div class="col-md-1"></div>
 
-        <button class="btn btn-default">
-            Sign Up
-        </button>
-    </form>
+        <div class="col-md-3">
+            <h1>BitR</h1>
+            <form action={% url 'bitrest:signup' %} class="signup form-horizontal" method="POST">
+                {% csrf_token %}
+                
+                {{ signup|as_bootstrap }}
 
-    <form action={% url 'bitrest:login' %} class="login form-horizontal" method="POST">
-        {% csrf_token %}
+                <button class="btn btn-material-bluegrey">
+                    Sign Up
+                </button>
+            </form>
 
-        {{ login|as_bootstrap }}
+            <form action={% url 'bitrest:login' %} class="login form-horizontal" method="POST">
+                {% csrf_token %}
 
-        <button class="btn btn-default">
-            Login
-        </button>
-    </form>
-    <p class="signup">Already have a BitR account?  <button id="login">Login</button></p>
-    <p class="login">Don't have a BitR account?  <button id="signup">Sign up now</button></p>
+                {{ login|as_bootstrap }}
+
+                <button class="btn btn-material-bluegrey">
+                    Login
+                </button>
+            </form>
+            <p class="signup">Already have a BitR account?  <button id="login" class="btn btn-material-bluegrey">Login</button></p>
+            <p class="login">Don't have a BitR account?  <button id="signup" class="btn btn-material-bluegrey">Sign up now</button></p>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
 {% endblock %}

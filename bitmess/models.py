@@ -9,7 +9,3 @@ class BitKey(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey( User )
     is_passive = models.BooleanField(default=False)
-
-
-class ReadMessage(models.Model):
-    key = models.CharField(max_length=200, primary_key=True)
