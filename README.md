@@ -43,3 +43,5 @@ So instead of using bootstraps grid system I have implemented a custom version t
 To create a row we use the "section" class.
 
 To create a column with a sopan from 1-12 we use "col span_(number from 1-12 here)"
+
+Anything below 480 px and everything will start to stack. If we dont like this it can be changed easily.
