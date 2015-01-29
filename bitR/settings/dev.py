@@ -34,6 +34,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'bitrest',
     'bitmess',
+    "django_forms_bootstrap",
 )
 
 MIDDLEWARE_CLASSES = (

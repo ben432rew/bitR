@@ -1,24 +1,24 @@
 {% extends "bitrest/base.html" %}
-
 {% block content %}
+    {% load bootstrap_tags %}
     {% load staticfiles %}
-    <script src="{%static 'bitrest/index.js' %}"></script>
+    <script src="{%static 'js/index.js' %}"></script>
     {{ error }} <br>
 
-    <form action={% url 'bitrest:signup' %} class="signup" method="POST">
+    <form action={% url 'bitrest:signup' %} class="signup form-horizontal" method="POST">
         {% csrf_token %}
         
-        {{ signup.as_p }}
+        {{ signup|as_bootstrap }}
 
         <button class="btn btn-default">
             Sign Up
         </button>
     </form>
 
-    <form action={% url 'bitrest:login' %} class="login" method="POST">
+    <form action={% url 'bitrest:login' %} class="login form-horizontal" method="POST">
         {% csrf_token %}
 
-        {{ login.as_p }}
+        {{ login|as_bootstrap }}
 
         <button class="btn btn-default">
             Login
