@@ -78,6 +78,10 @@
 	width:100%;	
 }
 
+#chan-tab p {
+	display: inline;
+}
+
 .container {
 	width: 90%;
 	margin-right:5%;
