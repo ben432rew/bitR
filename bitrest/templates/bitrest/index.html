@@ -5,7 +5,7 @@
     <script src="{%static 'bitrest/index.js' %}"></script>
     {{ error }} <br>
 
-    <form action={% url 'bitrest:signup' %} method="POST">
+    <form action={% url 'bitrest:signup' %} class="signup" method="POST">
         {% csrf_token %}
         
         {{ signup.as_p }}
@@ -15,7 +15,7 @@
         </button>
     </form>
 
-    <form action={% url 'bitrest:login' %} method="POST">
+    <form action={% url 'bitrest:login' %} class="login" method="POST">
         {% csrf_token %}
 
         {{ login.as_p }}
@@ -24,4 +24,6 @@
             Login
         </button>
     </form>
+    <p class="signup">Already have a BitR account?  <button id="login">Login</button></p>
+    <p class="login">Don't have a BitR account?  <button id="signup">Sign up now</button></p>
 {% endblock %}
