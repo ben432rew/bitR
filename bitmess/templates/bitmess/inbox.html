@@ -24,27 +24,19 @@
 			<br>
 			<button id = "chan-post-btn">Post to Chan</button>
 		</div>
+		<select class = "col span_1" id = 'mess-select'>
+			<option>All</option>
+			<option>None</option>
+			<option>Read</option>
+			<option>Unread</option>
+			<option>Starred</option>
+			<option>Unstarred</option>
+		</select>
+		<button class = "col span_1" id = 'refresh-btn'>Refresh</button>
 		<div id = 'primary-tab' class = 'col span_3'>
 			<p>Primary</p>
 		</div>
-	<a href="/bitmess/{{user.id}}">Inbox</a>
-	<a href="/bitmess/starred/{{user.id}}">Starred</a>
-	<a href="/bitmess/sent/{{user.id}}">Sent Mail</a>
-	<a href="/bitmess/drafts/{{user.id}}">Drafts</a>
-	<a href="/bitmess/spam/{{user.id}}">Spam</a>
-	<a href="/bitmess/trash/{{user.id}}">Trash</a>
-	<select id = 'mess-select'>
-		<option>All</option>
-		<option>None</option>
-		<option>Read</option>
-		<option>Unread</option>
-		<option>Starred</option>
-		<option>Unstarred</option>
-	</select>
-	<span id = 'refresh'>Refresh</span>
-	<div id = 'inbox'>
-		
-		<div id = 'chan-tab'>
+		<div class = "col span_3" id = 'chan-tab'>
 			<p>Chans</p>
 			<select id = 'chan-select'>
 				{% for chan in chans %}
@@ -52,14 +44,25 @@
 				{% endfor %}
 			</select>
 		</div>
-		{% for message in messages %}
-			{% if message in read_message_list %}
-			<div id = 'read-status'>Read</div>
-			{% else %}
-			<div id = 'read-status'>Unread</div>
-			{% endif %}
-			<div id = 'subject'>{{message.subject}}</div>
-		{% endfor %}
 	</div>
-</div>
+	<div class = "section">
+		<ul class = "col span_2" id = "inbox-options">
+			<li><a href={% url 'bitmess:inbox' user.id %}>Inbox</a></li>
+			<li><a href={% url 'bitmess:starred' user.id %}>Starred</a></li>
+			<li><a href={% url 'bitmess:sent' user.id %}>Sent Mail</a></li>
+			<li><a href={% url 'bitmess:drafts' user.id %}>Drafts</a></li>
+			<li><a href={% url 'bitmess:spam' user.id %}>Spam</a></li>
+			<li><a href={% url 'bitmess:trash' user.id %}>Trash</a></li>
+		</ul>
+		<div class = "col span_8" id = 'inbox'>
+			{% for message in messages %}
+				{% if message in read_message_list %}
+				<div id = 'read-status'>Read</div>
+				{% else %}
+				<div id = 'read-status'>Unread</div>
+				{% endif %}
+				<div id = 'subject'>{{message.subject}}</div>
+			{% endfor %}
+		</div>
+	</div>
 {% endblock %}
