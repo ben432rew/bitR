@@ -55,6 +55,9 @@ class API():
 					dic['subject'] = base64.b64decode(value).decode()
 		return(inboxMessages['inboxMessages'])
 
-	def getAllMessagesIds(self):
-		ids = self.api.getAllInboxMessageIDs()
+	def getAllMessagesIds(self,*args):
+		if len(args)>0:
+			ids = self.api.getAllInboxMessageIDs(args[0].lower())
+		else:	
+			ids = self.api.getAllInboxMessageIDs()
 		return(json.loads(ids)["inboxMessageIds"])
