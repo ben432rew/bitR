@@ -1,11 +1,11 @@
 $(document).ready(function(){
     $( ".signup" ).hide();
     $('#signup').on('click', function(e) {
-        $( ".login" ).hide();
-        $( ".signup" ).show();
+        $( ".login" ).hide('medium');
+        $( ".signup" ).show('medium');
     })
     $('#login').on('click', function(e) {
-        $( ".signup" ).hide();
-        $( ".login" ).show();
+        $( ".signup" ).hide('medium');
+        $( ".login" ).show('medium');
     })    
 });
