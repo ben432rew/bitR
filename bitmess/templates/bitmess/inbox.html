@@ -1,0 +1,7 @@
+{% extends "bitrest/base.html" %}
+{% block title %}{{ user.username }} Inbox - {% endblock %}
+
+{% block content %}
+    {% load staticfiles %}
+    <a href="/bitrest/logout" class="btn">Logout</a>
+{% endblock %}

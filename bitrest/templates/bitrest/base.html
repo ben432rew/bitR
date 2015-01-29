@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% load staticfiles %}
+        <title>{% block title %}{% endblock %}BitR</title>
+        <script src = "http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src = "http://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+        <script src="{%static "bitrest/django_ajax.js"%}"></script>
+    </head>
+    <body>
+        {% block content %}
+        {% endblock %}
+    </body>
+</html>
