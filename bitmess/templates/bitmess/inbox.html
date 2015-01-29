@@ -4,7 +4,7 @@
 {% block header %}
 	<div class = "section">
 	    <a class="col span_2" href={% url 'bitrest:index' %} id = 'logo'>BitR</a>
-	    <form class="col span_4" action = {% url 'bitrest:search' %} id = "search-bar">
+	    <form class="col span_4" action = {% url 'bitmess:search' %} id = "search-bar">
 	    <input id = "search-input" type = 'search' placeholder = "Search" results = "0" name = 'bitr-search'>
 		</form>
 		<select class="col span_2" id = 'identity-select'>
