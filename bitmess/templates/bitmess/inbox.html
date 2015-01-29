@@ -3,8 +3,8 @@
 {% block title %}{{ user.username }} Inbox - {% endblock %}
 {% block header %}
 	<div class = "section">
-	    <a class="col span_2" href="" id = 'logo'>BitR</a>
-	    <form class="col span_4" action = "/bitmess/{{user.id}}" id = "search-bar">
+	    <a class="col span_2" href={% url 'bitrest:index' %} id = 'logo'>BitR</a>
+	    <form class="col span_4" action = {% url 'bitrest:search' %} id = "search-bar">
 	    <input id = "search-input" type = 'search' placeholder = "Search" results = "0" name = 'bitr-search'>
 		</form>
 		<select class="col span_2" id = 'identity-select'>
@@ -13,7 +13,7 @@
 				<option>{{identity.name}}</option>
 			{% endfor %}
 		</select>
-		<a class="col span_2" href="bitmess/settings/{{user.id}}" id = 'settings-btn'><button>Settings</button></a>
+		<a class="col span_2" href={% url 'bitmess:settings' user.id %} id = 'settings-btn'><button>Settings</button></a>
 	    <a class="col span_2" href={% url 'bitrest:logout' %} id = 'logout-btn'>Logout</a>
 	</div>
 {% endblock %}
