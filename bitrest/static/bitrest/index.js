@@ -7,5 +7,13 @@ $(document).ready(function(){
     $('#login').on('click', function(e) {
         $( ".signup" ).hide('medium');
         $( ".login" ).show('medium');
-    })    
+    })
+
+    $("input").keypress(function(event) {
+    if (event.which == 13) {
+        event.preventDefault();
+        $("form").submit();
+    }
+	});
+
 });
