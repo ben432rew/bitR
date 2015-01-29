@@ -1,4 +1,5 @@
 $(document).ready(function(){
+    $.material.ripples()
     $( ".signup" ).hide();
     $('#signup').on('click', function(e) {
         $( ".login" ).hide('medium');
@@ -10,10 +11,10 @@ $(document).ready(function(){
     })
 
     $("input").keypress(function(event) {
-    if (event.which == 13) {
-        event.preventDefault();
-        $("form").submit();
-    }
+        if (event.which == 13) {
+            event.preventDefault();
+            $("form").submit();
+        }
 	});
 
 });
