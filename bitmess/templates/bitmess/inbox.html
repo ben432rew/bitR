@@ -47,12 +47,12 @@
 	</div>
 	<div class = "section">
 		<ul class = "col span_2" id = "inbox-options">
-			<li><a href="/bitmess/{{user.id}}">Inbox</a></li>
-			<li><a href="/bitmess/starred/{{user.id}}">Starred</a></li>
-			<li><a href="/bitmess/sent/{{user.id}}">Sent Mail</a></li>
-			<li><a href="/bitmess/drafts/{{user.id}}">Drafts</a></li>
-			<li><a href="/bitmess/spam/{{user.id}}">Spam</a></li>
-			<li><a href="/bitmess/trash/{{user.id}}">Trash</a></li>
+			<li><a href={% url 'bitmess:inbox' user.id %}>Inbox</a></li>
+			<li><a href={% url 'bitmess:starred' user.id %}>Starred</a></li>
+			<li><a href={% url 'bitmess:sent' user.id %}>Sent Mail</a></li>
+			<li><a href={% url 'bitmess:drafts' user.id %}>Drafts</a></li>
+			<li><a href={% url 'bitmess:spam' user.id %}>Spam</a></li>
+			<li><a href={% url 'bitmess:trash' user.id %}>Trash</a></li>
 		</ul>
 		<div class = "col span_8" id = 'inbox'>
 			{% for message in messages %}
