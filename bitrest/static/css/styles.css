@@ -1,0 +1,20 @@
+body {
+	background-color: white;
+}
+
+#form-grouping {
+
+	position: absolute;
+	z-index: 10;
+	top:120px;
+	left: 80px;
+}
+#login-phone {
+	position: relative;
+}
+
+.login{
+	position: relative;
+	top:-10px;
+	left: -10px;
+}
