@@ -35,3 +35,22 @@ class API():
 		x = base64.b64encode(bytes(label, "utf-8")).decode()
 		address = self.api.createRandomAddress(x)
 		return address
+
+	def sendMessage(self,Subject,Message,toAddress,froAddress):
+		subject = base64.b64encode(bytes(Subject, "utf-8")).decode()
+		message = base64.b64encode(bytes(Message, "utf-8")).decode()
+		ackData = self.api.sendMessage(toAddress, froAddress, subject,message)
+		print ('The ackData is:', ackData)
+		# while True:
+		# 	time.sleep(2)
+		# print ('Current status:', self.api.getStatus(ackData))
+	
+	def getAllMessages(self):
+		inboxMessages = json.loads(self.api.getAllInboxMessages())
+		for dic in inboxMessages['inboxMessages']:
+			for key,value in dic.items():
+				if key == 'message':
+					dic['message'] = base64.b64decode(value).decode()
+				elif key == 'subject':
+					dic['subject'] = base64.b64decode(value).decode()
+		print(inboxMessages['inboxMessages'])
