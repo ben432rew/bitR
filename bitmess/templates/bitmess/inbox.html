@@ -3,5 +3,5 @@
 
 {% block content %}
     {% load staticfiles %}
-    <a href="/bitrest/logout" class="btn">Logout</a>
+    <a href={% url 'bitrest:logout' %} class="btn">Logout</a>
 {% endblock %}
