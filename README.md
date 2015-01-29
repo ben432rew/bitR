@@ -35,3 +35,11 @@ Should be good to go.  To start server,
 `python3 manage.py runserver`
 
 then direct your browser to http://127.0.0.1:8000
+
+## Custom Grid Sytem
+
+So instead of using bootstraps grid system I have implemented a custom version that is essentially the same.
+
+To create a row we use the "section" class.
+
+To create a column with a sopan from 1-12 we use "col span_(number from 1-12 here)"
