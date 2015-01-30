@@ -1,6 +1,7 @@
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
 from django.views.generic import View
 
 
@@ -58,5 +59,6 @@ class Blog ( View ):
 
 class Logout( View ):
     def get( self, request ):
+        request.user.token_set.all().delete()
         logout( request )
         return render ( request, 'bitweb/index.html', {'signup':UserCreationForm(), 'login':AuthenticationForm()} )
