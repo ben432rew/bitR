@@ -1,4 +1,4 @@
-{% extends "bitrest/base.html" %}
+{% extends "bitweb/base.html" %}
 {% block content %}
     {% load bootstrap_tags %}
     {% load staticfiles %}
@@ -19,7 +19,7 @@
             <br>
             <br>
             <p>{{ error }} </p>
-            <form action={% url 'bitrest:signup' %} class="signup form-horizontal" method="POST">
+            <form action={% url 'bitweb:signup' %} class="signup form-horizontal" method="POST">
                 {% csrf_token %}
                 
                 {{ signup|as_bootstrap }}
@@ -29,7 +29,7 @@
                 </button>
             </form>
 
-            <form action={% url 'bitrest:login' %} class="login form-horizontal" method="POST">
+            <form action={% url 'bitweb:login' %} class="login form-horizontal" method="POST">
                 {% csrf_token %}
 
                 {{ login|as_bootstrap }}

@@ -4,8 +4,6 @@ import json
 import time
 from pprint import pprint as print
 
-import redis
-r = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 class API():
 	def __init__( self):
@@ -65,4 +63,23 @@ class API():
 
 if __name__ == "__main__":
 	a = API()
-	a.getAllMessages()
+	print(a.getAllMessages())
+
+'''
+[{'encodingType': 2,
+  'fromAddress': 'BM-2cUsUouTXohE15YA9sJzhghLCndnnxz2Ad',
+  'message': 'asdasdad',
+  'msgid': '2ea1235750e89a38d7751010fce7c62f0a46c292950db2abdf09612ee4bdcf66',
+  'read': 1,
+  'receivedTime': '1422460069',
+  'subject': 'asdasd',
+  'toAddress': 'BM-2cUTMYmgrpXmhieJLad7s5tLPnBQKaTyqb'},
+ {'encodingType': 2,
+  'fromAddress': 'BM-2cVr4jKDZNvBu4GeJvLqybgaaMCLqnv9Rr',
+  'message': 'fish fish fish fish fish fish fish',
+  'msgid': '30d23bc4174439738734db2e4bd9835308098fef2f31a049aca49840ddc90d90',
+  'read': 1,
+  'receivedTime': '1422461066',
+  'subject': 'fish',
+  'toAddress': 'BM-2cUTMYmgrpXmhieJLad7s5tLPnBQKaTyqb'}]
+'''
