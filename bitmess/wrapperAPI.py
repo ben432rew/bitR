@@ -4,6 +4,8 @@ import json
 import time
 from pprint import pprint as print
 
+import redis
+r = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 class API():
 	def __init__( self):

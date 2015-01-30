@@ -2,6 +2,8 @@
 {% load staticfiles %}
 {% block title %}{{ user.username }} Inbox - {% endblock %}
 {% block header %}
+    {% load staticfiles %}
+    <script src="{%static 'js/inbox.js' %}"></script>
 	<div class = "row">
 	    <a class="col-md-2" href={% url 'bitrest:index' %} id = 'logo'>BitR</a>
 	    <form class="col-md-4" action = {% url 'bitmess:search' %} id = "search-bar">
