@@ -7,22 +7,29 @@ class Inbox( View ):
         return render ( request, 'bitmess/inbox.html' )
 
 class Search( View ):
-	pass
+    def get(self, request, user_id):
+        return render ( request, 'bitmess/inbox.html' )
 
 class Settings( View ):
-	pass
+    def get(self, request, user_id):
+        return render ( request, 'bitmess/inbox.html' )
 
 class Starred( View ):
-	pass
+    def get(self, request, user_id):
+        return render ( request, 'bitmess/inbox.html' )
 
 class Sent( View ):
-	pass
+    def get(self, request, user_id):
+        return render ( request, 'bitmess/inbox.html' )
 
 class Drafts( View ):
-	pass
+    def get(self, request, user_id):
+        return render ( request, 'bitmess/inbox.html' )
 
 class Spam( View ):
-	pass
+    def get(self, request, user_id):
+        return render ( request, 'bitmess/inbox.html' )
 
 class Trash( View ):
-	pass
+    def get(self, request, user_id):
+        return render ( request, 'bitmess/inbox.html' )
