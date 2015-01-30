@@ -37,6 +37,9 @@ class Inbox( View ):
         return render (request, 'bitweb/inbox.html')
 
 
+class Profile( View ):
+    pass
+
 class About( View ):
     pass
 
