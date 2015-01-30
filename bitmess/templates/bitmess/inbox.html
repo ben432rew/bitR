@@ -13,16 +13,16 @@
 				<option>{{identity.name}}</option>
 			{% endfor %}
 		</select>
-		<a class="col-md-2" href={% url 'bitmess:settings' user.id %} id = 'settings-btn'><button>Settings</button></a>
+		<a class="col-md-2" href={% url 'bitmess:settings' user.id %} id = 'settings-btn'><button class="btn btn-material-blue-grey-100">Settings</button></a>
 	    <a class="col-md-2" href={% url 'bitrest:logout' %} id = 'logout-btn'>Logout</a>
 	</div>
 {% endblock %}
 {% block content %}
 	<div class = "row">
 		<div class = "col-md-2">
-			<button id = "compose-btn">Compose</button>
+			<button class="btn btn-material-blue-grey-100" id = "compose-btn">Compose</button>
 			<br>
-			<button id = "chan-post-btn">Post to Chan</button>
+			<button class="btn btn-material-blue-grey-100" id = "chan-post-btn">Post to Chan</button>
 		</div>
 		<select class = "col-md-1" id = 'mess-select'>
 			<option>All</option>
@@ -32,7 +32,7 @@
 			<option>Starred</option>
 			<option>Unstarred</option>
 		</select>
-		<button class = "col-md-1" id = 'refresh-btn'>Refresh</button>
+		<button class = "col-md-1 btn btn-material-blue-grey-100" id = 'refresh-btn'>Refresh</button>
 		<div id = 'primary-tab' class = 'col-md-3'>
 			<p>Primary</p>
 		</div>

@@ -76,7 +76,7 @@ STATIC_URL = '/static/'
 
 ## login url
 
-LOGIN_URL = '/users/login'
+LOGIN_URL = '/'
 
 try:
     from .local_settings import *

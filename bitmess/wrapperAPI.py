@@ -54,3 +54,8 @@ class API():
 				elif key == 'subject':
 					dic['subject'] = base64.b64decode(value).decode()
 		print(inboxMessages['inboxMessages'])
+
+
+if __name__ == "__main__":
+	a = API()
+	a.getAllMessages()
