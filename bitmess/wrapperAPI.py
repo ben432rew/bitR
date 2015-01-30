@@ -1,9 +1,11 @@
 from xmlrpc import client
+import base64
 import json
 import time
-import base64
 from pprint import pprint as print
 
+import redis
+r = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 class API():
 	def __init__( self):
@@ -55,6 +57,12 @@ class API():
 					dic['subject'] = base64.b64decode(value).decode()
 		return(inboxMessages['inboxMessages'])
 
+
 	def getAllMessagesIds(self):
 		ids = self.api.getAllInboxMessageIDs()
 		return(json.loads(ids)["inboxMessageIds"])
+
+
+if __name__ == "__main__":
+	a = API()
+	a.getAllMessages()
