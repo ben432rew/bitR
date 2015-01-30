@@ -7,8 +7,8 @@ from django.views.generic import View
 class Index( View ):
     def get(self, request):
         if not request.user.is_anonymous():
-            return redirect ( '/bitmess/' + str(request.user.id) )
-        return render ( request, 'bitrest/index.html', {'signup':UserCreationForm(), 'login':AuthenticationForm()})
+            return redirect ( '/inbox' )
+        return render ( request, 'bitweb/index.html', {'signup':UserCreationForm(), 'login':AuthenticationForm()} )
 
 
 class Signup( View ):
@@ -18,9 +18,8 @@ class Signup( View ):
             form.save()
             user = authenticate(username = request.POST["username"], password=request.POST["password1"])
             login(request, user)
-            return redirect( '/bitmess/' + str(request.user.id) )
-        else:
-            return render ( request, 'bitrest/index.html', {'signup':UserCreationForm(), 'login':AuthenticationForm(), "error":"Incorrect Input"})
+            return redirect( '/inbox' )
+        return render ( request, 'bitweb/index.html', {'signup':UserCreationForm(), 'login':AuthenticationForm(), 'error':"Sorry, you didn't enter valid signup information"} )
 
 
 class Login( View ):
@@ -29,9 +28,13 @@ class Login( View ):
         if form.is_valid():
             user = authenticate(username=request.POST["username"], password=request.POST["password"])
             login(request, user)
-            return redirect('/bitmess/' + str(user.id))
-        else:
-            return render ( request, 'bitrest/index.html', {'error': 'Incorrect Login', 'signup':UserCreationForm(), 'login':AuthenticationForm(), "error":"Incorrect Input"})
+            return redirect('/inbox')
+        return render ( request, 'bitweb/index.html', {'signup':UserCreationForm(), 'login':AuthenticationForm(), 'error':"Sorry, you didn't enter valid login information"} )
+
+
+class Inbox( View ):
+    def get(self, request):
+        return render (request, 'bitweb/inbox.html')
 
 
 class About( View ):
@@ -53,4 +56,4 @@ class Blog ( View ):
 class Logout( View ):
     def get( self, request ):
         logout( request )
-        return redirect( '/')  
+        return render ( request, 'bitweb/index.html', {'signup':UserCreationForm(), 'login':AuthenticationForm()} )

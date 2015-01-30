@@ -1,4 +1,4 @@
-{% extends "bitrest/base.html" %}
+{% extends "bitweb/base.html" %}
 {% block content %}
     {% load bootstrap_tags %}
     {% load staticfiles %}
@@ -19,20 +19,18 @@
             <img id  = "login-phone" src="{%static 'images/login_phone.png' %}" class="img-responsive" alt="Sailboat">
             <br>
             <br>
-            <div id = "form-grouping">
-                <p>{{ error }} </p>
-                <form action={% url 'bitrest:signup' %} class="signup form-horizontal" method="POST">
-                    {% csrf_token %}
-                    
-                    {{ signup|as_bootstrap }}
-
+            <p>{{ error }} </p>
+            <form action={% url 'bitweb:signup' %} class="signup form-horizontal" method="POST">
+                {% csrf_token %}
+                
+                {{ signup|as_bootstrap }}
                     <button class="btn btn-material-blue-grey-100 pull-right">
                         Sign Up
                     </button>
                 </form>
 
-                <form action={% url 'bitrest:login' %} class="login form-horizontal" method="POST">
-                    {% csrf_token %}
+            <form action={% url 'bitweb:login' %} class="login form-horizontal" method="POST">
+                {% csrf_token %}
 
                     {{ login|as_bootstrap }}
 

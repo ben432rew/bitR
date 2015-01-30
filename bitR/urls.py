@@ -3,6 +3,6 @@ from django.contrib import admin
 
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^', include('bitrest.urls', namespace='bitrest')),
-    url(r'^bitmess/', include('bitmess.urls', namespace='bitmess')),
+    url(r'^', include('bitweb.urls', namespace='bitweb')),
+    url(r'^bmapi/', include('bmapi.urls', namespace='bmapi')),
 )

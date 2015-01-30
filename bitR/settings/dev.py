@@ -32,8 +32,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'bitrest',
-    'bitmess',
+    'bitweb',
+    'bmapi',
     "django_forms_bootstrap",
 )
 
@@ -73,10 +73,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-
-## login url
-
-LOGIN_URL = '/users/login'
+LOGIN_URL = '/'
 
 try:
     from .local_settings import *
