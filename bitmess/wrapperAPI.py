@@ -42,7 +42,7 @@ class API():
 		subject = base64.b64encode(bytes(Subject, "utf-8")).decode()
 		message = base64.b64encode(bytes(Message, "utf-8")).decode()
 		ackData = self.api.sendMessage(toAddress, froAddress, subject,message)
-		print ('The ackData is:', ackData)
+		# print ('The ackData is:', ackData)
 		# while True:
 		# 	time.sleep(2)
 		# print ('Current status:', self.api.getStatus(ackData))
@@ -55,7 +55,12 @@ class API():
 					dic['message'] = base64.b64decode(value).decode()
 				elif key == 'subject':
 					dic['subject'] = base64.b64decode(value).decode()
-		print(inboxMessages['inboxMessages'])
+		return(inboxMessages['inboxMessages'])
+
+
+	def getAllMessagesIds(self):
+		ids = self.api.getAllInboxMessageIDs()
+		return(json.loads(ids)["inboxMessageIds"])
 
 
 if __name__ == "__main__":
