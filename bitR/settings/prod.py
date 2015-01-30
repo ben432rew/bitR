@@ -46,8 +46,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-## login url
-LOGIN_URL = '/users/login'
+LOGIN_URL = '/'
 
 #### SECRET CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#secret-key

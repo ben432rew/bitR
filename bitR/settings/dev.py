@@ -73,9 +73,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-
-## login url
-
 LOGIN_URL = '/'
 
 try:
