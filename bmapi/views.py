@@ -2,7 +2,15 @@ from django.views.generic import View
 from django.http import JsonResponse
 from django.shortcuts import render
 from bmapi.wrapperAPI import API
+from bmapi.models import Token
+from datetime import datetime
 
+# check if the token is in the database and if it's expired (older than 5 hours)
+def check_token (token):
+    if Token.objects.filter(token=token).exists():
+        if Token.objects.get(token=token).created_at > datetime.now() - datetime.timedelta(hours=5):
+            return True
+    return False
 
 #getting all messages from client, not really usefull, only for testing
 class AllMessages( View ):
@@ -20,6 +28,14 @@ class EveryMinute( View ):
     pass
 
 
+class CreateId( View ):
+    pass
+
+
+class CreateChan( View ):
+    pass
+
+    
 # send an email
 class Send ( View ):
     pass
