@@ -2,7 +2,7 @@ from bitweb.forms import AuthenticationForm, UserCreationForm
 from bitweb.models import *
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
+from bitweb.models import User
 from django.views.generic import View
 import uuid
 

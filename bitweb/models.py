@@ -7,9 +7,3 @@ class User( AbstractUser ):
 class Token( models.Model ):
 	user = models.ForeignKey( User )
 	token = models.CharField( max_length = 50 )
-
-	def check(self, token_try):
-		if token_try == self.token:
-			return True
-		else:
-			return False
