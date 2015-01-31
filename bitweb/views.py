@@ -1,4 +1,5 @@
 from bitweb.forms import AuthenticationForm, UserCreationForm
+from bitweb.models import *
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from django.views.generic import View
@@ -20,9 +21,7 @@ class Signup( View ):
             user = authenticate(username = request.POST["username"], password=request.POST["password1"])
             login(request, user)
             uid = uuid.uuid4()
-            user.uuid = uid
-            user.save()
-            request.session['uid'] = uid
+            token = Token.objects.create(token = uid, user = user)
             return redirect( '/inbox' )
         return render ( request, 'bitweb/index.html', {'signup':UserCreationForm(), 'login':AuthenticationForm(), 'error':"Sorry, you didn't enter valid signup information"} )
 
@@ -34,9 +33,7 @@ class Login( View ):
             user = authenticate(username=request.POST["username"], password=request.POST["password"])
             login(request, user)
             uid = uuid.uuid4()
-            user.uuid = uid
-            user.save()
-            request.session['uid'] = uid
+            token = Token.objects.create(token = uid, user = user)
             return redirect('/inbox')
         return render ( request, 'bitweb/index.html', {'signup':UserCreationForm(), 'login':AuthenticationForm(), 'error':"Sorry, you didn't enter valid login information"} )
 
@@ -65,4 +62,5 @@ class Blog ( View ):
 class Logout( View ):
     def get( self, request ):
         logout( request )
+        request.session.clear()
         return render ( request, 'bitweb/index.html', {'signup':UserCreationForm(), 'login':AuthenticationForm()} )
