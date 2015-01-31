@@ -32,43 +32,50 @@ class CreateId( View ):
     api = API()
 
     def post( self, request ):
-    label = request.POST['label']
-    return JsonResponse( { 'id' : self.api.createRandomAddress(label) } )
+        label = request.POST['label']
+        return JsonResponse( { 'id' : self.api.createRandomAddress(label) } )
+
+class DeleteId( View ):
+    api = API()
+
+    def post( self, request ):
+        address = request.POST['address']
+        return JsonResponse( { 'id' : self.api.deleteAddress(address) } )
 
 
 class CreateChan( View ):
     api = API()
 
     def post( self, request ):
-    passphrase = request.POST['passphrase']
-    return JsonResponse( { 'chan_address' : self.api.createChan(passphrase) } )
+        passphrase = request.POST['passphrase']
+        return JsonResponse( { 'chan_address' : self.api.createChan(passphrase) } )
 
 
 class JoinChan( View ):
     api = API()
 
     def post( self, request ):
-    passphrase = request.POST['passphrase']
-    address = request.POST['address']
-    return JsonResponse( { 'join_status' : self.api.joinChan(passphrase, address) } )
+        passphrase = request.POST['passphrase']
+        address = request.POST['address']
+        return JsonResponse( { 'join_status' : self.api.joinChan(passphrase, address) } )
 
 class LeaveChan( View ):
     api = API()
 
     def post( self, request ):
-    address = request.POST['address']
-    return JsonResponse( { 'leave_status' : self.api.leaveChan(address) } )
+        address = request.POST['address']
+        return JsonResponse( { 'leave_status' : self.api.leaveChan(address) } )
     
 # send an email
 class Send ( View ):
     api = API()
 
     def post( self, request ):
-    to_address = request.POST['to_address']
-    from_address = request.POST['from_address']
-    subject = request.POST['subject']
-    message = request.POST['message']
-    return JsonResponse( { 'message_status' : self.api.sendMessage( to_address, from_address, subject, message ) } )
+        to_address = request.POST['to_address']
+        from_address = request.POST['from_address']
+        subject = request.POST['subject']
+        message = request.POST['message']
+        return JsonResponse( { 'message_status' : self.api.sendMessage( to_address, from_address, subject, message ) } )
 
 
 # given an identity, will return all messages that are associated
