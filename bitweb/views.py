@@ -2,6 +2,7 @@ from bitweb.forms import AuthenticationForm, UserCreationForm
 from bitweb.models import *
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
 from django.views.generic import View
 import uuid
 
@@ -43,6 +44,9 @@ class Inbox( View ):
         return render (request, 'bitweb/inbox.html')
 
 
+class Profile( View ):
+    pass
+
 class About( View ):
     pass
 
@@ -61,6 +65,7 @@ class Blog ( View ):
 
 class Logout( View ):
     def get( self, request ):
+        request.user.token_set.all().delete()
         logout( request )
         request.session.clear()
         return render ( request, 'bitweb/index.html', {'signup':UserCreationForm(), 'login':AuthenticationForm()} )
