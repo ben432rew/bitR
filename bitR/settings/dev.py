@@ -48,16 +48,6 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
 )
-DATABASES = {
-       'default': {
-       'ENGINE': 'django.db.backends.postgresql_psycopg2',
-       'NAME': 'bitr',
-       'USER': 'bears',
-       'PASSWORD': 'bears',
-       'HOST': '127.0.0.1',
-       'PORT': '5432',
-       }
-   } 
 
 ROOT_URLCONF = 'bitR.urls'
 
