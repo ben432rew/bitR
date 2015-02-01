@@ -1,0 +1,81 @@
+{% extends "bitweb/base.html" %}
+{% load staticfiles %}
+{% block title %}{{ user.username }} Inbox - {% endblock %}
+{% block header %}
+    {% load staticfiles %}
+    <script src="{%static 'js/inbox.js' %}"></script>
+    <script src="{%static 'js/jq-repeat.min.js' %}"></script>
+    <script src="{%static 'js/mustache.min.js' %}"></script>
+	<div class = "row" id="user_id" value="{{user.id}}">
+	    <h1><a class="col-md-2" href={% url 'bitweb:index' %} id = 'logo'>BitR</a></h1>
+	    <form class="col-md-4" action = {% url 'bmapi:search' %} id = "search-bar">
+	    <input id = "search-input" type = 'search' placeholder = "Search" results = "0" name = 'bitr-search'>
+		</form>
+		<div class="dropdown col-md-2">
+		  <button class="btn btn-material-blue-grey-100 dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+		    Identities
+		    <span class="caret"></span>
+		  </button>
+		  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">					   {% verbatim %}
+		    	<li role="presentation" jq-repeat="identities"><a role="menuitem" tabindex="-1" href="#">{{ identity }}</a></li>
+			{% endverbatim %}  
+		  </ul>
+		</div>
+		<a class="col-md-2" href={% url 'bitweb:profile' %} id = 'profile-btn'><button class="btn btn-material-blue-grey-100">Profile</button></a>
+	    <a class="col-md-2" href={% url 'bitweb:logout' %} id = 'logout-btn'>Logout</a>
+	</div>
+{% endblock %}
+{% block content %}
+	<div class = "row">
+		<div class = "col-md-2">
+			<button class="btn btn-material-blue-grey-100" id = "compose-btn">Compose</button>
+			<br>
+			<button class="btn btn-material-blue-grey-100" id = "chan-post-btn">Post to Chan</button>
+		</div>
+		<div class="dropdown col-md-2">
+		  <button class="btn btn-material-blue-grey-100 dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+		    Show
+		    <span class="caret"></span>
+		  </button>
+		  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+		    	<li role="presentation"><a role="menuitem" tabindex="-1" href="#">All</a></li>
+		    	<li role="presentation"><a role="menuitem" tabindex="-1" href="#">None</a></li>
+		    	<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Read</a></li>
+		    	<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Unread</a></li>
+		    	<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Starred</a></li>
+		    	<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Unstarred</a></li>
+		  </ul>
+		</div>
+		<button class = "col-md-2 btn btn-material-blue-grey-100" id = 'refresh-btn'>Refresh</button>
+		<div id = 'primary-tab' class = 'col-md-2'>
+			<p>Primary</p>
+		</div>
+		<div class="dropdown col-md-4">
+		  <button class="btn btn-material-blue-grey-100 dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+		    Chans
+		    <span class="caret"></span>
+		  </button>
+		  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">					   {% verbatim %}
+		    	<li role="presentation" jq-repeat="chans"><a role="menuitem" tabindex="-1" href="#">{{ chan }}</a></li>
+			{% endverbatim %}  
+		  </ul>
+		</div>
+	</div>
+	<div class = "row">
+		<ul class = "col-md-2" id = "inbox-options">
+			<li><a href={% url 'bmapi:allmessages' %}>Inbox</a></li>
+			<li><a href={% url 'bmapi:starred' %}>Starred</a></li>
+			<li><a href={% url 'bmapi:sent' %}>Sent Mail</a></li>
+			<li><a href={% url 'bmapi:drafts' %}>Drafts</a></li>
+			<li><a href={% url 'bmapi:spam' %}>Spam</a></li>
+			<li><a href={% url 'bmapi:trash' %}>Trash</a></li>
+		</ul>
+		<div class = "col-md-8">
+			<ul>
+			{% verbatim %}
+				<li jq-repeat="inbox">{{ message }}</li>
+			{% endverbatim %}
+			</ul>
+		</div>
+	</div>
+{% endblock %}

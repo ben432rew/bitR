@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% load staticfiles %}
+        <title>{% block title %}{% endblock %}BitR</title>
+        <!-- Twitter Bootstrap -->        
+        <link media="all" type="text/css" rel="stylesheet" href="{% static "css/bootstrap.min.css" %}">
+        <!-- Material Design for Bootstrap -->
+        <link media="all" type="text/css" rel="stylesheet" href="{% static "css/material-wfont.min.css" %}">
+        <link media="all" type="text/css" rel="stylesheet" href="{% static "css/ripples.css" %}">
+        <!-- Dropdown.js -->
+
+        <script src="{%static "js/jquery.min.js"%}"></script>
+        <script src="{% static "js/mustache.min.js" %}"></script>        
+        <script src="{%static "js/django_ajax.js"%}"></script>
+        <script src="{%static "js/bootstrap.min.js"%}"></script>
+        <!-- Material Design for Bootstrap -->
+        <script src="{%static "js/material.min.js"%}"></script>
+        <script src="{%static "js/ripples.min.js"%}"></script>
+
+    </head>
+    <body>
+        <div class = "container">
+        {% block header %}
+        {% endblock %}
+        {% block content %}
+        {% endblock %}
+        </div>
+    </body>
+</html>

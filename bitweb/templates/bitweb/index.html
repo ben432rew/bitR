@@ -1,0 +1,52 @@
+{% extends "bitweb/base.html" %}
+{% block content %}
+    {% load bootstrap_tags %}
+    {% load staticfiles %}
+    <script src="{%static 'js/index.js' %}"></script>
+    <br><br><br>
+    <div class="row">
+        <div class="col-md-8">
+            <img src="{%static 'images/road_rail.jpeg' %}" class="img-responsive" alt="Sailboat">
+            <br>
+            <br>
+            <p>Join private our messanging service that you can feel safe with knowing your communications are secure</p>
+        </div>
+
+        <div class="col-md-1"></div>
+
+        <div class="col-md-3">
+            <h1>BitR</h1>
+            <br>
+            <br>
+            <p>{{ error }} </p>
+            <form action={% url 'bitweb:signup' %} class="signup form-horizontal" method="POST">
+                {% csrf_token %}
+                
+                {{ signup|as_bootstrap }}
+
+                <button class="btn btn-material-blue-grey-100 pull-right">
+                    Sign Up
+                </button>
+            </form>
+
+            <form action={% url 'bitweb:login' %} class="login form-horizontal" method="POST">
+                {% csrf_token %}
+
+                {{ login|as_bootstrap }}
+
+                <button class="btn btn-material-blue-grey-100 pull-right">
+                    Login
+                </button>
+            </form>
+            <br><br><br><br><br>
+            <p class="signup">Already have a BitR account?  <button id="login" class="btn btn-material-blue-grey-500">Login</button></p>
+            <p class="login">Don't have a BitR account?  <button id="signup" class="btn btn-material-blue-grey-500">Sign up now</button></p>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+    <footer class="footer">
+        <div class="container" style="background-color:#607d8b">
+            <p class="text-muted">footer links here</p>
+        </div>
+    </footer>
+{% endblock %}

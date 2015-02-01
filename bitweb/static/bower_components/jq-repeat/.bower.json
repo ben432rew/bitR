@@ -1,0 +1,45 @@
+{
+  "name": "jq-repeat",
+  "version": "1.0.0",
+  "homepage": "http://github.com/wmantly/jq-repeat/",
+  "authors": [
+    "William Mantly <wmantly@gmail.com>"
+  ],
+  "description": "A simple, yet highly customizable plugin to handle all of you're client-side repetitive DOM needs",
+  "main": "dist/js/repeat.js",
+  "keywords": [
+    "dom",
+    "jquery",
+    "mustache"
+  ],
+  "moduleType": [
+    "globals"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "package.json",
+    "gulpfile.js"
+  ],
+  "devDependencies": {
+    "qunit": "~1.17.1"
+  },
+  "dependencies": {
+    "jquery": ">1.0.0",
+    "mustache.js": "~1.0.0"
+  },
+  "_release": "1.0.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.0.0",
+    "commit": "4d1f86f75bc71125b4af8209baa6e4853cd97637"
+  },
+  "_source": "git://github.com/wmantly/jq-repeat.git",
+  "_target": "~1.0.0",
+  "_originalSource": "jq-repeat",
+  "_direct": true
+}

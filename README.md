@@ -36,12 +36,12 @@ Should be good to go.  To start server,
 
 then direct your browser to http://127.0.0.1:8000
 
-## Custom Grid Sytem
+create a file named api_info.py in app bmapi using a  dictionary called API_LOGIN = { "user": your_user_name, "password": your_password }
 
-So instead of using bootstraps grid system I have implemented a custom version that is essentially the same.
+To enable the API, copy and paste these lines into the bitmessagesettings section of the keys.dat file. Note that the values "username" and "password" below are merely examples, and should be replaced by values that cannot feasibly be guessed:
 
-To create a row we use the "section" class.
-
-To create a column with a sopan from 1-12 we use "col span_(number from 1-12 here)"
-
-Anything below 480 px and everything will start to stack. If we dont like this it can be changed easily.
+apienabled = true
+apiport = 8442
+apiinterface = 127.0.0.1
+apiusername = username 
+apipassword = password
