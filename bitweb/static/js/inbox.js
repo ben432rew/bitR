@@ -20,8 +20,9 @@ $(document).ready(function(){
         })
     })
 // doesn't work as is
-    $.get('/bmapi/identities', JSON.stringify(user_id), function (data){
+    $.get('/bmapi/identities', user_id, function (data){
         if (data){
+            console.log(data)
             identities = data
             data['indentities'].forEach(function(value) {
                 $.scope.identities.push(value)

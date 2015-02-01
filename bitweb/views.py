@@ -1,28 +1,29 @@
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
+from bitweb.forms import UserCreateForm
 from django.views.generic import View
 from bmapi.models import Token
+from bitweb.models import User
 import uuid
 
 class Index( View ):
     def get(self, request):
         if not request.user.is_anonymous():
             return redirect ( '/inbox' )
-        return render ( request, 'bitweb/index.html', {'signup':UserCreationForm(), 'login':AuthenticationForm()} )
+        return render ( request, 'bitweb/index.html', {'signup':UserCreateForm(), 'login':AuthenticationForm()} )
 
 
 class Signup( View ):
     def post(self, request):
-        form = UserCreationForm( request.POST )
+        form = UserCreateForm( request.POST )
         if form.is_valid():
             form.save()
             user = authenticate(username = request.POST["username"], password=request.POST["password1"])
             login(request, user)
             token = Token.objects.create(token = uuid.uuid4(), user = user)            
             return redirect( '/inbox' )
-        return render ( request, 'bitweb/index.html', {'signup':UserCreationForm(), 'login':AuthenticationForm(), 'error':"Sorry, you didn't enter valid signup information"} )
+        return render ( request, 'bitweb/index.html', {'signup':UserCreateForm(), 'login':AuthenticationForm(), 'error':"Sorry, you didn't enter valid signup information"} )
 
 
 class Login( View ):
@@ -33,7 +34,7 @@ class Login( View ):
             login(request, user)
             token = Token.objects.create(token = uuid.uuid4(), user = user)     
             return redirect('/inbox')
-        return render ( request, 'bitweb/index.html', {'signup':UserCreationForm(), 'login':AuthenticationForm(), 'error':"Sorry, you didn't enter valid login information"} )
+        return render ( request, 'bitweb/index.html', {'signup':UserCreateForm(), 'login':AuthenticationForm(), 'error':"Sorry, you didn't enter valid login information"} )
 
 
 class Inbox( View ):
@@ -65,4 +66,5 @@ class Logout( View ):
     def get( self, request ):
         request.user.token_set.all().delete()
         logout( request )
-        return render ( request, 'bitweb/index.html', {'signup':UserCreationForm(), 'login':AuthenticationForm()} )
+        request.session.clear()
+        return render ( request, 'bitweb/index.html', {'signup':UserCreateForm(), 'login':AuthenticationForm()} )

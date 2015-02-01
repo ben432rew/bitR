@@ -28,17 +28,36 @@ class API():
 				print(key, value, type(value), base64.b64decode(value) )
 		return response
 
+
+	def getAllIdentities( self ):
+		addresses = self.api.listAddresses2()
+		return addresses
+
 	# string is label 
 	def createRandomAddress(self,label):
-		# dont judge me by the code i write
 		x = base64.b64encode(bytes(label, "utf-8")).decode()
 		address = self.api.createRandomAddress(x)
 		return address
 
-	def sendMessage(self,Subject,Message,toAddress,froAddress):
-		subject = base64.b64encode(bytes(Subject, "utf-8")).decode()
-		message = base64.b64encode(bytes(Message, "utf-8")).decode()
-		ackData = self.api.sendMessage(toAddress, froAddress, subject,message)
+	def createChan(self, passphrase):
+		x = base64.b64encode(bytes(passphrase, "utf-8")).decode()
+		chan = self.api.createChan(x)
+		return chan
+
+	def joinChan(self, passphrase, address):
+		x = base64.b64encode(bytes(passphrase, "utf-8")).decode()
+		join_status = self.api.joinChan(x, address)
+		return join_status
+
+	def leaveChan(self, address):
+		leave_status = self.api.leaveChan(address)
+		return leave_status
+
+	def sendMessage(self,subject,message,toAddress,fromAddress):
+		subject = base64.b64encode(bytes(subject, "utf-8")).decode()
+		message = base64.b64encode(bytes(message, "utf-8")).decode()
+		ackData = self.api.sendMessage(toAddress, fromAddress, subject,message)
+		return ackData
 		# print ('The ackData is:', ackData)
 		# while True:
 		# 	time.sleep(2)
