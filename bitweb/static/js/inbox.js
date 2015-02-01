@@ -1,9 +1,15 @@
 $(document).ready(function(){
+    var options = {
+        "backdrop" : "static",
+        "keyboard" : "true",
+        "show"     : "true"
+
+    }
     var user_id = {'user_id':$( '#user_id' ).val()};
     var identities;
 
-    $( '#create_identitiy' ).modal() 
-    $( '#create_identitiy' ).hide()
+    $( '#create_identitiy' ).modal(options)
+    // $( '#create_identitiy' ).hide()
     $.material.ripples();
     $('.dropdown-toggle').dropdown();
     $.get('/bmapi/allmessages', function (data){
@@ -11,9 +17,10 @@ $(document).ready(function(){
             $.scope.inbox.push(value)
         })
     })
-// untested, definitely doesn't work as is
+// doesn't work as is
     $.get('/bmapi/identities', JSON.stringify(user_id), function (data){
         if (data){
+            identities = data
             data['indentities'].forEach(function(value) {
                 $.scope.identities.push(value)
             })

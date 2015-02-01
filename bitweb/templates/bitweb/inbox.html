@@ -6,20 +6,20 @@
     <script src="{%static 'js/inbox.js' %}"></script>
     <script src="{%static 'js/jq-repeat.min.js' %}"></script>
     <script src="{%static 'js/mustache.min.js' %}"></script>
-	<div class = "row" id="user_id" value="{{user.id}}">
+	<div class = "row">
 	    <h1><a class="col-md-2" href={% url 'bitweb:index' %} id = 'logo'>BitR</a></h1>
 	    <form class="col-md-4" action = {% url 'bmapi:search' %} id = "search-bar">
 	    <input id = "search-input" type = 'search' placeholder = "Search" results = "0" name = 'bitr-search'>
 		</form>
 		<div class="dropdown col-md-2">
-		  <button class="btn btn-material-blue-grey-100 dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+		  <button class="btn btn-material-blue-grey-100 dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true" id="user_id" value="{{user.id}}">
 		    Identities
 		    <span class="caret"></span>
 		  </button>
 		  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">					   {% verbatim %}
 		    	<li role="presentation" jq-repeat="identities"><a role="menuitem" tabindex="-1" href="#">{{ identity }}</a></li>
 			{% endverbatim %}  
-			<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Create New Identity</a></li>
+			<li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#create_identity">Create New Identity</a></li>
 		  </ul>
 		</div>
 		<a class="col-md-2" href={% url 'bitweb:profile' %} id = 'profile-btn'><button class="btn btn-material-blue-grey-100">Profile</button></a>
@@ -81,10 +81,20 @@
 	</div>
 
 <!-- new identity modal -->
-	<div class="modal fade bs-example-modal-lg" id="create_identity" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-	  <div class="modal-dialog modal-lg">
-	    <div class="modal-content">
-	      Form for new identities here
+	<div class="modal fade" id="create_identity" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+		<div class="modal-content">
+	        <div class="modal-header">
+	 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+	        	<h4 class="modal-title" id="myModalLabel">New Identity</h4>
+	        </div>
+		    <div class="modal-body">
+		      Form for new identities here
+		    </div>
+		    <div class="modal-footer">
+	            <button type="button" class="btn" data-dismiss="modal">Cancel</button>
+		        <button type="button" class="btn btn-material-blue-grey-500">Create</button>
+	        </div>
 	    </div>
 	  </div>
 	</div>
