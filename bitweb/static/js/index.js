@@ -16,10 +16,5 @@ $(document).ready(function(){
             $("form").submit();
         }
 	});
-    var user = "a"
-    $.post( '/bmapi/create_id', user, function(data){
-              console.log(data)
-          
-      })
-
+    
 });
