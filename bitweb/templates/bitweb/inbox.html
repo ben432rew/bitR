@@ -19,6 +19,7 @@
 		  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">					   {% verbatim %}
 		    	<li role="presentation" jq-repeat="identities"><a role="menuitem" tabindex="-1" href="#">{{ identity }}</a></li>
 			{% endverbatim %}  
+			<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Create New Identity</a></li>
 		  </ul>
 		</div>
 		<a class="col-md-2" href={% url 'bitweb:profile' %} id = 'profile-btn'><button class="btn btn-material-blue-grey-100">Profile</button></a>
@@ -77,5 +78,14 @@
 			{% endverbatim %}
 			</ul>
 		</div>
+	</div>
+
+<!-- new identity modal -->
+	<div class="modal fade bs-example-modal-lg" id="create_identity" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-lg">
+	    <div class="modal-content">
+	      Form for new identities here
+	    </div>
+	  </div>
 	</div>
 {% endblock %}

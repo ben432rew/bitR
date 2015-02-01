@@ -1,7 +1,8 @@
 $(document).ready(function(){
-    var user_id = $( '#user_id' ).val();
+    var user_id = {'user_id':$( '#user_id' ).val()};
     var identities;
 
+    $( '#create_identitiy' ).modal() 
     $( '#create_identitiy' ).hide()
     $.material.ripples();
     $('.dropdown-toggle').dropdown();
@@ -10,15 +11,15 @@ $(document).ready(function(){
             $.scope.inbox.push(value)
         })
     })
-// untested
-    $.get('/bmapi/identities', function (data){
+// untested, definitely doesn't work as is
+    $.get('/bmapi/identities', JSON.stringify(user_id), function (data){
         if (data){
             data['indentities'].forEach(function(value) {
                 $.scope.identities.push(value)
+            })
         } else {
 // here the rest of the page should be darkened or faded
             $( '#create_identitiy' ).show()
         }
-        })
     })
 });
