@@ -7,7 +7,7 @@
     <script src="{%static 'js/jq-repeat.min.js' %}"></script>
     <script src="{%static 'js/mustache.min.js' %}"></script>
 	<div class = "row">
-	    <h1><a class="col-md-2" href={% url 'bitweb:index' %} id = 'logo'>BitR</a></h1>
+	    <h1 class="col-md-2"><ahref={% url 'bitweb:index' %} id = 'logo'>BitR</a></h1>
 		<div class="row col md-4">
 			<div class="input-group">
 				<span class="input-group-btn">
@@ -16,7 +16,12 @@
 				<input type="text" class="form-control" placeholder="Search for...">
 			</div>
 		</div>
-		<div class="dropdown col-md-2">
+	</div>
+{% endblock %}
+
+{% block content %}
+	<div class="row">
+		<div class="dropdown col-md-2 col-md-offset-6">
 		  <button class="btn btn-material-blue-grey-100 dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true" id="user_id" value="{{user.id}}">
 		    Identities
 		    <span class="caret"></span>
@@ -31,8 +36,7 @@
 		<a class="col-md-2" href={% url 'bitweb:profile' %} id = 'profile-btn'><button class="btn btn-material-blue-grey-100">Profile</button></a>
 	    <a class="col-md-2" href={% url 'bitweb:logout' %} id = 'logout-btn'>Logout</a>
 	</div>
-{% endblock %}
-{% block content %}
+
 	<div class = "row">
 		<div class = "col-md-2">
 			<button class="btn btn-material-blue-grey-100" id = "compose-btn">Compose</button>
@@ -53,11 +57,11 @@
 		    	<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Unstarred</a></li>
 		  </ul>
 		</div>
-		<button class = "btn btn-material-blue-grey-100" id = 'refresh-btn'>Refresh</button>
+		<button class = "btn btn-material-blue-grey-100 col-md-offset-2 col-md-offset-6" id = 'refresh-btn'>Refresh</button>
 	</div>
 
 	<div class = "row">
-		<div class="btn-group-vertical">
+		<div class="btn-group-vertical col-md-2">
 			<button type="button" class="btn">Inbox</button>
 			<button type="button" class="btn">Starred</button>
 			<button type="button" class="btn">Sent Mail</button>
