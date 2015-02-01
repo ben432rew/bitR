@@ -19,7 +19,7 @@ $(document).ready(function(){
             $.scope.inbox.push(value)
         })
     })
-// doesn't work as is
+// doesn't work as is (UNFINISHED)
     $.get('/bmapi/identities', user_id, function (data){
         if (data){
             console.log(data)
@@ -28,18 +28,29 @@ $(document).ready(function(){
                 $.scope.identities.push(value)
             })
 // if there aren't any identities that the user has (like if they just signed up),
-// then they should just see the create identities modal
+// then they should just see the create identities modal (UNFINISHED)
         } else {
             $( '#create_identitiy' ).modal('show')
         }
     })
 
+
+
     $( '#create_id_button' ).click(function() {
-// send json to createid function
-// clear inbox and chans
+        var info = user_id;
+        info['nickname'] = $( '#identity_name' ).val();
+        $.post('/bmapi/create_id', JSON.stringify(info), function (data){
+            })
+// clear inbox and chans (UNFINISHED)
     })
+
     $( '#create_chan_button' ).click(function() {
 // send json to createchan function
 // set new chan as active chan in chan tab
     })
+
+    $( '#refresh-btn' ).click(function() {
+// check for new messages
+    })
+
 });

@@ -1,0 +1,21 @@
+{% extends "bitweb/base.html" %}
+{% load staticfiles %}
+{% block title %}{{ user.username }} Profile - {% endblock %}
+
+{% block content %}
+    <a href={% url 'bitweb:inbox' %}><button class="btn btn-material-blue-grey-100">Back to Inbox</button></a>
+    <a href={% url 'bitweb:logout' %}><button class="btn btn-material-blue-grey-100">Logout</button></a>
+        <div class="panel panel-material-blue-grey-500">
+          <div class="panel-heading">
+            <h3 class="panel-title">Identities</h3>
+          </div>
+          <div class="panel-body">
+            <table class="table">
+                <tr><th>Nickname</th><th>Address</th></tr>
+                {% for identity in identities %}
+                    <tr><td>{{ identity.name }}</td><td>{{ identity.key }}</td></tr>
+                {% endfor %}
+            </table>
+          </div>
+        </div>
+{% endblock %}
