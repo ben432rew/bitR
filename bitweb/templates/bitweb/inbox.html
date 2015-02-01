@@ -11,7 +11,7 @@
 	    <form class="col-md-4" action = {% url 'bmapi:search' %} id = "search-bar">
 	    <input id = "search-input" type = 'search' placeholder = "Search" results = "0" name = 'bitr-search'>
 		</form>
-		<div class="dropdown">
+		<div class="dropdown col-md-2">
 		  <button class="btn btn-material-blue-grey-100 dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
 		    Identities
 		    <span class="caret"></span>
@@ -32,25 +32,33 @@
 			<br>
 			<button class="btn btn-material-blue-grey-100" id = "chan-post-btn">Post to Chan</button>
 		</div>
-		<select class = "col-md-1" id = 'mess-select'>
-			<option>All</option>
-			<option>None</option>
-			<option>Read</option>
-			<option>Unread</option>
-			<option>Starred</option>
-			<option>Unstarred</option>
-		</select>
-		<button class = "col-md-1 btn btn-material-blue-grey-100" id = 'refresh-btn'>Refresh</button>
-		<div id = 'primary-tab' class = 'col-md-3'>
+		<div class="dropdown col-md-2">
+		  <button class="btn btn-material-blue-grey-100 dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+		    Show
+		    <span class="caret"></span>
+		  </button>
+		  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+		    	<li role="presentation"><a role="menuitem" tabindex="-1" href="#">All</a></li>
+		    	<li role="presentation"><a role="menuitem" tabindex="-1" href="#">None</a></li>
+		    	<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Read</a></li>
+		    	<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Unread</a></li>
+		    	<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Starred</a></li>
+		    	<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Unstarred</a></li>
+		  </ul>
+		</div>
+		<button class = "col-md-2 btn btn-material-blue-grey-100" id = 'refresh-btn'>Refresh</button>
+		<div id = 'primary-tab' class = 'col-md-2'>
 			<p>Primary</p>
 		</div>
-		<div class = "col-md-3" id = 'chan-tab'>
-			<p>Chans</p>
-			<select id = 'chan-select'>
-				{% for chan in chans %}
-				<option>{{chan.name}}</option>
-				{% endfor %}
-			</select>
+		<div class="dropdown col-md-4">
+		  <button class="btn btn-material-blue-grey-100 dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+		    Chans
+		    <span class="caret"></span>
+		  </button>
+		  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">					   {% verbatim %}
+		    	<li role="presentation" jq-repeat="chans"><a role="menuitem" tabindex="-1" href="#">{{ chan }}</a></li>
+			{% endverbatim %}  
+		  </ul>
 		</div>
 	</div>
 	<div class = "row">
