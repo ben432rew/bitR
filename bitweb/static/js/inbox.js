@@ -5,7 +5,6 @@ $(document).ready(function(){
         "show"     : "true"
     }
     var user_id = {'user_id':$( '#user_id' ).val()};
-    var identities;
 
     $( '#create_identitiy' ).modal(options)
     $( '#create_chan' ).modal(options)
@@ -16,16 +15,16 @@ $(document).ready(function(){
     $('.dropdown-toggle').dropdown();
 
     $.get('/bmapi/allmessages', function (data){
+        console.log(data['messages'])
         data['messages'].forEach(function(value) {
             $.scope.inbox.push(value)
         })
     })
 // doesn't work as is (UNFINISHED)
     $.post('/bmapi/identities', JSON.stringify(user_id), function (data){
-        console.log(data)
-        if (data){
-            identities = data
-            data['indentities'].forEach(function(value) {
+        if (data['addresses'] != []){
+            console.log(data['addresses'])
+            data['addresses'].forEach(function(value) {
                 $.scope.identities.push(value)
             })
 // if there aren't any identities that the user has (like if they just signed up),
