@@ -1,14 +1,32 @@
 $(document).ready(function(){
-    $.material.ripples()
-    $('.dropdown-toggle').dropdown()
+    var options = {
+        "backdrop" : "static",
+        "keyboard" : "true",
+        "show"     : "true"
+
+    }
+    var user_id = {'user_id':$( '#user_id' ).val()};
+    var identities;
+
+    $( '#create_identitiy' ).modal(options)
+    // $( '#create_identitiy' ).hide()
+    $.material.ripples();
+    $('.dropdown-toggle').dropdown();
     $.get('/bmapi/allmessages', function (data){
         data['messages'].forEach(function(value) {
             $.scope.inbox.push(value)
         })
     })
-    // $.get('/bmapi/identities', function (data){
-    //     data['messages'].forEach(function(value) {
-    //         $.scope.identities.push(value)
-    //     })
-    // })
+// doesn't work as is
+    $.get('/bmapi/identities', JSON.stringify(user_id), function (data){
+        if (data){
+            identities = data
+            data['indentities'].forEach(function(value) {
+                $.scope.identities.push(value)
+            })
+        } else {
+// here the rest of the page should be darkened or faded
+            $( '#create_identitiy' ).show()
+        }
+    })
 });

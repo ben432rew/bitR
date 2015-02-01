@@ -1,9 +1,11 @@
+from django.contrib.auth.models import User
 from django.views.generic import View
 from django.http import JsonResponse
 from django.shortcuts import render
 from bmapi.wrapperAPI import API
 from bmapi.models import Token
 from datetime import datetime
+import json
 
 # check if the token is in the database and if it's expired (older than 5 hours)
 def check_token (token):
