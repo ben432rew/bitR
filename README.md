@@ -30,18 +30,21 @@ You should now be in the psql prompt -> postgres=#
 
 Put the app secret key and the databases information in a file named "local_settings" in your settings folder
 
+create a file named api_info.py in app bmapi with this dictionary:
+
+`API_LOGIN = { "user": <username>, "password": <password> }`
+
+To enable the API, copy and paste these lines into the bitmessagesettings section of the keys.dat file. Note that the values <username> and <password> below are merely examples, and should be replaced by values that cannot feasibly be guessed:
+
+`apienabled = true
+apiport = 8442
+apiinterface = 127.0.0.1
+apiusername = <username> 
+apipassword = <password>
+`
+
 Should be good to go.  To start server,
 
 `python3 manage.py runserver`
 
 then direct your browser to http://127.0.0.1:8000
-
-create a file named api_info.py in app bmapi using a  dictionary called API_LOGIN = { "user": your_user_name, "password": your_password }
-
-To enable the API, copy and paste these lines into the bitmessagesettings section of the keys.dat file. Note that the values "username" and "password" below are merely examples, and should be replaced by values that cannot feasibly be guessed:
-
-apienabled = true
-apiport = 8442
-apiinterface = 127.0.0.1
-apiusername = username 
-apipassword = password
