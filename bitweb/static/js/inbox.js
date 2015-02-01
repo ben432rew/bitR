@@ -23,7 +23,6 @@ $(document).ready(function(){
                 $.scope.identities.push(value)
             })
         } else {
-// here the rest of the page should be darkened or faded
             $( '#create_identitiy' ).modal('show')
         }
     })
