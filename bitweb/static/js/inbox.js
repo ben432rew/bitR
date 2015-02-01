@@ -1,18 +1,20 @@
 $(document).ready(function(){
+
+    var user_id = {'user_id':$( '#user_id' ).val()};
+
+    /* this seems to unnecessary -wm 
+    // modal
     var options = {
         "backdrop" : "static",
         "keyboard" : "true",
         "show"     : "true"
     }
-    var user_id = {'user_id':$( '#user_id' ).val()};
-
     $( '#create_identitiy' ).modal(options)
     $( '#create_chan' ).modal(options)
-// this next line is a bug, it shouldn't be neccessary.  if it's not here, the 
-// chan modal automatically appears on page load
-    $( '#create_chan' ).modal('hide')
-    $.material.ripples();
-    $('.dropdown-toggle').dropdown();
+    */
+
+    $.material.ripples(); //should this be in index.js? -wm
+    $('.dropdown-toggle').dropdown(); //should this be in index.js? -wm
 
     $.get('/bmapi/allmessages', function (data){
         data['messages'].forEach(function(value) {
