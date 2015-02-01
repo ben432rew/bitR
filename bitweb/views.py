@@ -3,7 +3,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
 from bitweb.forms import UserCreateForm
 from django.views.generic import View
-from bmapi.models import Token
+from bmapi.models import *
 from bitweb.models import User
 import uuid
 
@@ -44,7 +44,10 @@ class Inbox( View ):
 
 class Profile( View ):
     def get(self, request):
-        return render (request, 'bitweb/profile.html')
+        identities = request.user.bitkey_set.all()
+        print(identities)
+        return render (request, 'bitweb/profile.html', {'identities':identities})
+
 
 class About( View ):
     pass

@@ -3,7 +3,8 @@
 {% block title %}{{ user.username }} Profile - {% endblock %}
 
 {% block content %}
-
-
-
+    <a href={% url 'bitweb:inbox' %}><button class="btn btn-material-blue-grey-100">Back to Inbox</button></a>
+    {% for identity in identities %}
+        <p> Nickname:{{ identity.name }}, Address:{{ identity.key }} </p>
+    {% endfor %}
 {% endblock %}
