@@ -28,6 +28,11 @@ class API():
 				print(key, value, type(value), base64.b64decode(value) )
 		return response
 
+
+	def getAllIdentities( self ):
+		addresses = self.api.listAddresses2()
+		return addresses
+
 	# string is label 
 	def createRandomAddress(self,label):
 		x = base64.b64encode(bytes(label, "utf-8")).decode()

@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from bitweb.models import User
 from django.views.generic import View
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -85,7 +85,18 @@ class Send ( View ):
 
 # gets a list of all the identities of a user
 class AllIdentitiesOfUser( View ):
-    pass
+    api = API()
+
+    def get( self, request ):
+        print('here')
+        print(request.GET['user_id'])
+        user_id = request.GET['user_id']
+        print(user_id)
+        user = User.objects.get(pk=user_id)
+        print(user)
+        addresses = BitKey.objects.filter(user=user)
+        print(addresses)
+        return JsonResponse( { 'addresses' : addresses } )
 
 # given an identity, will return all messages that are associated
 class MessagesByIdentity( View ):

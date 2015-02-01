@@ -17,4 +17,9 @@ $(document).ready(function(){
         }
 	});
 
+    // $.post( '/bmapi/identities', JSON.stringify({'test':'testing', ''}), function(data){
+    //           console.log(data)
+    //       }
+    //   })
+
 });
