@@ -16,10 +16,10 @@ $(document).ready(function(){
             $("form").submit();
         }
 	});
-
-    // $.post( '/bmapi/identities', JSON.stringify({'test':'testing', ''}), function(data){
-    //           console.log(data)
-    //       }
-    //   })
+    var user = "a"
+    $.post( '/bmapi/create_id', user, function(data){
+              console.log(data)
+          
+      })
 
 });
