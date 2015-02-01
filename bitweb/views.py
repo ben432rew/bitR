@@ -42,7 +42,8 @@ class Inbox( View ):
 
 
 class Profile( View ):
-    pass
+    def get(self, request):
+        return render (request, 'bitweb/profile.html')
 
 class About( View ):
     pass

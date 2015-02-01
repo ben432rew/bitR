@@ -41,4 +41,7 @@ $(document).ready(function(){
 // send json to createchan function
 // set new chan as active chan in chan tab
     })
+    $( '#refresh-btn' ).click(function() {
+// check for new messages
+    })
 });
