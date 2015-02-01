@@ -41,6 +41,10 @@ class Send ( View ):
     pass
 
 
+# gets a list of all the identities of a user
+class AllIdentitiesOfUser( View ):
+    pass
+
 # given an identity, will return all messages that are associated
 class MessagesByIdentity( View ):
     pass
