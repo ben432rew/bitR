@@ -15,22 +15,24 @@ $(document).ready(function(){
     $('.dropdown-toggle').dropdown();
 
     $.get('/bmapi/allmessages', function (data){
-        console.log(data['messages'])
         data['messages'].forEach(function(value) {
             $.scope.inbox.push(value)
         })
     })
-// doesn't work as is (UNFINISHED)
+
     $.post('/bmapi/identities', JSON.stringify(user_id), function (data){
-        if (data['addresses'] != []){
+        if (data['addresses'] == undefined){
+// if there aren't any identities that the user has (like if they just signed up),
+// then they should just see the create identities modal (UNFINISHED)
+            $( '#create_identitiy' ).modal('show')
+            console.log("here")
             console.log(data['addresses'])
+        } else {
             data['addresses'].forEach(function(value) {
                 $.scope.identities.push(value)
             })
-// if there aren't any identities that the user has (like if they just signed up),
-// then they should just see the create identities modal (UNFINISHED)
-        } else {
-            $( '#create_identitiy' ).modal('show')
+            console.log(data['addresses'])
+            console.log('there')
         }
     })
 
