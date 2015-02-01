@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from bitweb.models import User
 from django.views.generic import View
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -31,21 +31,72 @@ class EveryMinute( View ):
 
 
 class CreateId( View ):
-    pass
+    api = API()
+
+    def post( self, request ):
+        the_jason = json.loads(request.body.decode('utf-8'))
+        print(the_jason)
+        label = the_jason['label']
+        print(label)
+        return JsonResponse( { 'id' : self.api.createRandomAddress(label) } )
+
+class DeleteId( View ):
+    api = API()
+
+    def post( self, request ):
+        address = request.POST['address']
+        return JsonResponse( { 'id' : self.api.deleteAddress(address) } )
 
 
 class CreateChan( View ):
-    pass
+    api = API()
 
+    def post( self, request ):
+        passphrase = request.POST['passphrase']
+        return JsonResponse( { 'chan_address' : self.api.createChan(passphrase) } )
+
+
+class JoinChan( View ):
+    api = API()
+
+    def post( self, request ):
+        passphrase = request.POST['passphrase']
+        address = request.POST['address']
+        return JsonResponse( { 'join_status' : self.api.joinChan(passphrase, address) } )
+
+class LeaveChan( View ):
+    api = API()
+
+    def post( self, request ):
+        address = request.POST['address']
+        return JsonResponse( { 'leave_status' : self.api.leaveChan(address) } )
     
 # send an email
 class Send ( View ):
-    pass
+    api = API()
+
+    def post( self, request ):
+        to_address = request.POST['to_address']
+        from_address = request.POST['from_address']
+        subject = request.POST['subject']
+        message = request.POST['message']
+        return JsonResponse( { 'message_status' : self.api.sendMessage( to_address, from_address, subject, message ) } )
 
 
 # gets a list of all the identities of a user
 class AllIdentitiesOfUser( View ):
-    pass
+    api = API()
+
+    def get( self, request ):
+        print('here')
+        print(request.GET['user_id'])
+        user_id = request.GET['user_id']
+        print(user_id)
+        user = User.objects.get(pk=user_id)
+        print(user)
+        addresses = BitKey.objects.filter(user=user)
+        print(addresses)
+        return JsonResponse( { 'addresses' : addresses } )
 
 # given an identity, will return all messages that are associated
 class MessagesByIdentity( View ):

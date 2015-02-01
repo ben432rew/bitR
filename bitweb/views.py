@@ -1,7 +1,8 @@
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from bitweb.forms import AuthenticationForm, UserCreationForm
+from bitweb.models import *
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
+from bitweb.models import User
 from django.views.generic import View
 from bmapi.models import Token
 import uuid
@@ -64,4 +65,5 @@ class Logout( View ):
     def get( self, request ):
         request.user.token_set.all().delete()
         logout( request )
+        request.session.clear()
         return render ( request, 'bitweb/index.html', {'signup':UserCreationForm(), 'login':AuthenticationForm()} )
