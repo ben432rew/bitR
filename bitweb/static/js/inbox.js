@@ -14,6 +14,7 @@ $(document).ready(function(){
     $( '#create_chan' ).modal('hide')
     $.material.ripples();
     $('.dropdown-toggle').dropdown();
+
     $.get('/bmapi/allmessages', function (data){
         data['messages'].forEach(function(value) {
             $.scope.inbox.push(value)
@@ -33,7 +34,6 @@ $(document).ready(function(){
             $( '#create_identitiy' ).modal('show')
         }
     })
-
 
 
     $( '#create_id_button' ).click(function() {

@@ -34,18 +34,18 @@ class CreateId( View ):
     api = API()
     
     def post( self, request ):
-        the_jason = json.loads(request.body.decode('utf-8'))
-        user = User.objects.get(pk=the_jason['user_id'])
+        the_json = request.body.decode('utf-8')
         newaddy = self.api.createRandomAddress(the_jason['nickname'])
+        user = User.objects.get(pk=the_jason['user_id'])
         bitty = BitKey.objects.create(name=the_jason["nickname"], key=newaddy, user=user)
-        return JsonResponse( { 'id' : newaddy } )
-
+        return JsonResponse( { 'id' : newaddy )
 
 class DeleteId( View ):
     api = API()
 
     def post( self, request ):
-        address = request.POST['address']
+        the_json = request.body.decode('utf-8')
+        address = the_json['address']
         return JsonResponse( { 'id' : self.api.deleteAddress(address) } )
 
 
@@ -53,7 +53,8 @@ class CreateChan( View ):
     api = API()
 
     def post( self, request ):
-        passphrase = request.POST['passphrase']
+        the_json = request.body.decode('utf-8')
+        passphrase = the_json['passphrase']
         return JsonResponse( { 'chan_address' : self.api.createChan(passphrase) } )
 
 
@@ -61,15 +62,17 @@ class JoinChan( View ):
     api = API()
 
     def post( self, request ):
-        passphrase = request.POST['passphrase']
-        address = request.POST['address']
+        the_json = json.loads(request.body.decode("utf-8"))
+        passphrase = the_json['passphrase']
+        address = the_json['address']
         return JsonResponse( { 'join_status' : self.api.joinChan(passphrase, address) } )
 
 class LeaveChan( View ):
     api = API()
 
     def post( self, request ):
-        address = request.POST['address']
+        the_json = json.loads(request.body.decode("utf-8"))
+        address = the_json['address']
         return JsonResponse( { 'leave_status' : self.api.leaveChan(address) } )
     
 # send an email
@@ -77,10 +80,11 @@ class Send ( View ):
     api = API()
 
     def post( self, request ):
-        to_address = request.POST['to_address']
-        from_address = request.POST['from_address']
-        subject = request.POST['subject']
-        message = request.POST['message']
+        the_json = json.loads(request.body.decode("utf-8"))
+        to_address = the_json['to_address']
+        from_address = the_json['from_address']
+        subject = the_json['subject']
+        message = the_json['message']
         return JsonResponse( { 'message_status' : self.api.sendMessage( to_address, from_address, subject, message ) } )
 
 
@@ -89,7 +93,7 @@ class AllIdentitiesOfUser( View ):
     api = API()
 
     def get( self, request ):
-        user_id = request.GET['user_id']
+        user_id = request.body.decode('utf-8')
         user = User.objects.get(pk=user_id)
         addresses = BitKey.objects.filter(user=user)
         return JsonResponse( { 'addresses' : addresses } )
