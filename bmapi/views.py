@@ -34,11 +34,11 @@ class CreateId( View ):
     api = API()
     
     def post( self, request ):
-        the_json = request.body.decode('utf-8')
+        the_json = json.loads(request.body.decode('utf-8'))
         newaddy = self.api.createRandomAddress(the_jason['nickname'])
         user = User.objects.get(pk=the_jason['user_id'])
         bitty = BitKey.objects.create(name=the_jason["nickname"], key=newaddy, user=user)
-        return JsonResponse( { 'id' : newaddy )
+        return JsonResponse( { 'id' : self.api.createRandomAddress(label) } )
 
 class DeleteId( View ):
     api = API()
