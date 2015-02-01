@@ -4,6 +4,7 @@ from django.shortcuts import render
 from bmapi.wrapperAPI import API
 from bmapi.models import Token
 from datetime import datetime
+import json
 
 # check if the token is in the database and if it's expired (older than 5 hours)
 def check_token (token):
@@ -32,7 +33,10 @@ class CreateId( View ):
     api = API()
 
     def post( self, request ):
-        label = request.POST['label']
+        the_jason = json.loads(request.body.decode('utf-8'))
+        print(the_jason)
+        label = the_jason['label']
+        print(label)
         return JsonResponse( { 'id' : self.api.createRandomAddress(label) } )
 
 class DeleteId( View ):
@@ -77,6 +81,10 @@ class Send ( View ):
         message = request.POST['message']
         return JsonResponse( { 'message_status' : self.api.sendMessage( to_address, from_address, subject, message ) } )
 
+
+# gets a list of all the identities of a user
+class AllIdentitiesOfUser( View ):
+    pass
 
 # given an identity, will return all messages that are associated
 class MessagesByIdentity( View ):
