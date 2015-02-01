@@ -3,15 +3,14 @@ import base64
 import json
 import time
 from pprint import pprint as print
+from api_info import API_LOGIN
 
 
 class API():
-	def __init__( self):
-		user = 'bear'
-		password = 'bear'
+	def __init__(self):
 		url = '127.0.0.1'
 		port = 8442
-		url = "http://{}:{}@{}:{}/".format( user, password, url,port)
+		url = "http://{}:{}@{}:{}/".format( API_LOGIN["user"], API_LOGIN["password"], url,port)
 		self.api = client.ServerProxy( url )
 
 	def clean( self ):

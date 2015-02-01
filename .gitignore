@@ -56,3 +56,7 @@ target/
 
 # Here secret key and database settings are stored
 local_settings.py
+
+# api login info
+api_info.py
+
