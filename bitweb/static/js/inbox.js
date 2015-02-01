@@ -3,13 +3,11 @@ $(document).ready(function(){
         "backdrop" : "static",
         "keyboard" : "true",
         "show"     : "true"
-
     }
     var user_id = {'user_id':$( '#user_id' ).val()};
     var identities;
 
     $( '#create_identitiy' ).modal(options)
-    // $( '#create_identitiy' ).hide()
     $.material.ripples();
     $('.dropdown-toggle').dropdown();
     $.get('/bmapi/allmessages', function (data){
@@ -26,7 +24,7 @@ $(document).ready(function(){
             })
         } else {
 // here the rest of the page should be darkened or faded
-            $( '#create_identitiy' ).show()
+            $( '#create_identitiy' ).modal('show')
         }
     })
 });
