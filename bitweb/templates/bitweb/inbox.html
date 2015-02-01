@@ -8,9 +8,14 @@
     <script src="{%static 'js/mustache.min.js' %}"></script>
 	<div class = "row">
 	    <h1><a class="col-md-2" href={% url 'bitweb:index' %} id = 'logo'>BitR</a></h1>
-	    <form class="col-md-4" action = {% url 'bmapi:search' %} id = "search-bar">
-	    <input id = "search-input" type = 'search' placeholder = "Search" results = "0" name = 'bitr-search'>
-		</form>
+		<div class="row col md-4">
+			<div class="input-group">
+				<span class="input-group-btn">
+					<button class="btn btn-raised" type="button" id="search-btn">Go!</button>
+				</span>
+				<input type="text" class="form-control" placeholder="Search for...">
+			</div>
+		</div>
 		<div class="dropdown col-md-2">
 		  <button class="btn btn-material-blue-grey-100 dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true" id="user_id" value="{{user.id}}">
 		    Identities
@@ -19,6 +24,7 @@
 		  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">					   {% verbatim %}
 		    	<li role="presentation" jq-repeat="identities"><a role="menuitem" tabindex="-1" href="#">{{ identity }}</a></li>
 			{% endverbatim %}  
+			<li role="presentation" class="divider"></li>
 			<li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#create_identity">Create New Identity</a></li>
 		  </ul>
 		</div>
@@ -47,32 +53,36 @@
 		    	<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Unstarred</a></li>
 		  </ul>
 		</div>
-		<button class = "col-md-2 btn btn-material-blue-grey-100" id = 'refresh-btn'>Refresh</button>
-		<div id = 'primary-tab' class = 'col-md-2'>
-			<p>Primary</p>
-		</div>
-		<div class="dropdown col-md-4">
-		  <button class="btn btn-material-blue-grey-100 dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-		    Chans
-		    <span class="caret"></span>
-		  </button>
-		  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">					   {% verbatim %}
-		    	<li role="presentation" jq-repeat="chans"><a role="menuitem" tabindex="-1" href="#">{{ chan }}</a></li>
-			{% endverbatim %}
-			<li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#create_chan">Create New Chan</a></li>
-		  </ul>
-		</div>
+		<button class = "btn btn-material-blue-grey-100" id = 'refresh-btn'>Refresh</button>
 	</div>
+
 	<div class = "row">
-		<ul class = "col-md-2" id = "inbox-options">
-			<li><a href={% url 'bmapi:allmessages' %}>Inbox</a></li>
-			<li><a href={% url 'bmapi:starred' %}>Starred</a></li>
-			<li><a href={% url 'bmapi:sent' %}>Sent Mail</a></li>
-			<li><a href={% url 'bmapi:drafts' %}>Drafts</a></li>
-			<li><a href={% url 'bmapi:spam' %}>Spam</a></li>
-			<li><a href={% url 'bmapi:trash' %}>Trash</a></li>
-		</ul>
-		<div class = "col-md-8">
+		<div class="btn-group-vertical">
+			<button type="button" class="btn">Inbox</button>
+			<button type="button" class="btn">Starred</button>
+			<button type="button" class="btn">Sent Mail</button>
+			<button type="button" class="btn">Drafts</button>
+			<button type="button" class="btn">Spam</button>
+			<button type="button" class="btn">Trash</button>
+		</div>
+		<div class = "col-md-10">
+			<div class="btn-group btn-group" role="group" aria-label="primaryChan">
+				<div id = 'primary-tab' class='btn'>
+					<p>Primary</p>
+				</div>
+				<div class="dropdown btn-group" role="group">
+				  <button class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+				    Chans
+				    <span class="caret"></span>
+				  </button>
+				  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">					   {% verbatim %}
+				    	<li role="presentation" jq-repeat="chans"><a role="menuitem" tabindex="-1" href="#">{{ chan }}</a></li>
+					{% endverbatim %}
+					<li role="presentation" class="divider"></li>
+					<li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#create_chan">Create New Chan</a></li>
+				  </ul>
+				</div>
+			</div>
 			<ul>
 			{% verbatim %}
 				<li jq-repeat="inbox">{{ message }}</li>
