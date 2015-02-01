@@ -45,7 +45,6 @@ class Inbox( View ):
 class Profile( View ):
     def get(self, request):
         identities = request.user.bitkey_set.all()
-        print(identities)
         return render (request, 'bitweb/profile.html', {'identities':identities})
 
 
@@ -69,5 +68,4 @@ class Logout( View ):
     def get( self, request ):
         request.user.token_set.all().delete()
         logout( request )
-        request.session.clear()
         return render ( request, 'bitweb/index.html', {'signup':UserCreateForm(), 'login':AuthenticationForm()} )
