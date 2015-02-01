@@ -38,7 +38,6 @@ class Login( View ):
 
 class Inbox( View ):
     def get(self, request):
-        print ( request.user.token_set.all() )
         return render (request, 'bitweb/inbox.html')
 
 
