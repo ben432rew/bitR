@@ -57,12 +57,6 @@ class API():
 
 	def getAllMessagesIds(self):
 		ids = self.api.getAllInboxMessageIDs()
-<<<<<<< HEAD:bitrest/wrapperAPI.py
-<<<<<<< Updated upstream:bitrest/wrapperAPI.py
-		return(json.loads(ids)["inboxMessageIds"])
-=======
-=======
->>>>>>> e90a05d48748fd891a0b5cfb3ba6a550627a1bf6:bmapi/wrapperAPI.py
 		return(json.loads(ids)["inboxMessageIds"])
 
 
@@ -88,7 +82,3 @@ if __name__ == "__main__":
   'subject': 'fish',
   'toAddress': 'BM-2cUTMYmgrpXmhieJLad7s5tLPnBQKaTyqb'}]
 '''
-<<<<<<< HEAD:bitrest/wrapperAPI.py
->>>>>>> Stashed changes:bmapi/wrapperAPI.py
-=======
->>>>>>> e90a05d48748fd891a0b5cfb3ba6a550627a1bf6:bmapi/wrapperAPI.py
