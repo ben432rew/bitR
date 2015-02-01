@@ -1,9 +1,9 @@
-from bitweb.models import User
+from bmapi.models import Token, BitKey
 from django.views.generic import View
 from django.http import JsonResponse
 from django.shortcuts import render
 from bmapi.wrapperAPI import API
-from bmapi.models import Token
+from bitweb.models import User
 from datetime import datetime
 import json
 
@@ -32,10 +32,17 @@ class EveryMinute( View ):
 
 class CreateId( View ):
     api = API()
-
+    
     def post( self, request ):
         label = request.body.decode('utf-8')
+        newaddy = self.api.createRandomAddress(the_jason['nickname'])
+        bitty = BitKey.objects.create(name=the_jason["nickname"], key=newaddy, user=user)
         return JsonResponse( { 'id' : self.api.createRandomAddress(label) } )
+        the_jason = json.loads(request.body.decode('utf-8'))
+        user = User.objects.get(pk=the_jason['user_id'])
+        newaddy = self.api.createRandomAddress(the_jason['nickname'])
+        bitty = BitKey.objects.create(name=the_jason["nickname"], key=newaddy, user=user)
+        return JsonResponse( { 'id' : newaddy } )
 
 class DeleteId( View ):
     api = API()

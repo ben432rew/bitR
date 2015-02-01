@@ -16,7 +16,6 @@
 
         <div class="col-md-3">
             <h1>BitR</h1>
-            <img id  = "login-phone" src="{%static 'images/login_phone.png' %}" class="img-responsive" alt="Sailboat">
             <br>
             <br>
             <p>{{ error }} </p>
@@ -24,24 +23,24 @@
                 {% csrf_token %}
                 
                 {{ signup|as_bootstrap }}
-                    <button class="btn btn-material-blue-grey-100 pull-right">
-                        Sign Up
-                    </button>
-                </form>
+
+                <button class="btn btn-material-blue-grey-100 pull-right">
+                    Sign Up
+                </button>
+            </form>
 
             <form action={% url 'bitweb:login' %} class="login form-horizontal" method="POST">
                 {% csrf_token %}
 
-                    {{ login|as_bootstrap }}
+                {{ login|as_bootstrap }}
 
-                    <button class="btn btn-material-blue-grey-100 pull-left">
-                        Login
-                    </button>
-                </form>
-                <br><br><br><br><br>
-                <p class="signup">Already have a BitR account?  <button id="login" class="btn btn-material-blue-grey-500">Login</button></p>
-                <p class="login">Don't have a BitR account?  <button id="signup" class="btn btn-material-blue-grey-500">Sign up now</button></p>
-            </div>
+                <button class="btn btn-material-blue-grey-100 pull-right">
+                    Login
+                </button>
+            </form>
+            <br><br><br><br><br>
+            <p class="signup">Already have a BitR account?  <button id="login" class="btn btn-material-blue-grey-500">Login</button></p>
+            <p class="login">Don't have a BitR account?  <button id="signup" class="btn btn-material-blue-grey-500">Sign up now</button></p>
         </div>
         <div class="col-md-1"></div>
     </div>
