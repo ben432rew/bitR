@@ -3,7 +3,7 @@ import base64
 import json
 import time
 from pprint import pprint as print
-from api_info import API_LOGIN
+from .api_info import API_LOGIN
 
 
 class API():
