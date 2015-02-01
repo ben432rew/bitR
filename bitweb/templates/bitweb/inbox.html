@@ -58,7 +58,8 @@
 		  </button>
 		  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">					   {% verbatim %}
 		    	<li role="presentation" jq-repeat="chans"><a role="menuitem" tabindex="-1" href="#">{{ chan }}</a></li>
-			{% endverbatim %}  
+			{% endverbatim %}
+			<li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#create_chan">Create New Chan</a></li>
 		  </ul>
 		</div>
 	</div>
@@ -89,12 +90,39 @@
 	        	<h4 class="modal-title" id="myModalLabel">New Identity</h4>
 	        </div>
 		    <div class="modal-body">
-		      Form for new identities here
+				<form>
+				  <div class="form-group">
+				    <label for="Identity Name">Identity Nickname</label>
+				    <input type="email" class="form-control" id="Identity Name" placeholder="Enter Identity Nickname">
+				    <p class="help-block">Create an 'Identity' for your mailbox.  You can create more anytime you want, and have different mailboxes for different Identities!</p>
+		            <button type="button" class="btn" data-dismiss="modal">Cancel</button>
+			        <button type="button" id="create_id_button" class="btn btn-material-blue-grey-500" data-dismiss="modal">Create</button>
+				  </div>
+				</form>
 		    </div>
-		    <div class="modal-footer">
-	            <button type="button" class="btn" data-dismiss="modal">Cancel</button>
-		        <button type="button" class="btn btn-material-blue-grey-500">Create</button>
+	    </div>
+	  </div>
+	</div>
+
+<!-- new chan modal -->
+	<div class="modal fade" id="create_chan" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display:none">
+	  <div class="modal-dialog modal-sm">
+		<div class="modal-content">
+	        <div class="modal-header">
+	 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+	        	<h4 class="modal-title" id="myModalLabel">New Chan</h4>
 	        </div>
+		    <div class="modal-body">
+				<form>
+				  <div class="form-group">
+				    <label for="Chan Name">Chan Nickname</label>
+				    <input type="email" class="form-control" id="Chan Name" placeholder="Enter Chan Name">
+				    <p class="help-block">Enter a name for your chan. If you choose a sufficiently complex chan name (like a strong and unique passphrase) and none of your friends share it publicly then the chan will be secure and private. If you and someone else both create a chan with the same chan name then it is currently very likely that they will be the same chan!</p>
+		            <button type="button" class="btn" data-dismiss="modal">Cancel</button>
+			        <button type="button" id="create_chan_button" class="btn btn-material-blue-grey-500" data-dismiss="modal">Create</button>
+				  </div>
+				</form>
+		    </div>
 	    </div>
 	  </div>
 	</div>
