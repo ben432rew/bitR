@@ -93,9 +93,9 @@ class Send ( View ):
 class AllIdentitiesOfUser( View ):
     api = API()
 
-    def get( self, request ):
+    def post( self, request ):
         the_jason = json.loads(request.body.decode('utf-8'))
-        user_id = the_jason["user_id"]
+        print(the_jason)
         user = User.objects.get(pk=user_id)
         addresses = BitKey.objects.filter(user=user)
         return JsonResponse( { 'addresses' : addresses } )
