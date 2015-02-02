@@ -42,7 +42,12 @@ $(document).ready(function(){
 
     $( '#refresh-btn' ).click(function(event) {
         event.preventDefault();
-        $("#inbox-mess").reload();
+        $.get('/bmapi/allmessages', function (data){
+            $.scope.splice(0);
+            data['messages'].forEach(function(value) {
+            $.scope.inbox.push(value)
+            })
+        })
     })
 
 });
