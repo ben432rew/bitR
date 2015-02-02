@@ -1,17 +1,6 @@
 $(document).ready(function(){
-    var options = {
-        "backdrop" : "static",
-        "keyboard" : "true",
-        "show"     : "true"
-    }
     var user_id = {'user_id':$( '#user_id' ).val()};
-    var identities;
-
-    $( '#create_identitiy' ).modal(options)
-    $( '#create_chan' ).modal(options)
-// this next line is a bug, it shouldn't be neccessary.  if it's not here, the 
-// chan modal automatically appears on page load
-    $( '#create_chan' ).modal('hide')
+    
     $.material.ripples();
     $('.dropdown-toggle').dropdown();
 
@@ -20,18 +9,20 @@ $(document).ready(function(){
             $.scope.inbox.push(value)
         })
     })
-// doesn't work as is (UNFINISHED)
-    $.get('/bmapi/identities', user_id, function (data){
-        if (data){
-            console.log(data)
-            identities = data
-            data['indentities'].forEach(function(value) {
-                $.scope.identities.push(value)
-            })
+
+    $.post('/bmapi/identities', JSON.stringify(user_id), function (data){
+        if (data['addresses'] == undefined){
 // if there aren't any identities that the user has (like if they just signed up),
 // then they should just see the create identities modal (UNFINISHED)
-        } else {
             $( '#create_identitiy' ).modal('show')
+            console.log("here")
+            console.log(data['addresses'])
+        } else {
+            data['addresses'].forEach(function(value) {
+                $.scope.identities.push(value)
+            })
+            console.log(data['addresses'])
+            console.log('there')
         }
     })
 

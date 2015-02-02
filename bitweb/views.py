@@ -3,9 +3,10 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
 from bitweb.forms import UserCreateForm
 from django.views.generic import View
-from bmapi.models import *
 from bitweb.models import User
+from bmapi.models import *
 import uuid
+
 
 class Index( View ):
     def get(self, request):

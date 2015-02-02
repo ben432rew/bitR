@@ -7,11 +7,21 @@
     <script src="{%static 'js/jq-repeat.min.js' %}"></script>
     <script src="{%static 'js/mustache.min.js' %}"></script>
 	<div class = "row">
-	    <h1><a class="col-md-2" href={% url 'bitweb:index' %} id = 'logo'>BitR</a></h1>
-	    <form class="col-md-4" action = {% url 'bmapi:search' %} id = "search-bar">
-	    <input id = "search-input" type = 'search' placeholder = "Search" results = "0" name = 'bitr-search'>
-		</form>
-		<div class="dropdown col-md-2">
+	    <h1 class="col-md-2"><ahref={% url 'bitweb:index' %} id = 'logo'>BitR</a></h1>
+		<div class="row col md-4">
+			<div class="input-group">
+				<span class="input-group-btn">
+					<button class="btn btn-raised" type="button" id="search-btn">Go!</button>
+				</span>
+				<input type="text" class="form-control" placeholder="Search for...">
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block content %}
+	<div class="row">
+		<div class="dropdown col-md-2 col-md-offset-6">
 		  <button class="btn btn-material-blue-grey-100 dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true" id="user_id" value="{{user.id}}">
 		    Identities
 		    <span class="caret"></span>
@@ -19,14 +29,14 @@
 		  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">					   {% verbatim %}
 		    	<li role="presentation" jq-repeat="identities"><a role="menuitem" tabindex="-1" href="#">{{ identity }}</a></li>
 			{% endverbatim %}  
+			<li role="presentation" class="divider"></li>
 			<li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#create_identity">Create New Identity</a></li>
 		  </ul>
 		</div>
 		<a class="col-md-2" href={% url 'bitweb:profile' %} id = 'profile-btn'><button class="btn btn-material-blue-grey-100">Profile</button></a>
 	    <a class="col-md-2" href={% url 'bitweb:logout' %} id = 'logout-btn'>Logout</a>
 	</div>
-{% endblock %}
-{% block content %}
+
 	<div class = "row">
 		<div class = "col-md-2">
 			<button class="btn btn-material-blue-grey-100" id = "compose-btn">Compose</button>
@@ -47,32 +57,36 @@
 		    	<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Unstarred</a></li>
 		  </ul>
 		</div>
-		<button class = "col-md-2 btn btn-material-blue-grey-100" id = 'refresh-btn'>Refresh</button>
-		<div id = 'primary-tab' class = 'col-md-2'>
-			<p>Primary</p>
-		</div>
-		<div class="dropdown col-md-4">
-		  <button class="btn btn-material-blue-grey-100 dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-		    Chans
-		    <span class="caret"></span>
-		  </button>
-		  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">					   {% verbatim %}
-		    	<li role="presentation" jq-repeat="chans"><a role="menuitem" tabindex="-1" href="#">{{ chan }}</a></li>
-			{% endverbatim %}
-			<li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#create_chan">Create New Chan</a></li>
-		  </ul>
-		</div>
+		<button class = "btn btn-material-blue-grey-100 col-md-offset-2 col-md-offset-6" id = 'refresh-btn'>Refresh</button>
 	</div>
+
 	<div class = "row">
-		<ul class = "col-md-2" id = "inbox-options">
-			<li><a href={% url 'bmapi:allmessages' %}>Inbox</a></li>
-			<li><a href={% url 'bmapi:starred' %}>Starred</a></li>
-			<li><a href={% url 'bmapi:sent' %}>Sent Mail</a></li>
-			<li><a href={% url 'bmapi:drafts' %}>Drafts</a></li>
-			<li><a href={% url 'bmapi:spam' %}>Spam</a></li>
-			<li><a href={% url 'bmapi:trash' %}>Trash</a></li>
-		</ul>
-		<div class = "col-md-8">
+		<div class="btn-group-vertical col-md-2">
+			<button type="button" class="btn">Inbox</button>
+			<button type="button" class="btn">Starred</button>
+			<button type="button" class="btn">Sent Mail</button>
+			<button type="button" class="btn">Drafts</button>
+			<button type="button" class="btn">Spam</button>
+			<button type="button" class="btn">Trash</button>
+		</div>
+		<div class = "col-md-10">
+			<div class="btn-group btn-group-justified" role="group" aria-label="primaryChan">
+				<div id = 'primary-tab' class='btn'>
+					<p>Primary</p>
+				</div>
+				<div class="dropdown btn-group" role="group">
+				  <button class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+				    Chans
+				    <span class="caret"></span>
+				  </button>
+				  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">					   {% verbatim %}
+				    	<li role="presentation" jq-repeat="chans"><a role="menuitem" tabindex="-1" href="#">{{ chan }}</a></li>
+					{% endverbatim %}
+					<li role="presentation" class="divider"></li>
+					<li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#create_chan">Create New Chan</a></li>
+				  </ul>
+				</div>
+			</div>
 			<ul>
 			{% verbatim %}
 				<li jq-repeat="inbox">{{ message }}</li>
@@ -115,8 +129,8 @@
 		    <div class="modal-body">
 				<form>
 				  <div class="form-group">
-				    <label for="Chan Name">Chan Nickname</label>
-				    <input type="email" class="form-control" id="chan_name" placeholder="Enter Chan Name">
+				    <label for="Chan Name">Chan Passphrase</label>
+				    <input type="email" class="form-control" id="chan_name" placeholder="Enter Chan Name(passphrase)">
 				    <p class="help-block">Enter a name for your chan. If you choose a sufficiently complex chan name (like a strong and unique passphrase) and none of your friends share it publicly then the chan will be secure and private. If you and someone else both create a chan with the same chan name then it is currently very likely that they will be the same chan!</p>
 		            <button type="button" class="btn" data-dismiss="modal">Cancel</button>
 			        <button type="button" id="create_chan_button" class="btn btn-material-blue-grey-500" data-dismiss="modal">Create</button>
