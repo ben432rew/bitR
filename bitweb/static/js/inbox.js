@@ -32,6 +32,7 @@ $(document).ready(function(){
         var info = tokenValue;
         info['nickname'] = $( '#identity_name' ).val();
         $.post('/bmapi/create_id', JSON.stringify(info), function (data){
+// add new identity to list, select it
             })
 // clear inbox and chans (UNFINISHED)
     })
