@@ -40,8 +40,9 @@ $(document).ready(function(){
 // set new chan as active chan in chan tab
     })
 
-    $( '#refresh-btn' ).click(function() {
-// check for new messages
+    $( '#refresh-btn' ).click(function(event) {
+        event.preventDefault();
+        $("#inbox-mess").reload();
     })
 
 });

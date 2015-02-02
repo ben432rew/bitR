@@ -87,11 +87,13 @@
 				  </ul>
 				</div>
 			</div>
-			<ul>
-			{% verbatim %}
-				<li jq-repeat="inbox">{{ message }}</li>
-			{% endverbatim %}
-			</ul>
+			<div id = "inbox-mess">
+				<ul>
+				{% verbatim %}
+					<li jq-repeat="inbox">{{ message }}</li>
+				{% endverbatim %}
+				</ul>
+			</div>
 		</div>
 	</div>
 
