@@ -32,8 +32,8 @@ class Signup( View ):
             user = authenticate(username = the_jason["username"], password=the_jason["password1"])
             login(request, user)
             token = Token.objects.create(token = uuid.uuid4(), user = user)    
-            return redirect( '/inbox' )
-        return render ( request, 'bitweb/index.html', {'signup':UserCreateForm(), 'login':AuthenticationForm(), 'error':"Sorry, you didn't enter valid signup information"} )
+            return JsonResponse({ 'token':token})
+        return JsonResponse({})
 
 
 class Login( View ):
@@ -42,9 +42,9 @@ class Login( View ):
         user = authenticate(username=the_jason["username"], password=the_jason["password"])
         if user:
             login(request, user)
-            token = Token.objects.create(token = uuid.uuid4(), user = user)     
-            return redirect('/inbox')
-        return render ( request, 'bitweb/index.html', {'signup':UserCreateForm(), 'login':AuthenticationForm(), 'error':"Sorry, you didn't enter valid login information"} )
+            token = Token.objects.create(token = uuid.uuid4(), user = user)
+            return JsonResponse({ 'token':token})
+        return JsonResponse({})
 
 
 class Logout( View ):
