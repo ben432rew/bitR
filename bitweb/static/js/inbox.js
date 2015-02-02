@@ -1,20 +1,8 @@
 $(document).ready(function(){
-
     var user_id = {'user_id':$( '#user_id' ).val()};
-
-    /* this seems to unnecessary -wm 
-    // modal
-    var options = {
-        "backdrop" : "static",
-        "keyboard" : "true",
-        "show"     : "true"
-    }
-    $( '#create_identitiy' ).modal(options)
-    $( '#create_chan' ).modal(options)
-    */
-
-    $.material.ripples(); //should this be in index.js? -wm
-    $('.dropdown-toggle').dropdown(); //should this be in index.js? -wm
+    
+    $.material.ripples();
+    $('.dropdown-toggle').dropdown();
 
     $.get('/bmapi/allmessages', function (data){
         data['messages'].forEach(function(value) {
