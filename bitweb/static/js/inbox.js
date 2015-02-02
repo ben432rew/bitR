@@ -40,8 +40,14 @@ $(document).ready(function(){
 // set new chan as active chan in chan tab
     })
 
-    $( '#refresh-btn' ).click(function() {
-// check for new messages
+    $( '#refresh-btn' ).click(function(event) {
+        event.preventDefault();
+        $.get('/bmapi/allmessages', function (data){
+            $.scope.splice(0);
+            data['messages'].forEach(function(value) {
+            $.scope.inbox.push(value)
+            })
+        })
     })
 
     $( '#logout-btn' ).click(function(){
