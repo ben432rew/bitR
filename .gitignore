@@ -54,9 +54,5 @@ docs/_build/
 # PyBuilder
 target/
 
-# Here secret key and database settings are stored
+# Here secret key, database, and api login settings are stored
 local_settings.py
-
-# api login info
-api_info.py
-

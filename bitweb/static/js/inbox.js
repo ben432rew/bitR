@@ -1,8 +1,6 @@
 $(document).ready(function(){
     var user_id = {'user_id':$( '#user_id' ).val()};
     
-// this next line is a bug, it shouldn't be neccessary.  if it's not here, the 
-// chan modal automatically appears on page load
     $.material.ripples();
     $('.dropdown-toggle').dropdown();
 
