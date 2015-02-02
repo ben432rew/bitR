@@ -3,7 +3,6 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from bmapi.views import *
 
-AllIdentitiesOfUser
 
 urlpatterns = patterns('',
     url(r'^allmessages', AllMessages.as_view(), name="allmessages" ),

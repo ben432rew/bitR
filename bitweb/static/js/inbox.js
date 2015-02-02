@@ -1,9 +1,8 @@
 $(document).ready(function(){
-    var user_id = {'user_id':$( '#user_id' ).val()};
-    var tokenValue = document.cookie;
-
     $.material.ripples();
     $('.dropdown-toggle').dropdown();
+
+    var tokenValue = {'token': $.cookie('token') }
 
     $.get('/bmapi/allmessages', function (data){
         data['messages'].forEach(function(value) {
@@ -11,8 +10,8 @@ $(document).ready(function(){
         })
     })
 
-    $.post('/bmapi/identities', JSON.stringify(user_id), function (data){
-        if (data['addresses'] == undefined){
+    $.post('/bmapi/identities', JSON.stringify(tokenValue), function (data){
+        if (data['addresses'] == 'none'){
 // if there aren't any identities that the user has (like if they just signed up),
 // then they should just see the create identities modal (UNFINISHED)
             $( '#create_identitiy' ).modal('show')
@@ -29,7 +28,7 @@ $(document).ready(function(){
 
 
     $( '#create_id_button' ).click(function() {
-        var info = user_id;
+        var info = tokenValue;
         info['nickname'] = $( '#identity_name' ).val();
         $.post('/bmapi/create_id', JSON.stringify(info), function (data){
             })

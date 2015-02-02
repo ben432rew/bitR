@@ -25,7 +25,7 @@ $(document).ready(function(){
         var signupInfo = $( this ).serializeObject();
         $.post('/bmapi/signup', JSON.stringify(signupInfo), function (data){ 
             if (data['token']) {
-                document.cookie=data['token'];
+                $.cookie( 'token', data['token'], { expires: 1 } );
                 window.location.replace('/inbox');
             } else {
                 alert('Sorry, that signup information is not valid')
@@ -39,7 +39,7 @@ $(document).ready(function(){
         var loginInfo = $( this ).serializeObject();
         $.post('/bmapi/login', JSON.stringify(loginInfo), function (data){
             if (data['token']) {
-                document.cookie=data['token'];
+                $.cookie( 'token', data['token'], { expires: 1 } );
                 window.location.replace('/inbox');
             } else {
                 alert('Sorry, that signup information is not valid')

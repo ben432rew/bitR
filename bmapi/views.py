@@ -23,6 +23,7 @@ def check_token (token):
     return "token does not exist in database"
 
 
+# dry these next two functions out
 class Signup( View ):
     def post(self, request):
         the_jason = json.loads(request.body.decode('utf-8'))
@@ -31,8 +32,9 @@ class Signup( View ):
             form.save()
             user = authenticate(username = the_jason["username"], password=the_jason["password1"])
             login(request, user)
-            token = Token.objects.create(token = uuid.uuid4(), user = user)    
-            return JsonResponse({ 'token':token})
+            token = Token.objects.create(token = uuid.uuid4(), user = user)
+            string_ver = str(token.token) 
+            return JsonResponse({ 'token':string_ver})
         return JsonResponse({})
 
 
@@ -43,7 +45,8 @@ class Login( View ):
         if user:
             login(request, user)
             token = Token.objects.create(token = uuid.uuid4(), user = user)
-            return JsonResponse({ 'token':token})
+            string_ver = str(token.token) 
+            return JsonResponse({ 'token':string_ver})
         return JsonResponse({})
 
 
@@ -135,11 +138,13 @@ class AllIdentitiesOfUser( View ):
 
     def post( self, request ):
         the_jason = json.loads(request.body.decode('utf-8'))
-        user = User.objects.get(pk=the_jason['user_id'])
-        bitkeys = BitKey.objects.filter(user=user)
+        token = Token.objects.get(token=uuid.UUID(the_jason['token']))
+        bitkeys = BitKey.objects.filter(user=token.user)
         if bitkeys.count() > 0:
             addresses = [{'identity':bk.name} for bk in bitkeys]
-        return JsonResponse( { 'addresses' : addresses } )
+            return JsonResponse( { 'addresses' : addresses } )
+        return JsonResponse( {'addresses': 'none'})
+
 
 # given an identity, will return all messages that are associated
 class MessagesByIdentity( View ):
