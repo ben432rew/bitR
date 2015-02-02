@@ -1,6 +1,10 @@
 $(document).ready(function(){
     var user_id = {'user_id':$( '#user_id' ).val()};
-    
+
+
+     $.ajaxSetup({
+        headers: {'BMtoken': tokenValue}
+        }); 
     $.material.ripples();
     $('.dropdown-toggle').dropdown();
 

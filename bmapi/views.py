@@ -6,14 +6,50 @@ from bmapi.wrapperAPI import API
 from bitweb.models import User
 from datetime import datetime
 import json
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import authenticate, login, logout
+from bmapi.forms import UserCreateForm
 
 
 # check if the token is in the database and if it's expired (older than 5 hours)
+# maybe include request and have it decode and load the json and return also
 def check_token (token):
     if Token.objects.filter(token=token).exists():
         if Token.objects.get(token=token).created_at > datetime.now() - datetime.timedelta(hours=5):
-            return True
-    return False
+            return Token.objects.get(token=token).user
+        else:
+            return "expired"
+    return "token does not exist in database"
+
+
+class Signup( View ):
+    def post(self, request):
+        form = UserCreateForm( request.POST )
+        if form.is_valid():
+            form.save()
+            user = authenticate(username = request.POST["username"], password=request.POST["password1"])
+            login(request, user)
+            token = Token.objects.create(token = uuid.uuid4(), user = user)            
+            return redirect( '/inbox' )
+        return render ( request, 'bitweb/index.html', {'signup':UserCreateForm(), 'login':AuthenticationForm(), 'error':"Sorry, you didn't enter valid signup information"} )
+
+
+class Login( View ):
+    def post(self, request):
+        form = AuthenticationForm( request, request.POST )
+        if form.is_valid():
+            user = authenticate(username=request.POST["username"], password=request.POST["password"])
+            login(request, user)
+            token = Token.objects.create(token = uuid.uuid4(), user = user)     
+            return redirect('/inbox')
+        return render ( request, 'bitweb/index.html', {'signup':UserCreateForm(), 'login':AuthenticationForm(), 'error':"Sorry, you didn't enter valid login information"} )
+
+
+class Logout( View ):
+    def get( self, request ):
+        request.user.token_set.all().delete()
+        logout( request )
+        return render ( request, 'bitweb/index.html', {'signup':UserCreateForm(), 'login':AuthenticationForm()} )
 
 
 #getting all messages from client, not really usefull, only for testing
