@@ -42,7 +42,6 @@ class CreateId( View ):
         bitty = BitKey.objects.create(name=the_jason["nickname"], key=newaddy, user=user)
         return JsonResponse( { 'id' : newaddy } )
 
-
 class DeleteId( View ):
     api = API()
 
