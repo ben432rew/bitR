@@ -6,7 +6,7 @@ $(document).ready(function(){
 
 //  just for testing, needs to be changed to only get messages for specific user
     $.get('/bmapi/allmessages', function (data){
-        data['messages'].forEach(function(value) {
+        data['messages']['data'].forEach(function(value) {
             $.scope.inbox.push(value)
         })
     })
@@ -23,7 +23,6 @@ $(document).ready(function(){
             data['addresses'].forEach(function(value) {
                 $.scope.identities.push(value)
             })
-            console.log(data['addresses'])
         }
     })
 
@@ -32,6 +31,7 @@ $(document).ready(function(){
         var info = tokenValue;
         info['nickname'] = $( '#identity_name' ).val();
         $.post('/bmapi/create_id', JSON.stringify(info), function (data){
+// add new identity to list, select it
             })
 // clear inbox and chans (UNFINISHED)
     })
