@@ -137,10 +137,8 @@ class AllIdentitiesOfUser( View ):
         the_jason = json.loads(request.body.decode('utf-8'))
         user = User.objects.get(pk=the_jason['user_id'])
         bitkeys = BitKey.objects.filter(user=user)
-        addresses = []
         if bitkeys.count() > 0:
-            for bk in bitkeys:
-                addresses.append({'identity':bk.name})
+            addresses = [{'identity':bk.name} for bk in bitkeys]
         return JsonResponse( { 'addresses' : addresses } )
 
 # given an identity, will return all messages that are associated
