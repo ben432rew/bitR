@@ -1,10 +1,7 @@
-from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
-from bitweb.forms import UserCreateForm
+from bmapi.forms import UserCreateForm
 from django.views.generic import View
-from bitweb.models import User
-from bmapi.models import *
 import uuid
 
 

@@ -19,22 +19,22 @@
             <br>
             <br>
             <p>{{ error }} </p>
-            <form action={% url 'bitweb:signup' %} class="signup form-horizontal" method="POST">
+            <form class="signup form-horizontal">
                 {% csrf_token %}
                 
                 {{ signup|as_bootstrap }}
 
-                <button class="btn btn-material-blue-grey-100 pull-right">
+                <button id="signup_form" class="btn btn-material-blue-grey-100 pull-right">
                     Sign Up
                 </button>
             </form>
 
-            <form action={% url 'bitweb:login' %} class="login form-horizontal" method="POST">
+            <form class="login form-horizontal">
                 {% csrf_token %}
 
                 {{ login|as_bootstrap }}
 
-                <button class="btn btn-material-blue-grey-100 pull-right">
+                <button id="login_form" class="btn btn-material-blue-grey-100 pull-right">
                     Login
                 </button>
             </form>

@@ -1,3 +1,6 @@
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import AuthenticationForm
+from bmapi.forms import UserCreateForm
 from bmapi.models import Token, BitKey
 from django.views.generic import View
 from django.http import JsonResponse
@@ -6,9 +9,6 @@ from bmapi.wrapperAPI import API
 from bitweb.models import User
 from datetime import datetime
 import json
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth import authenticate, login, logout
-from bmapi.forms import UserCreateForm
 
 
 # check if the token is in the database and if it's expired (older than 5 hours)
@@ -24,7 +24,8 @@ def check_token (token):
 
 class Signup( View ):
     def post(self, request):
-        form = UserCreateForm( request.POST )
+        the_jason = json.loads(request.body.decode('utf-8'))
+        form = UserCreateForm( the_jason )
         if form.is_valid():
             form.save()
             user = authenticate(username = request.POST["username"], password=request.POST["password1"])
@@ -36,9 +37,9 @@ class Signup( View ):
 
 class Login( View ):
     def post(self, request):
-        form = AuthenticationForm( request, request.POST )
-        if form.is_valid():
-            user = authenticate(username=request.POST["username"], password=request.POST["password"])
+        the_jason = json.loads(request.body.decode('utf-8'))
+        user = authenticate(username=the_jason["username"], password=the_jason["password"])
+        if user:
             login(request, user)
             token = Token.objects.create(token = uuid.uuid4(), user = user)     
             return redirect('/inbox')
