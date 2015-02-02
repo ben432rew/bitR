@@ -1,10 +1,10 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
+from django.shortcuts import render, redirect
 from bmapi.forms import UserCreateForm
 from bmapi.models import Token, BitKey
 from django.views.generic import View
 from django.http import JsonResponse
-from django.shortcuts import render
 from bmapi.wrapperAPI import API
 from bitweb.models import User
 from datetime import datetime
@@ -54,7 +54,7 @@ class Logout( View ):
     def get( self, request ):
         request.user.token_set.all().delete()
         logout( request )
-        return render ( request, 'bitweb/index.html', {'signup':UserCreateForm(), 'login':AuthenticationForm()} )
+        return redirect ( '/' )
 
 
 #getting all messages from client, not really usefull, only for testing
@@ -138,7 +138,8 @@ class AllIdentitiesOfUser( View ):
 
     def post( self, request ):
         the_jason = json.loads(request.body.decode('utf-8'))
-        token = Token.objects.get(token=uuid.UUID(the_jason['token']))
+        t1 = uuid.UUID(the_jason['token'])
+        token = Token.objects.get(token=t1)
         bitkeys = BitKey.objects.filter(user=token.user)
         if bitkeys.count() > 0:
             addresses = [{'identity':bk.name} for bk in bitkeys]

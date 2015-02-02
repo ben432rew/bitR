@@ -4,12 +4,12 @@ $(document).ready(function(){
 
     var tokenValue = {'token': $.cookie('token') }
 
-    $.get('/bmapi/allmessages', function (data){
-        data['messages'].forEach(function(value) {
-            $.scope.inbox.push(value)
-        })
-    })
-
+// totally unncessary function, just for testing
+    // $.get('/bmapi/allmessages', function (data){
+    //     data['messages'].forEach(function(value) {
+    //         $.scope.inbox.push(value)
+    //     })
+    // })
     $.post('/bmapi/identities', JSON.stringify(tokenValue), function (data){
         if (data['addresses'] == 'none'){
 // if there aren't any identities that the user has (like if they just signed up),
@@ -42,6 +42,10 @@ $(document).ready(function(){
 
     $( '#refresh-btn' ).click(function() {
 // check for new messages
+    })
+
+    $( '#logout-btn' ).click(function(){
+        $.removeCookie('token');
     })
 
 });

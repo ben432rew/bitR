@@ -42,7 +42,7 @@ $(document).ready(function(){
                 $.cookie( 'token', data['token'], { expires: 1 } );
                 window.location.replace('/inbox');
             } else {
-                alert('Sorry, that signup information is not valid')
+                alert('Sorry, that login information is not valid')
                 signupInfo.reset()
             }
         })
