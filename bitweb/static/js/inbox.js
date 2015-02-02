@@ -4,25 +4,26 @@ $(document).ready(function(){
 
     var tokenValue = {'token': $.cookie('token') }
 
-// totally unncessary function, just for testing
-    // $.get('/bmapi/allmessages', function (data){
-    //     data['messages'].forEach(function(value) {
-    //         $.scope.inbox.push(value)
-    //     })
-    // })
+//  just for testing, needs to be changed to only get messages for specific user
+    $.get('/bmapi/allmessages', function (data){
+        data['messages'].forEach(function(value) {
+            $.scope.inbox.push(value)
+        })
+    })
     $.post('/bmapi/identities', JSON.stringify(tokenValue), function (data){
         if (data['addresses'] == 'none'){
 // if there aren't any identities that the user has (like if they just signed up),
 // then they should just see the create identities modal (UNFINISHED)
             $( '#create_identitiy' ).modal('show')
             console.log("here")
-            console.log(data['addresses'])
+        } else if (data['addresses'] == 'invalid token given') {
+            console.log('there')
+            window.location.replace('bmapi/logout');
         } else {
             data['addresses'].forEach(function(value) {
                 $.scope.identities.push(value)
             })
             console.log(data['addresses'])
-            console.log('there')
         }
     })
 
