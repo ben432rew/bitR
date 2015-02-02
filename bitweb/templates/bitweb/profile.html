@@ -3,9 +3,42 @@
 {% block title %}{{ user.username }} Profile - {% endblock %}
 
 {% block content %}
-    <a href={% url 'bitweb:inbox' %}><button class="btn btn-material-blue-grey-100">Back to Inbox</button></a>
-    <a href={% url 'bmapi:logout' %}><button class="btn btn-material-blue-grey-100">Logout</button></a>
-        <div class="panel panel-material-blue-grey-500">
+  <div class = "row">
+    <div class = "col-md-3">
+      <a href={% url 'bitweb:inbox' %}><button class="btn btn-material-blue-grey-100">Back to Inbox</button></a>
+    </div>
+    <div class = "col-md-3" >
+      <a href={% url 'bmapi:logout' %}><button class="btn btn-material-blue-grey-100">Logout</button></a>
+    </div>
+  </div>
+  <div class = "row" >
+    <div class = "col-md-12" >
+      <div class="panel panel-material-blue-grey-500">
+          <div class="panel-heading">
+            <h3 class="panel-title">Profile Info</h3>
+          </div>
+          <div class="panel-body">
+            <div class = "row" >
+              <div class = "col-md-2" >
+                <p>Username: {{user.username}}</p>
+                <p>Password: ******</p>
+            </div>
+            </div>
+            <div class = "row" >
+              <div class = "col-md-2" >
+                <a href="">Change Password</a>
+              </div>
+              <div class = "col-md-2" >
+                <a href="">Change Username</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <div class = "row" >
+    <div class = "col-md-12" >
+      <div class="panel panel-material-blue-grey-500">
           <div class="panel-heading">
             <h3 class="panel-title">Identities</h3>
           </div>
@@ -18,4 +51,6 @@
             </table>
           </div>
         </div>
+      </div>
+    </div>
 {% endblock %}

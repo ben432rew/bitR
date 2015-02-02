@@ -26,8 +26,8 @@
 		    Identities
 		    <span class="caret"></span>
 		  </button>
-		  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">					   {% verbatim %}
-		    	<li role="presentation" jq-repeat="identities"><a role="menuitem" tabindex="-1" href="#">{{ identity }}</a></li>
+		  <ul class="dropdown-menu identity-list" role="menu" aria-labelledby="dropdownMenu1">					   {% verbatim %}
+		    	<li class = "identity-inbox" role="presentation" jq-repeat="identities"><a role="menuitem" tabindex="-1" href="/bmapi/inbox/{{identity}}">{{ identity }}</a></li>
 			{% endverbatim %}  
 			<li role="presentation" class="divider"></li>
 			<li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#create_identity">Create New Identity</a></li>
@@ -95,13 +95,13 @@
 			<button type="button" class="btn">Trash</button>
 		</div>
 		<div class = "col-md-8">
-			<!-- <div id = "inbox-mess"> -->
+			<div id = "inbox-mess">
 				<ul>
 				{% verbatim %}
 					<li jq-repeat="inbox">{{ message }}</li>
 				{% endverbatim %}
 				</ul>
-			<!-- </div> -->
+			</div>
 		</div>
 	</div>
 <!-- new identity modal -->

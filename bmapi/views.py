@@ -63,6 +63,20 @@ class AllMessages( View ):
         api = API()
         return JsonResponse ( {'messages': api.getAllMessages()} )
 
+class AllMessagesByAddy( View ):
+
+    def get(self, request, identity):
+        api = API()
+        user = User.objects.get(pk=request.user.id)
+        addy = BitKey.objects.get(user = user, name=identity)
+        mess_array = []
+        messages = api.getAllMessages()
+        for message in messages:
+            if message['fromAddress'] == addy.key:
+                mess_array.append(message)
+                print(mess_array)
+        return JsonResponse ( {'messages': mess_array} )
+
 
 # this probably should be in the wrapper, but for now it's here.  This will: 
 # be given a list of currently logged in identities.  It will check for new
@@ -83,9 +97,9 @@ class CreateId( View ):
             token = Token.objects.get(token=t1)
         except:
             return JsonResponse( {'addresses': 'invalid token given'})
-        newaddy = self.api.createRandomAddress(the_jason['nickname'])
-        bitty = BitKey.objects.create(name=the_jason["nickname"], key=newaddy, user=token.user)
-        return JsonResponse( { 'id' : newaddy } )
+        newaddy = self.api.createRandomAddress(the_jason['identity'])
+        bitty = BitKey.objects.create(name=the_jason["identity"], key=newaddy, user=token.user)
+        return JsonResponse( { 'id' : newaddy, 'identity' : the_jason['identity'] } )
 
 class DeleteId( View ):
     api = API()
