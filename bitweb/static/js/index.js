@@ -12,23 +12,23 @@ $(document).ready(function(){
         $( ".login" ).show('medium');
     })
 
-    $('#signup_form').on('click', function(e) {
-        $.post('/bmapi/signup', JSON.stringify(user_id), function (data){
-            
-        })
-    })
-
-    $('#login_form').on('click', function(e) {
-        $.post('/bmapi/login', JSON.stringify(user_id), function (data){
-
-        })
-    })
-
     $("input").keypress(function(event) {
         if (event.which == 13) {
             event.preventDefault();
             $("form").submit();
         }
 	});
+
+    $('#signup_form').submit(function() {
+        var signupJson = $( this ).serializeObject();
+        $.post('/bmapi/signup', JSON.stringify(signupJson), function (data){ 
+        })
+    })
+
+    $('#login_form').submit(function() {
+        var loginJson = $( this ).serializeObject();
+        $.post('/bmapi/login', JSON.stringify(loginJson), function (data){
+        })
+    })
     
 });

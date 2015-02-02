@@ -8,6 +8,7 @@ from django.shortcuts import render
 from bmapi.wrapperAPI import API
 from bitweb.models import User
 from datetime import datetime
+import uuid
 import json
 
 
@@ -28,9 +29,9 @@ class Signup( View ):
         form = UserCreateForm( the_jason )
         if form.is_valid():
             form.save()
-            user = authenticate(username = request.POST["username"], password=request.POST["password1"])
+            user = authenticate(username = the_jason["username"], password=the_jason["password1"])
             login(request, user)
-            token = Token.objects.create(token = uuid.uuid4(), user = user)            
+            token = Token.objects.create(token = uuid.uuid4(), user = user)    
             return redirect( '/inbox' )
         return render ( request, 'bitweb/index.html', {'signup':UserCreateForm(), 'login':AuthenticationForm(), 'error':"Sorry, you didn't enter valid signup information"} )
 

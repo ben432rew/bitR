@@ -15,26 +15,26 @@
         <div class="col-md-1"></div>
 
         <div class="col-md-3">
-            <h1>BitR</h1>
+            <h1><ahref={% url 'bitweb:index' %}>BitR</a></h1>
             <br>
             <br>
             <p>{{ error }} </p>
-            <form class="signup form-horizontal">
+            <form id="signup_form" class="signup form-horizontal">
                 {% csrf_token %}
                 
                 {{ signup|as_bootstrap }}
 
-                <button id="signup_form" class="btn btn-material-blue-grey-100 pull-right">
+                <button type="submit" class="btn btn-material-blue-grey-100 pull-right">
                     Sign Up
                 </button>
             </form>
 
-            <form class="login form-horizontal">
+            <form id="login_form" class="login form-horizontal">
                 {% csrf_token %}
 
                 {{ login|as_bootstrap }}
 
-                <button id="login_form" class="btn btn-material-blue-grey-100 pull-right">
+                <button type="submit" class="btn btn-material-blue-grey-100 pull-right">
                     Login
                 </button>
             </form>
