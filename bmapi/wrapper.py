@@ -21,7 +21,14 @@ class API():
 
 		# self.apiDir = []
 		# for m in json.loads( self.api.call( 'help' ) )['data']:
-		# 	self.apiDir.append(m['method'])
+		# 	setattr( self, method, )
+		# 	self.apiDir.append( m['method'] )
+
+	def _decode( self, StuffTobeDecode ):
+		return base64.b64decode( StuffTobeDecode ).decode()
+	
+	def _encode(self, StuffTObeEncode):
+		return base64.b64encode(bytes(StuffTObeEncode, "utf-8")).decode()
 
 	def call( self, method, *args ):
 		# if method not in self.apiDir: return False
@@ -36,10 +43,10 @@ class API():
 	def clean( self, response):
 		check = ['message','subject','label','ripe']
 		for dic in response['data']:
-			print(dic)
 			for key,value in dic.items():
 				if key in check:
-					dic[str(key)] = base64.b64decode(value).decode()
+					dic[str(key)] = self._decode( value )
+
 		return response
 
 	# def sendMessage(self,subject,message,toAddress,fromAddress):
