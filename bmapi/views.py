@@ -78,9 +78,13 @@ class CreateId( View ):
     
     def post( self, request ):
         the_jason = json.loads(request.body.decode('utf-8'))
-        user = User.objects.get(pk=the_jason['user_id'])
+        t1 = uuid.UUID(the_jason['token'])
+        try:
+            token = Token.objects.get(token=t1)
+        except:
+            return JsonResponse( {'addresses': 'invalid token given'})
         newaddy = self.api.createRandomAddress(the_jason['nickname'])
-        bitty = BitKey.objects.create(name=the_jason["nickname"], key=newaddy, user=user)
+        bitty = BitKey.objects.create(name=the_jason["nickname"], key=newaddy, user=token.user)
         return JsonResponse( { 'id' : newaddy } )
 
 class DeleteId( View ):
