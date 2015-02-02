@@ -5,9 +5,10 @@ from bmapi.forms import UserCreateForm
 from bmapi.models import Token, BitKey
 from django.views.generic import View
 from django.http import JsonResponse
-from bmapi.wrapperAPI import API
+from bmapi.wrapper import client as BMclient
 from bitweb.models import User
 from datetime import datetime
+from pprint import pprint
 import uuid
 import json
 
@@ -60,8 +61,8 @@ class Logout( View ):
 #getting all messages from client, not really usefull, only for testing
 class AllMessages( View ):
     def get(self, request):
-        api = API()
-        return JsonResponse ( {'messages': api.getAllMessages()} )
+        BMclient.call('getAllInboxMessages')
+        return JsonResponse ( {'messages': BMclient.call('getAllInboxMessages')} )
 
 
 # this probably should be in the wrapper, but for now it's here.  This will: 
@@ -74,7 +75,6 @@ class EveryMinute( View ):
 
 
 class CreateId( View ):
-    api = API()
     
     def post( self, request ):
         the_jason = json.loads(request.body.decode('utf-8'))
@@ -83,61 +83,56 @@ class CreateId( View ):
             token = Token.objects.get(token=t1)
         except:
             return JsonResponse( {'addresses': 'invalid token given'})
-        newaddy = self.api.createRandomAddress(the_jason['nickname'])
+        newaddy = BMclient.call('createRandomAddress', the_jason['nickname'])
+        pprint(newaddy)
         bitty = BitKey.objects.create(name=the_jason["nickname"], key=newaddy, user=token.user)
         return JsonResponse( { 'id' : newaddy } )
 
-class DeleteId( View ):
-    api = API()
+# class DeleteId( View ):
 
-    def post( self, request ):
-        the_jason = json.loads(request.body.decode('utf-8'))
-        address = the_json['address']
-        return JsonResponse( { 'id' : self.api.deleteAddress(address) } )
-
-
-class CreateChan( View ):
-    api = API()
-
-    def post( self, request ):
-        the_jason = json.loads(request.body.decode('utf-8'))
-        passphrase = the_json['passphrase']
-        return JsonResponse( { 'chan_address' : self.api.createChan(passphrase) } )
+#     def post( self, request ):
+#         the_jason = json.loads(request.body.decode('utf-8'))
+#         address = the_json['address']
+#         return JsonResponse( { 'id' : self.api.deleteAddress(address) } )
 
 
-class JoinChan( View ):
-    api = API()
+# class CreateChan( View ):
 
-    def post( self, request ):
-        the_jason = json.loads(request.body.decode('utf-8'))
-        passphrase = the_json['passphrase']
-        address = the_json['address']
-        return JsonResponse( { 'join_status' : self.api.joinChan(passphrase, address) } )
+#     def post( self, request ):
+#         the_jason = json.loads(request.body.decode('utf-8'))
+#         passphrase = the_json['passphrase']
+#         return JsonResponse( { 'chan_address' : self.api.createChan(passphrase) } )
 
-class LeaveChan( View ):
-    api = API()
 
-    def post( self, request ):
-        the_jason = json.loads(request.body.decode('utf-8'))
-        address = the_json['address']
-        return JsonResponse( { 'leave_status' : self.api.leaveChan(address) } )
+# class JoinChan( View ):
+
+#     def post( self, request ):
+#         the_jason = json.loads(request.body.decode('utf-8'))
+#         passphrase = the_json['passphrase']
+#         address = the_json['address']
+#         return JsonResponse( { 'join_status' : self.api.joinChan(passphrase, address) } )
+
+# class LeaveChan( View ):
+
+#     def post( self, request ):
+#         the_jason = json.loads(request.body.decode('utf-8'))
+#         address = the_json['address']
+#         return JsonResponse( { 'leave_status' : self.api.leaveChan(address) } )
     
-# send an email
-class Send ( View ):
-    api = API()
+# # send an email
+# class Send ( View ):
 
-    def post( self, request ):
-        the_jason = json.loads(request.body.decode('utf-8'))
-        to_address = the_json['to_address']
-        from_address = the_json['from_address']
-        subject = the_json['subject']
-        message = the_json['message']
-        return JsonResponse( { 'message_status' : self.api.sendMessage( to_address, from_address, subject, message ) } )
+#     def post( self, request ):
+#         the_jason = json.loads(request.body.decode('utf-8'))
+#         to_address = the_json['to_address']
+#         from_address = the_json['from_address']
+#         subject = the_json['subject']
+#         message = the_json['message']
+#         return JsonResponse( { 'message_status' : self.api.sendMessage( to_address, from_address, subject, message ) } )
 
 
 # gets a list of all the identities of a user
 class AllIdentitiesOfUser( View ):
-    api = API()
 
     def post( self, request ):
         the_jason = json.loads(request.body.decode('utf-8'))

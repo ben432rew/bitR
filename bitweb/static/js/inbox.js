@@ -6,7 +6,7 @@ $(document).ready(function(){
 
 //  just for testing, needs to be changed to only get messages for specific user
     $.get('/bmapi/allmessages', function (data){
-        data['messages'].forEach(function(value) {
+        data['messages']['data'].forEach(function(value) {
             $.scope.inbox.push(value)
         })
     })
@@ -23,7 +23,6 @@ $(document).ready(function(){
             data['addresses'].forEach(function(value) {
                 $.scope.identities.push(value)
             })
-            console.log(data['addresses'])
         }
     })
 
