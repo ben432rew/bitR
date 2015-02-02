@@ -15,23 +15,20 @@ class API():
 		url = "http://{}:{}@{}:{}/".format( settings.BMAPI["user"], settings.BMAPI["password"], url, port )
 		self.api = client.ServerProxy( url )
 
-		self.apiDir = []
-		for m in json.loads( self.api.call( 'help' ) )['data']:
-			self.apiDir.append(m['method'])
+		# self.apiDir = []
+		# for m in json.loads( self.api.call( 'help' ) )['data']:
+		# 	self.apiDir.append(m['method'])
 
 
-	def clean( self ):
-		pass
 
 	def call( self, method, *args ):
-		if method not in self.apiDir: return False
+		# if method not in self.apiDir: return False
 
 		call = 'self.api.{}{}'.format( method, str( args ) )
 		print( 'call:', call )
 		response = eval( call, { 'self': self } )
 		response = json.loads( response )
-
-		return response
+		return self.clean(response)
 
 	# 	# key = list( response.keys() )[0]
 
@@ -42,6 +39,17 @@ class API():
 	# 			print(key, value, type(value), base64.b64decode(value) )
 	# 	return response
 
+	def clean( self, response):
+		check = ['message','subject','label','ripe']
+		for dic in response['data']:
+			for key,value in dic.items():
+				if key in check:
+					dic[str(key)] = base64.b64decode(value).decode()
+		return response
+
+	# def getAllMessages(self):
+	# 	inboxMessages = self.call("getAllInboxMessages")
+	# 	return self.clean(inboxMessages)
 
 	# def getAllIdentities( self ):
 	# 	addresses = self.api.listAddresses2()
@@ -77,15 +85,6 @@ class API():
 	# 	# 	time.sleep(2)
 	# 	# print ('Current status:', self.api.getStatus(ackData))
 	
-	# def getAllMessages(self):
-	# 	inboxMessages = json.loads(self.api.getAllInboxMessages())
-	# 	for dic in inboxMessages['inboxMessages']:
-	# 		for key,value in dic.items():
-	# 			if key == 'message':
-	# 				dic['message'] = base64.b64decode(value).decode()
-	# 			elif key == 'subject':
-	# 				dic['subject'] = base64.b64decode(value).decode()
-	# 	return(inboxMessages['inboxMessages'])
 
 
 	# def getAllMessagesIds(self):
