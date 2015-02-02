@@ -21,7 +21,9 @@ $(document).ready(function(){
             window.location.replace('bmapi/logout');
         } else {
             data['addresses'].forEach(function(value) {
+                console.log(value)
                 $.scope.identities.push(value)
+                $.scope.senders.push(value)
             })
         }
     })
@@ -34,6 +36,18 @@ $(document).ready(function(){
 // add new identity to list, select it
             })
 // clear inbox and chans (UNFINISHED)
+    })
+
+    $( '#send_message_btn' ).click(function() {
+        var info = tokenValue;
+        info['to_address'] = $( '#send_addy' ).val();
+        info['from'] = $( '#from_addy' ).val();
+        info['subject'] = $( '#subject' ).val();
+        info['message'] = $( '#message' ).val();
+        $.post('/bmapi/send', JSON.stringify(info), function (data){
+            console.log("HERE AT THE END")
+// add message to sent messages folder
+            })
     })
 
     $( '#create_chan_button' ).click(function() {
