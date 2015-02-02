@@ -5,7 +5,7 @@ from bmapi.forms import UserCreateForm
 from bmapi.models import Token, BitKey
 from django.views.generic import View
 from django.http import JsonResponse
-from bmapi.wrapper import client as BMclient
+from bmapi.wrapper import BMclient
 from bitweb.models import User
 from datetime import datetime
 from pprint import pprint
@@ -83,10 +83,10 @@ class CreateId( View ):
             token = Token.objects.get(token=t1)
         except:
             return JsonResponse( {'addresses': 'invalid token given'})
-        newaddy = BMclient.call('createRandomAddress', the_jason['nickname'])
-        pprint(newaddy)
-        bitty = BitKey.objects.create(name=the_jason["nickname"], key=newaddy, user=token.user)
-        return JsonResponse( { 'id' : newaddy } )
+# need to check for status code so doesn't save to db if client doesn't like it
+        newaddy = BMclient.call('createRandomAddress', BMclient._encode(the_jason['nickname']) )
+        bitty = BitKey.objects.create(name=the_jason["nickname"], key=newaddy['data'][0]['address'], user=token.user)
+        return JsonResponse( { 'id' : newaddy['data'][0]['address'] } )
 
 # class DeleteId( View ):
 

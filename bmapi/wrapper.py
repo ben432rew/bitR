@@ -59,4 +59,4 @@ class API():
 	# 	# 	time.sleep(2)
 	# 	# print ('Current status:', self.api.getStatus(ackData))
 
-client = API()
+BMclient = API()
