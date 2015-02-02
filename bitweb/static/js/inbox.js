@@ -1,17 +1,17 @@
 $(document).ready(function(){
-    var user_id = {'user_id':$( '#user_id' ).val()};
-    
     $.material.ripples();
     $('.dropdown-toggle').dropdown();
 
-    $.get('/bmapi/allmessages', function (data){
-        data['messages'].forEach(function(value) {
-            $.scope.inbox.push(value)
-        })
-    })
+    var tokenValue = {'token': $.cookie('token') }
 
-    $.post('/bmapi/identities', JSON.stringify(user_id), function (data){
-        if (data['addresses'] == undefined){
+// totally unncessary function, just for testing
+    // $.get('/bmapi/allmessages', function (data){
+    //     data['messages'].forEach(function(value) {
+    //         $.scope.inbox.push(value)
+    //     })
+    // })
+    $.post('/bmapi/identities', JSON.stringify(tokenValue), function (data){
+        if (data['addresses'] == 'none'){
 // if there aren't any identities that the user has (like if they just signed up),
 // then they should just see the create identities modal (UNFINISHED)
             $( '#create_identitiy' ).modal('show')
@@ -28,7 +28,7 @@ $(document).ready(function(){
 
 
     $( '#create_id_button' ).click(function() {
-        var info = user_id;
+        var info = tokenValue;
         info['nickname'] = $( '#identity_name' ).val();
         $.post('/bmapi/create_id', JSON.stringify(info), function (data){
             })
@@ -48,6 +48,10 @@ $(document).ready(function(){
             $.scope.inbox.push(value)
             })
         })
+    })
+
+    $( '#logout-btn' ).click(function(){
+        $.removeCookie('token');
     })
 
 });

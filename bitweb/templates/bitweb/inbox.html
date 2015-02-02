@@ -4,8 +4,8 @@
 {% block header %}
     {% load staticfiles %}
     <script src="{%static 'js/inbox.js' %}"></script>
-    <script src="{%static 'js/jq-repeat.min.js' %}"></script>
     <script src="{%static 'js/mustache.min.js' %}"></script>
+    <script src="{%static 'js/jq-repeat.min.js' %}"></script>
 	<div class = "row">
 	    <h1 class="col-md-2"><ahref={% url 'bitweb:index' %} id = 'logo'>BitR</a></h1>
 		<div class="col-md-10">
@@ -34,7 +34,7 @@
 		  </ul>
 		</div>
 		<a class="col-md-2" href={% url 'bitweb:profile' %} id = 'profile-btn'><button class="btn btn-material-blue-grey-100">Profile</button></a>
-	    <a class="col-md-2" href={% url 'bitweb:logout' %} id = 'logout-btn'><button class="btn btn-material-blue-grey-100">Logout</button></a>
+	    <a class="col-md-2" href={% url 'bmapi:logout' %} id = 'logout-btn'><button class="btn btn-material-blue-grey-100">Logout</button></a>
 	</div>
 
 	<div class = "row">

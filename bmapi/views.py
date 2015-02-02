@@ -1,19 +1,60 @@
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import AuthenticationForm
+from django.shortcuts import render, redirect
+from bmapi.forms import UserCreateForm
 from bmapi.models import Token, BitKey
 from django.views.generic import View
 from django.http import JsonResponse
-from django.shortcuts import render
 from bmapi.wrapperAPI import API
 from bitweb.models import User
 from datetime import datetime
+import uuid
 import json
 
 
 # check if the token is in the database and if it's expired (older than 5 hours)
+# maybe include request and have it decode and load the json and return also
 def check_token (token):
     if Token.objects.filter(token=token).exists():
         if Token.objects.get(token=token).created_at > datetime.now() - datetime.timedelta(hours=5):
-            return True
-    return False
+            return Token.objects.get(token=token).user
+        else:
+            return "expired"
+    return "token does not exist in database"
+
+
+# dry these next two functions out
+class Signup( View ):
+    def post(self, request):
+        the_jason = json.loads(request.body.decode('utf-8'))
+        form = UserCreateForm( the_jason )
+        if form.is_valid():
+            form.save()
+            user = authenticate(username = the_jason["username"], password=the_jason["password1"])
+            login(request, user)
+            token = Token.objects.create(token = uuid.uuid4(), user = user)
+            string_ver = str(token.token) 
+            return JsonResponse({ 'token':string_ver})
+        return JsonResponse({})
+
+
+class Login( View ):
+    def post(self, request):
+        the_jason = json.loads(request.body.decode('utf-8'))
+        user = authenticate(username=the_jason["username"], password=the_jason["password"])
+        if user:
+            login(request, user)
+            token = Token.objects.create(token = uuid.uuid4(), user = user)
+            string_ver = str(token.token) 
+            return JsonResponse({ 'token':string_ver})
+        return JsonResponse({})
+
+
+class Logout( View ):
+    def get( self, request ):
+        request.user.token_set.all().delete()
+        logout( request )
+        return redirect ( '/' )
 
 
 #getting all messages from client, not really usefull, only for testing
@@ -96,13 +137,14 @@ class AllIdentitiesOfUser( View ):
 
     def post( self, request ):
         the_jason = json.loads(request.body.decode('utf-8'))
-        user = User.objects.get(pk=the_jason['user_id'])
-        bitkeys = BitKey.objects.filter(user=user)
-        addresses = []
+        t1 = uuid.UUID(the_jason['token'])
+        token = Token.objects.get(token=t1)
+        bitkeys = BitKey.objects.filter(user=token.user)
         if bitkeys.count() > 0:
-            for bk in bitkeys:
-                addresses.append({'identity':bk.name})
-        return JsonResponse( { 'addresses' : addresses } )
+            addresses = [{'identity':bk.name} for bk in bitkeys]
+            return JsonResponse( { 'addresses' : addresses } )
+        return JsonResponse( {'addresses': 'none'})
+
 
 # given an identity, will return all messages that are associated
 class MessagesByIdentity( View ):
