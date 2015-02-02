@@ -7,12 +7,14 @@ from bitweb.models import User
 from datetime import datetime
 import json
 
+
 # check if the token is in the database and if it's expired (older than 5 hours)
 def check_token (token):
     if Token.objects.filter(token=token).exists():
         if Token.objects.get(token=token).created_at > datetime.now() - datetime.timedelta(hours=5):
             return True
     return False
+
 
 #getting all messages from client, not really usefull, only for testing
 class AllMessages( View ):

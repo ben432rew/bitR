@@ -1,16 +1,8 @@
 $(document).ready(function(){
-    var options = {
-        "backdrop" : "static",
-        "keyboard" : "true",
-        "show"     : "true"
-    }
     var user_id = {'user_id':$( '#user_id' ).val()};
-
-    $( '#create_identitiy' ).modal(options)
-    $( '#create_chan' ).modal(options)
+    
 // this next line is a bug, it shouldn't be neccessary.  if it's not here, the 
 // chan modal automatically appears on page load
-    $( '#create_chan' ).modal('hide')
     $.material.ripples();
     $('.dropdown-toggle').dropdown();
 
