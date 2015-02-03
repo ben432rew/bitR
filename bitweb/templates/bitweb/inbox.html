@@ -23,9 +23,10 @@
 		<div class = "col-md-2">
 			<button class="btn btn-material-blue-grey-100" data-toggle="modal" data-target="#compose_msg">Compose</button>
 		</div>
+
 		<div class="dropdown col-md-2">
 		  <button class="btn btn-material-blue-grey-100 dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-		    Show
+		    Select
 		    <span class="caret"></span>
 		  </button>
 		  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
@@ -39,12 +40,14 @@
 		</div>
 
 		<div class="dropdown col-md-2">
-			<div class="btn-group">
-			  <button data-toggle="dropdown" class="btn dropdown-toggle btn-material-blue-grey-100 col-md-offset-2 col-md-offset-6"  data-placeholder="No Identity Selected">No Identity Selected<span class="caret"></span></button>
-				<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">				{% verbatim %}
+			<div class="btn-group col-md-offset-2 col-md-offset-6">
+			  <button data-toggle="dropdown" class="btn dropdown-toggle btn-material-blue-grey-100"  data-placeholder="No Identity Selected">No Identity Selected<span class="caret"></span></button>
+				<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+					{% verbatim %}
 						<li jq-repeat="identities"><input type="checkbox" id="{{ identity }}"><label for="{{ identity }}">{{ identity }}</label></li>
 					{% endverbatim %}  
 					<li role="presentation" class="divider"></li>
+					<li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#subscribe_chan">Subscribe to Chan</a></li>					
 					<li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#create_identity">Create New Identity</a></li>
 			    </ul>
 			</div>
@@ -56,6 +59,7 @@
 		<div class="col-md-2">
 			<button class="btn btn-material-blue-grey-100" id = "chan-post-btn">Post to Chan</button>
 		</div>
+
 		<div class = "col-md-10">
 			<div class="btn-group btn-group-justified" role="group" aria-label="primaryChan">
 				<div id = 'primary-tab' class='btn'>
@@ -63,7 +67,8 @@
 				</div>
 				<div class="dropdown btn-group" role="group">
 				  <button data-toggle="dropdown" class="btn dropdown-toggle btn-material-blue-grey-100 col-md-offset-2 col-md-offset-6"  data-placeholder="No Chan Selected">No Chan Selected<span class="caret"></span></button>
-					<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">				{% verbatim %}
+					<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+						{% verbatim %}
 							<li jq-repeat="chans"><input type="checkbox" id="{{ chan }}"><label for="{{ chan }}">{{ chan }}</label></li>
 						{% endverbatim %}  
 						<li role="presentation" class="divider"></li>
@@ -99,6 +104,7 @@
 			</div>
 		</div>
 	</div>
+
 <!-- new identity modal -->
 	<div class="modal fade" id="create_identity" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
 	  <div class="modal-dialog">
