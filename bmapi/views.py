@@ -136,17 +136,26 @@ class CreateId( View ):
 #         the_jason = json.loads(request.body.decode('utf-8'))
 #         address = the_json['address']
 #         return JsonResponse( { 'leave_status' : self.api.leaveChan(address) } )
-    
-# # send an email
-# class Send ( View ):
 
-#     def post( self, request ):
-#         the_jason = json.loads(request.body.decode('utf-8'))
-#         to_address = the_json['to_address']
-#         from_address = the_json['from_address']
-#         subject = the_json['subject']
-#         message = the_json['message']
-#         return JsonResponse( { 'message_status' : self.api.sendMessage( to_address, from_address, subject, message ) } )
+
+# send an email
+class Send ( View ):
+    def post( self, request ):
+#  check token first!!!
+        the_jason = json.loads(request.body.decode('utf-8'))
+        to_address = the_jason['to_address']
+        from_name = the_jason['from']
+        from_add = BitKey.objects.get(name=from_name)
+        subject = the_jason['subject']
+        message = the_jason['message']
+        sent = BMclient.call(
+            'sendMessage',
+            to_address,
+            from_add.key,
+            BMclient._encode(subject),
+            BMclient._encode(message)
+        )
+        return JsonResponse( { 'message_status' : sent } )
 
 
 # gets a list of all the identities of a user
@@ -155,15 +164,16 @@ class AllIdentitiesOfUser( View ):
     def post( self, request ):
         the_jason = json.loads(request.body.decode('utf-8'))
         t1 = uuid.UUID(the_jason['token'])
+
         try:
             token = Token.objects.get(token=t1)
         except:
-            return JsonResponse( {'addresses': 'invalid token given'})
+            return JsonResponse( {'addresses': 'invalid token given'} )
+
         bitkeys = BitKey.objects.filter(user=token.user)
-        if bitkeys.count() > 0:
-            addresses = [{'identity':bk.name} for bk in bitkeys]
-            return JsonResponse( { 'addresses' : addresses } )
-        return JsonResponse( {'addresses': 'none'})
+
+        addresses = [ {'identity':bk.name} for bk in bitkeys ]
+        return JsonResponse( { 'addresses' : addresses } )
 
 
 # given an identity, will return all messages that are associated

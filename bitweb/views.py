@@ -2,6 +2,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
 from bmapi.forms import UserCreateForm
 from django.views.generic import View
+from pprint import pprint
 
 
 class Index( View ):
