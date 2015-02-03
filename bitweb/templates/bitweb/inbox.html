@@ -74,19 +74,26 @@
 		</div>
 	</div>
 	<div class = "row">
-		<div class="btn-group-vertical col-md-2">
-			<button type="button" class="btn">Inbox</button>
+		<div class="inbox-nav btn-group-vertical col-md-2">
+			<button id="inbox" type="button" class="btn">Inbox</button>
 			<button type="button" class="btn">Starred</button>
-			<button type="button" class="btn">Sent Mail</button>
+			<button id="sent" type="button" class="btn">Sent Mail</button>
 			<button type="button" class="btn">Drafts</button>
 			<button type="button" class="btn">Spam</button>
 			<button type="button" class="btn">Trash</button>
 		</div>
-		<div class = "col-md-8">
-			<div id = "inbox-mess">
+		<div class="inbox-bucket col-md-8" >
+			<div id="inbox-mess">
 				<ul>
 				{% verbatim %}
 					<li jq-repeat="inbox">{{subject}}:{{ message }}</li>
+				{% endverbatim %}
+				</ul>
+			</div>
+			<div id = "sent-mess">
+				<ul>
+				{% verbatim %}
+					<li jq-repeat="sent">{{subject}}:{{ message }}</li>
 				{% endverbatim %}
 				</ul>
 			</div>
