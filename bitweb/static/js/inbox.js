@@ -15,40 +15,26 @@ $(document).ready(function(){
 // if there aren't any identities that the user has (like if they just signed up),
 // then they should just see the create identities modal (UNFINISHED)
             $( '#create_identity' ).modal();
-            console.log("here")
         } else if (data['addresses'] == 'invalid token given') {
-            console.log('there')
             window.location.replace('bmapi/logout');
         } else {
             data['addresses'].forEach(function(value) {
-                console.log(value)
                 $.scope.identities.push(value)
                 $.scope.senders.push(value)
             })
         }
     })
 
-    $(".identity-inbox").click(function(event){
-        event.preventDefault();
-        console.log("INDENTITY IONBOX")
-        var href = $(this).find("a")[0].attr("href")
-        $.get(href, function(data){
-            console.log(data)
-            $.scope.inbox.push(data)
-        })
-    })
-
 
 // add new identity to list, select it
     $( '#create_id_button' ).click(function() {
         var info = tokenValue;
-        console.log('HEY')
         info['identity'] = $( '#identity_name' ).val();
+        console.log('HEY')
         $.post('/bmapi/create_id', JSON.stringify(info), function (data){
             console.log(data);
             $.scope.identities.push(info)
         })
-// clear inbox and chans (UNFINISHED)
     })
 
     $( '#send_message_btn' ).click(function() {
@@ -58,8 +44,7 @@ $(document).ready(function(){
         info['subject'] = $( '#subject' ).val();
         info['message'] = $( '#message' ).val();
         $.post('/bmapi/send', JSON.stringify(info), function (data){
-            console.log("HERE AT THE END")
-// add message to sent messages folder
+// add message to sent messages folder (UNFINISHED)
             })
     })
 

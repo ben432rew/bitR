@@ -102,8 +102,8 @@ class CreateId( View ):
         except:
             return JsonResponse( {'addresses': 'invalid token given'})
 # need to check for status code so doesn't save to db if client doesn't like it
-        newaddy = BMclient.call('createRandomAddress', BMclient._encode(the_jason['nickname']) )
-        bitty = BitKey.objects.create(name=the_jason["nickname"], key=newaddy['data'][0]['address'], user=token.user)
+        newaddy = BMclient.call('createRandomAddress', BMclient._encode(the_jason['identity']) )
+        bitty = BitKey.objects.create(name=the_jason["identity"], key=newaddy['data'][0]['address'], user=token.user)
         return JsonResponse( { 'id' : newaddy['data'][0]['address'] } )
 
 # class DeleteId( View ):
