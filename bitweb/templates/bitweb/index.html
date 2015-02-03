@@ -1,9 +1,28 @@
-{% extends "bitweb/base.html" %}
-{% block content %}
-    {% load bootstrap_tags %}
-    {% load staticfiles %}
+<!DOCTYPE html>
+<html>
+    <head>
+        {% load bootstrap_tags %}
+        {% load staticfiles %}
+        <title>{% block title %}{% endblock %}BitR</title>
+        <!-- Twitter Bootstrap -->        
+        <link media="all" type="text/css" rel="stylesheet" href="{% static "css/bootstrap.min.css" %}">
+        <!-- Material Design for Bootstrap -->
+        <link media="all" type="text/css" rel="stylesheet" href="{% static "css/material-wfont.min.css" %}">
+        <link media="all" type="text/css" rel="stylesheet" href="{% static "css/ripples.css" %}">
+
+        <script src="{%static "js/jquery.min.js"%}"></script>
+        <script src="{% static "js/mustache.min.js" %}"></script>        
+        <script src="{%static "js/django_ajax.js"%}"></script>
+        <script src="{%static "js/bootstrap.min.js"%}"></script>
+        <script src="{%static "js/jquery.cookie.js"%}"></script>
+        <!-- Material Design for Bootstrap -->
+        <script src="{%static "js/material.min.js"%}"></script>
+        <script src="{%static "js/ripples.min.js"%}"></script>
     <script src="{%static 'js/index.js' %}"></script>
     <br><br><br>
+    </head>
+    <body>
+    <div class = "container">
     <div class="row">
         <div class="col-md-8">
             <img src="{%static 'images/phone_lines.jpeg' %}" class="img-responsive" alt="Sailboat">
@@ -49,4 +68,6 @@
             <p class="text-muted">footer links here</p>
         </div>
     </footer>
-{% endblock %}
+        </div>
+    </body>
+</html>

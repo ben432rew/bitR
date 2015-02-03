@@ -8,6 +8,8 @@
         <!-- Material Design for Bootstrap -->
         <link media="all" type="text/css" rel="stylesheet" href="{% static "css/material-wfont.min.css" %}">
         <link media="all" type="text/css" rel="stylesheet" href="{% static "css/ripples.css" %}">
+        <!-- Dropdown Enhancement -->
+        <link media="all" type="text/css" rel="stylesheet" href="{% static "css/dropdowns-enhancement.css" %}">
 
         <script src="{%static "js/jquery.min.js"%}"></script>
         <script src="{% static "js/mustache.min.js" %}"></script>        
@@ -17,10 +19,18 @@
         <!-- Material Design for Bootstrap -->
         <script src="{%static "js/material.min.js"%}"></script>
         <script src="{%static "js/ripples.min.js"%}"></script>
+        <script src="{%static "js/base.js"%}"></script>
+        <!-- Dropdown Enhancement -->
+        <script src="{%static "js/dropdowns-enhancement.js"%}"></script>
 
     </head>
     <body>
         <div class = "container">
+        <div class="row">
+        <h1 class="col-md-2"><ahref={% url 'bitweb:index' %} id = 'logo'>BitR</a></h1>
+        <a class="col-md-2 col-md-offset-6" href={% url 'bitweb:profile' %} id = 'profile-btn'><button class="btn btn-material-blue-grey-100">Profile</button></a>
+        <a class="col-md-2" href={% url 'bmapi:logout' %} id = 'logout-btn'><button class="btn btn-material-blue-grey-100">Logout</button></a>
+        </div>
         {% block header %}
         {% endblock %}
         {% block content %}

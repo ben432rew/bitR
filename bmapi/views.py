@@ -63,6 +63,24 @@ class AllMessages( View ):
         BMclient.call('getAllInboxMessages')
         return JsonResponse ( {'messages': BMclient.call('getAllInboxMessages')} )
 
+class AllMessagesByAddy( View ):
+
+    def get(self, request, identity):
+        print(request.user.id)
+        user = User.objects.get(pk=request.user.id)
+        print(identity)
+        addy = BitKey.objects.get(user = user, name=identity)
+        print(addy)
+        mess_array = []
+        messages = BMclient.call("getAllInboxMessages")
+        print(messages['data'])
+        for message in messages["data"]:
+            print(message)
+            if message['read'] == 1:
+                mess_array.append(message)
+        print(mess_array)
+        return JsonResponse ( {'messages': mess_array} )
+
 
 # this probably should be in the wrapper, but for now it's here.  This will: 
 # be given a list of currently logged in identities.  It will check for new
@@ -83,8 +101,8 @@ class CreateId( View ):
         except:
             return JsonResponse( {'addresses': 'invalid token given'})
 # need to check for status code so doesn't save to db if client doesn't like it
-        newaddy = BMclient.call('createRandomAddress', BMclient._encode(the_jason['nickname']) )
-        bitty = BitKey.objects.create(name=the_jason["nickname"], key=newaddy['data'][0]['address'], user=token.user)
+        newaddy = BMclient.call('createRandomAddress', BMclient._encode(the_jason['identity']) )
+        bitty = BitKey.objects.create(name=the_jason["identity"], key=newaddy['data'][0]['address'], user=token.user)
         return JsonResponse( { 'id' : newaddy['data'][0]['address'] } )
 
 # class DeleteId( View ):
