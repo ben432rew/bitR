@@ -146,15 +146,16 @@ class AllIdentitiesOfUser( View ):
     def post( self, request ):
         the_jason = json.loads(request.body.decode('utf-8'))
         t1 = uuid.UUID(the_jason['token'])
+
         try:
             token = Token.objects.get(token=t1)
         except:
-            return JsonResponse( {'addresses': 'invalid token given'})
+            return JsonResponse( {'addresses': 'invalid token given'} )
+
         bitkeys = BitKey.objects.filter(user=token.user)
-        if bitkeys.count() > 0:
-            addresses = [{'identity':bk.name} for bk in bitkeys]
-            return JsonResponse( { 'addresses' : addresses } )
-        return JsonResponse( {'addresses': 'none'})
+
+        addresses = [ {'identity':bk.name} for bk in bitkeys ]
+        return JsonResponse( { 'addresses' : addresses } )
 
 
 # given an identity, will return all messages that are associated
