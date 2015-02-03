@@ -95,6 +95,7 @@ class CreateId( View ):
     
     def post( self, request ):
         the_jason = json.loads(request.body.decode('utf-8'))
+
         t1 = uuid.UUID(the_jason['token'])
         try:
             token = Token.objects.get(token=t1)
