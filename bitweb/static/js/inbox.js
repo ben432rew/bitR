@@ -1,14 +1,18 @@
 $(document).ready(function(){
-    $.material.ripples();
+
     $('.dropdown-toggle').dropdown();
 
     var tokenValue = {'token': $.cookie('token') }
 
 //  just for testing, needs to be changed to only get messages for specific user
-    $.get('/bmapi/allmessages', function (data){
-        data['messages']['data'].forEach(function(value) {
-            $.scope.inbox.push(value);
+    $.post('/bmapi/allmessages', JSON.stringify(tokenValue), function (data){
+        console.log(data)
+        data['messages'].forEach(function(value) {
+            value['data'].forEach(function(value){
+                $.scope.inbox.push(value);
+            });
         })
+        sessionStorage.setItem('inboxMessages', JSON.stringify($.scope.inbox));
     })
     $.post('/bmapi/identities', JSON.stringify(tokenValue), function (data){
         if (data['addresses'].length === 0 ){
