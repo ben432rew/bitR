@@ -3,9 +3,9 @@
 {% block title %}{{ user.username }} Inbox - {% endblock %}
 {% block header %}
     {% load staticfiles %}
-    <script src="{%static 'js/inbox.js' %}"></script>
     <script src="{%static 'js/mustache.min.js' %}"></script>
     <script src="{%static 'js/jq-repeat.min.js' %}"></script>
+    <script src="{%static 'js/inbox.js' %}"></script>
 	<div class = "row">
 	    <h1 class="col-md-2"><ahref={% url 'bitweb:index' %} id = 'logo'>BitR</a></h1>
 		<div class="col-md-10">
@@ -96,11 +96,11 @@
 		</div>
 		<div class = "col-md-8">
 			<!-- <div id = "inbox-mess"> -->
-				<ul>
+				<ol>
 				{% verbatim %}
-					<li jq-repeat="inbox">{{ message }}</li>
+					<li jq-repeat="inbox">{{subject}}:{{ message }}</li>
 				{% endverbatim %}
-				</ul>
+				</ol>
 			<!-- </div> -->
 		</div>
 	</div>
