@@ -1,5 +1,3 @@
-var test;
-
 $(document).ready(function(){
     $.material.ripples();
     $('.dropdown-toggle').dropdown();
@@ -13,7 +11,6 @@ $(document).ready(function(){
         })
     })
     $.post('/bmapi/identities', JSON.stringify(tokenValue), function (data){
-        test = data;
         if (data['addresses'].length === 0 ){
 // if there aren't any identities that the user has (like if they just signed up),
 // then they should just see the create identities modal (UNFINISHED)
