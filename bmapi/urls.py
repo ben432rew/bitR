@@ -5,12 +5,12 @@ from bmapi.views import *
 
 
 urlpatterns = patterns('',
-    url(r'^allmessages', AllMessages.as_view(), name="allmessages" ),
+    url(r'^allmessages', getInboxMessagesByUser.as_view(), name="getInboxMessagesByUser" ),
     url(r'^signup', Signup.as_view(), name="signup" ),
     url(r'^login', Login.as_view(), name="login" ),
     url(r'^logout', login_required(Logout.as_view()), name="logout" ),    
-    url(r'^send', Send.as_view(), name="send" ),
     url(r'^identities', AllIdentitiesOfUser.as_view(), name="identities" ),
+    url(r'^send', Send.as_view(), name="send" ),
     url(r'^search', Search.as_view(), name="search" ),
     url(r'^starred', Starred.as_view(), name="starred" ),
     url(r'^sent', Sent.as_view(), name="sent" ),

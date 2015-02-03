@@ -12,7 +12,6 @@ from pprint import pprint
 import uuid
 import json
 
-
 # check if the token is in the database and if it's expired (older than 5 hours)
 # maybe include request and have it decode and load the json and return also
 def check_token (token):
@@ -102,8 +101,8 @@ class CreateId( View ):
         except:
             return JsonResponse( {'addresses': 'invalid token given'})
 # need to check for status code so doesn't save to db if client doesn't like it
-        newaddy = BMclient.call('createRandomAddress', BMclient._encode(the_jason['nickname']) )
-        bitty = BitKey.objects.create(name=the_jason["nickname"], key=newaddy['data'][0]['address'], user=token.user)
+        newaddy = BMclient.call('createRandomAddress', BMclient._encode(the_jason['identity']) )
+        bitty = BitKey.objects.create(name=the_jason["identity"], key=newaddy['data'][0]['address'], user=token.user)
         return JsonResponse( { 'id' : newaddy['data'][0]['address'] } )
 
 # class DeleteId( View ):
@@ -209,3 +208,26 @@ class Spam( View ):
 #get to see trash, post to trash or untrash something
 class Trash( View ):
     pass
+
+class getInboxMessagesByUser( View ):
+    def post( self, request ):
+        the_jason = json.loads(request.body.decode('utf-8'))
+        t1 = uuid.UUID(the_jason['token'])
+
+        try:
+            token = Token.objects.get(token=t1)
+        except:
+            return JsonResponse( {'addresses': 'invalid token given'} )
+
+        bitkeys = BitKey.objects.filter(user=token.user)
+
+        addresses = [ bk.key for bk in bitkeys ]
+
+        data = []
+        for address in addresses:
+            x= BMclient.call( 'getInboxMessagesByToAddress', address )
+            print( address, x )
+            data.append( x )
+
+        return JsonResponse( { 'messages': data } )
+

@@ -3,9 +3,9 @@
 {% block title %}{{ user.username }} Inbox - {% endblock %}
 {% block header %}
     {% load staticfiles %}
-    <script src="{%static 'js/inbox.js' %}"></script>
     <script src="{%static 'js/mustache.min.js' %}"></script>
     <script src="{%static 'js/jq-repeat.min.js' %}"></script>
+    <script src="{%static 'js/inbox.js' %}"></script>
 	<div class = "row">
 		<div class="col-md-10">
 			<div class="input-group">
@@ -37,27 +37,24 @@
 		    	<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Unstarred</a></li>
 		  </ul>
 		</div>
+
 		<div class="dropdown col-md-2">
-		<button class = "btn btn-material-blue-grey-100 col-md-offset-2 col-md-offset-6" id = 'refresh-btn'>Refresh</button>
-		</div>
-		<div class="dropdown col-md-2">
-		  <button class="btn btn-material-blue-grey-100 dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true" id="user_id" value="{{user.id}}">
-		    Identities
-		    <span class="caret"></span>
-		  </button>
-		  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">					   {% verbatim %}
-		    	<li role="presentation" jq-repeat="identities"><a role="menuitem" tabindex="-1" href="#">{{ identity }}</a></li>
-			{% endverbatim %}  
-			<li role="presentation" class="divider"></li>
-			<li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#create_identity">Create New Identity</a></li>
-		  </ul>
+			<div class="btn-group">
+			  <button data-toggle="dropdown" class="btn dropdown-toggle btn-material-blue-grey-100 col-md-offset-2 col-md-offset-6"  data-placeholder="No Identity Selected">No Identity Selected<span class="caret"></span></button>
+				<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">				{% verbatim %}
+						<li jq-repeat="identities"><input type="checkbox" id="{{ identity }}"><label for="{{ identity }}">{{ identity }}</label></li>
+					{% endverbatim %}  
+					<li role="presentation" class="divider"></li>
+					<li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#create_identity">Create New Identity</a></li>
+			    </ul>
+			</div>
 		</div>
 	</div>
+
 
 	<div class = "row">
 		<div class="col-md-2">
 			<button class="btn btn-material-blue-grey-100" id = "chan-post-btn">Post to Chan</button>
-		
 		</div>
 		<div class = "col-md-10">
 			<div class="btn-group btn-group-justified" role="group" aria-label="primaryChan">
@@ -65,16 +62,13 @@
 					<p>Primary</p>
 				</div>
 				<div class="dropdown btn-group" role="group">
-				  <button class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-				    Chans
-				    <span class="caret"></span>
-				  </button>
-				  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">					   {% verbatim %}
-				    	<li role="presentation" jq-repeat="chans"><a role="menuitem" tabindex="-1" href="#">{{ chan }}</a></li>
-					{% endverbatim %}
-					<li role="presentation" class="divider"></li>
-					<li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#create_chan">Create New Chan</a></li>
-				  </ul>
+				  <button data-toggle="dropdown" class="btn dropdown-toggle btn-material-blue-grey-100 col-md-offset-2 col-md-offset-6"  data-placeholder="No Chan Selected">No Chan Selected<span class="caret"></span></button>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">				{% verbatim %}
+							<li jq-repeat="chans"><input type="checkbox" id="{{ chan }}"><label for="{{ chan }}">{{ chan }}</label></li>
+						{% endverbatim %}  
+						<li role="presentation" class="divider"></li>
+						<li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#create_chan">Create New Chan</a></li>
+				    </ul>
 				</div>
 			</div>
 		</div>
@@ -92,7 +86,7 @@
 			<div id = "inbox-mess">
 				<ul>
 				{% verbatim %}
-					<li jq-repeat="inbox">{{ message }}</li>
+					<li jq-repeat="inbox">{{subject}}:{{ message }}</li>
 				{% endverbatim %}
 				</ul>
 			</div>
