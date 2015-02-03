@@ -21,6 +21,10 @@
     </head>
     <body>
         <div class = "container">
+        <div class="row">
+        <a class="col-md-2 col-md-offset-8" href={% url 'bitweb:profile' %} id = 'profile-btn'><button class="btn btn-material-blue-grey-100">Profile</button></a>
+        <a class="col-md-2" href={% url 'bmapi:logout' %} id = 'logout-btn'><button class="btn btn-material-blue-grey-100">Logout</button></a>
+        </div>
         {% block header %}
         {% endblock %}
         {% block content %}
