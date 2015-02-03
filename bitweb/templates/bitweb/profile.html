@@ -1,10 +1,11 @@
 {% extends "bitweb/base.html" %}
 {% load staticfiles %}
+<script src="{%static 'js/profile.js' %}"></script>
 {% block title %}{{ user.username }} Profile - {% endblock %}
 
 {% block content %}
     <a href={% url 'bitweb:inbox' %}><button class="btn btn-material-blue-grey-100">Back to Inbox</button></a>
-    <a href={% url 'bmapi:logout' %}><button class="btn btn-material-blue-grey-100">Logout</button></a>
+    <a href={% url 'bmapi:logout' %} id="logout-btn" ><button class="btn btn-material-blue-grey-100">Logout</button></a>
         <div class="panel panel-material-blue-grey-500">
           <div class="panel-heading">
             <h3 class="panel-title">Identities</h3>
