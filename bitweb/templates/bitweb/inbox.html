@@ -24,9 +24,10 @@
 		<div class = "col-md-2">
 			<button class="btn btn-material-blue-grey-100" data-toggle="modal" data-target="#compose_msg">Compose</button>
 		</div>
+
 		<div class="dropdown col-md-2">
 		  <button class="btn btn-material-blue-grey-100 dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-		    Show
+		    Select
 		    <span class="caret"></span>
 		  </button>
 		  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
@@ -40,12 +41,14 @@
 		</div>
 
 		<div class="dropdown col-md-2">
-			<div class="btn-group">
-			  <button data-toggle="dropdown" class="btn dropdown-toggle btn-material-blue-grey-100 col-md-offset-2 col-md-offset-6"  data-placeholder="No Identity Selected">No Identity Selected<span class="caret"></span></button>
-				<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">				{% verbatim %}
+			<div class="btn-group col-md-offset-2 col-md-offset-6">
+			  <button data-toggle="dropdown" class="btn dropdown-toggle btn-material-blue-grey-100"  data-placeholder="No Identity Selected">No Identity Selected<span class="caret"></span></button>
+				<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+					{% verbatim %}
 						<li jq-repeat="identities"><input type="checkbox" id="{{ identity }}"><label for="{{ identity }}">{{ identity }}</label></li>
 					{% endverbatim %}  
 					<li role="presentation" class="divider"></li>
+					<li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#subscribe_chan">Subscribe to Chan</a></li>					
 					<li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#create_identity">Create New Identity</a></li>
 			    </ul>
 			</div>
@@ -57,6 +60,7 @@
 		<div class="col-md-2">
 			<button class="btn btn-material-blue-grey-100" id = "chan-post-btn">Post to Chan</button>
 		</div>
+
 		<div class = "col-md-10">
 			<div class="btn-group btn-group-justified" role="group" aria-label="primaryChan">
 				<div id = 'primary-tab' class='btn'>
@@ -64,7 +68,8 @@
 				</div>
 				<div class="dropdown btn-group" role="group">
 				  <button data-toggle="dropdown" class="btn dropdown-toggle btn-material-blue-grey-100 col-md-offset-2 col-md-offset-6"  data-placeholder="No Chan Selected">No Chan Selected<span class="caret"></span></button>
-					<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">				{% verbatim %}
+					<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+						{% verbatim %}
 							<li jq-repeat="chans"><input type="checkbox" id="{{ chan }}"><label for="{{ chan }}">{{ chan }}</label></li>
 						{% endverbatim %}  
 						<li role="presentation" class="divider"></li>
@@ -75,16 +80,16 @@
 		</div>
 	</div>
 	<div class = "row">
-		<div class="btn-group-vertical col-md-2">
-			<button type="button" class="btn">Inbox</button>
+		<div class="inbox-nav btn-group-vertical col-md-2">
+			<button id="inbox" type="button" class="btn">Inbox</button>
 			<button type="button" class="btn">Starred</button>
-			<button type="button" class="btn">Sent Mail</button>
+			<button id="sent" type="button" class="btn">Sent Mail</button>
 			<button type="button" class="btn">Drafts</button>
 			<button type="button" class="btn">Spam</button>
 			<button type="button" class="btn">Trash</button>
 		</div>
-		<div class = "col-md-8">
-			<div id = "inbox-mess">
+		<div class="inbox-bucket col-md-8" >
+			<div id="inbox-mess">
 				<ul>
 				{% verbatim %}
 				<div jq-repeat="inbox" class = "new-message row">
@@ -96,8 +101,16 @@
 				{% endverbatim %}
 				</ul>
 			</div>
+			<div id = "sent-mess">
+				<ul>
+				{% verbatim %}
+					<li jq-repeat="sent">{{subject}}:{{ message }}</li>
+				{% endverbatim %}
+				</ul>
+			</div>
 		</div>
 	</div>
+
 <!-- new identity modal -->
 	<div class="modal fade" id="create_identity" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
 	  <div class="modal-dialog">

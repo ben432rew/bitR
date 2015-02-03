@@ -95,6 +95,7 @@ class CreateId( View ):
     
     def post( self, request ):
         the_jason = json.loads(request.body.decode('utf-8'))
+
         t1 = uuid.UUID(the_jason['token'])
         try:
             token = Token.objects.get(token=t1)
@@ -231,3 +232,24 @@ class getInboxMessagesByUser( View ):
 
         return JsonResponse( { 'messages': data } )
 
+class getSentMessageByUser( View ):
+    def post( self, request ):
+        the_jason = json.loads(request.body.decode('utf-8'))
+        t1 = uuid.UUID(the_jason['token'])
+
+        try:
+            token = Token.objects.get(token=t1)
+        except:
+            return JsonResponse( {'addresses': 'invalid token given'} )
+
+        bitkeys = BitKey.objects.filter(user=token.user)
+
+        addresses = [ bk.key for bk in bitkeys ]
+
+        data = []
+        
+        for address in addresses:
+            print( 'addresses:', addresses )
+            data.append( BMclient.call( 'getSentMessagesBySender', address ) )
+
+        return JsonResponse( { 'messages': data } )
