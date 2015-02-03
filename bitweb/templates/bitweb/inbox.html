@@ -62,18 +62,16 @@
 				<div id = 'primary-tab' class='btn'>
 					<p>Primary</p>
 				</div>
-				<div class="dropdown btn-group" role="group">
-				  <button class="btn dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-				    Chans
-				    <span class="caret"></span>
-				  </button>
-				  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-				  	{% verbatim %}
-				    	<li role="presentation" jq-repeat="chans"><a role="menuitem" tabindex="-1" href="#">{{ chan }}</a></li>
-					{% endverbatim %}
-					<li role="presentation" class="divider"></li>
-					<li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#create_chan">Create New Chan</a></li>
-				  </ul>
+				<div class="dropdown">
+					<div class="btn-group">
+					  <button data-toggle="dropdown" class="btn dropdown-toggle btn-material-blue-grey-100 col-md-offset-2 col-md-offset-6"  data-placeholder="No Chan Selected">No Chan Selected<span class="caret"></span></button>
+						<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">				{% verbatim %}
+								<li jq-repeat="chans"><input type="checkbox" id="{{ chan }}"><label for="{{ chan }}">{{ chan }}</label></li>
+							{% endverbatim %}  
+							<li role="presentation" class="divider"></li>
+							<li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#create_chan">Create New Chan</a></li>
+					    </ul>
+					</div>
 				</div>
 			</div>
 		</div>
