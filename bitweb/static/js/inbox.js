@@ -66,4 +66,7 @@ $(document).ready(function(){
             })
         })
     })
+
+    console.log($("#inbox-mess").text())
+
 });

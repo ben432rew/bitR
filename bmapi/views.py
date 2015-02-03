@@ -60,7 +60,7 @@ class Logout( View ):
 #getting all messages from client, not really usefull, only for testing
 class AllMessages( View ):
     def get(self, request):
-        BMclient.call('getAllInboxMessages')
+        print(BMclient.call('getAllInboxMessages'))
         return JsonResponse ( {'messages': BMclient.call('getAllInboxMessages')} )
 
 class AllMessagesByAddy( View ):
