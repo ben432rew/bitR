@@ -18,4 +18,5 @@ urlpatterns = patterns('',
     url(r'^spam', Spam.as_view(), name="spam" ),
     url(r'^trash', Trash.as_view(), name="trash" ),
     url(r'^create_id', CreateId.as_view(), name="create" ),
+    url(r'^inbox/(?P<identity>\w+)', AllMessagesByAddy.as_view(), name="inbox" ),
 )

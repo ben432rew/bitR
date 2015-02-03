@@ -28,12 +28,26 @@ $(document).ready(function(){
         }
     })
 
+    $(".identity-inbox").click(function(event){
+        event.preventDefault();
+        console.log("INDENTITY IONBOX")
+        var href = $(this).find("a")[0].attr("href")
+        $.get(href, function(data){
+            console.log(data)
+            $.scope.inbox.push(data)
+        })
+    })
+
+
+// add new identity to list, select it
     $( '#create_id_button' ).click(function() {
         var info = tokenValue;
-        info['nickname'] = $( '#identity_name' ).val();
+        console.log('HEY')
+        info['identity'] = $( '#identity_name' ).val();
         $.post('/bmapi/create_id', JSON.stringify(info), function (data){
-// add new identity to list, select it
-            })
+            console.log(data);
+            $.scope.identities.push(info)
+        })
 // clear inbox and chans (UNFINISHED)
     })
 
