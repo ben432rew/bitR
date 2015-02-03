@@ -37,44 +37,19 @@
 		    	<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Unstarred</a></li>
 		  </ul>
 		</div>
+
 		<div class="dropdown col-md-2">
-		<button class = "btn btn-material-blue-grey-100 col-md-offset-2 col-md-offset-6" id = 'refresh-btn'>Refresh</button>
-		</div>
-		<div class="dropdown col-md-2">
-		  <button class="btn btn-material-blue-grey-100 dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true" id="user_id" value="{{user.id}}">
-		    Identities
-		    <span class="caret"></span>
-		  </button>
-		  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">					   {% verbatim %}
-		    	<li role="presentation" jq-repeat="identities"><a role="menuitem" tabindex="-1" href="#">{{ identity }}</a></li>
-			{% endverbatim %}  
-			<li role="presentation" class="divider"></li>
-			<li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#create_identity">Create New Identity</a></li>
-		  </ul>
+			<div class="btn-group">
+			  <button data-toggle="dropdown" class="btn dropdown-toggle btn-material-blue-grey-100 col-md-offset-2 col-md-offset-6"  data-placeholder="No Identity Selected">No Identity Selected<span class="caret"></span></button>
+				<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">				{% verbatim %}
+						<li jq-repeat="identities"><input type="checkbox" id="{{ identity }}"><label for="{{ identity }}">{{ identity }}</label></li>
+					{% endverbatim %}  
+					<li role="presentation" class="divider"></li>
+					<li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#create_identity">Create New Identity</a></li>
+			    </ul>
+			</div>
 		</div>
 	</div>
-
-
-
-
-<!-- TEST DIV -->
-
-
-	<div class="btn-group">
-  <button data-toggle="dropdown" class="btn btn-default dropdown-toggle">Checked option <span class="caret"></span></button>
-    <ul class="dropdown-menu">
-      <li><input type="radio" id="ID" name="NAME" value="VALUE"><label for="ID">Label</label></li>
-      <li><input type="radio" id="b" name="a" value="2"><label for="ID">bbbb</label></li>
-      <li><input type="radio" id="c" name="b" value="3"><label for="ID">cccc</label></li>
-      <!-- Other items -->
-    </ul>
-</div>
-
-
-
-<!-- END TEST DIV -->
-
-
 
 
 	<div class = "row">
@@ -92,7 +67,8 @@
 				    Chans
 				    <span class="caret"></span>
 				  </button>
-				  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">					   {% verbatim %}
+				  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+				  	{% verbatim %}
 				    	<li role="presentation" jq-repeat="chans"><a role="menuitem" tabindex="-1" href="#">{{ chan }}</a></li>
 					{% endverbatim %}
 					<li role="presentation" class="divider"></li>
@@ -112,13 +88,13 @@
 			<button type="button" class="btn">Trash</button>
 		</div>
 		<div class = "col-md-8">
-			<!-- <div id = "inbox-mess"> -->
+			<div id = "inbox-mess">
 				<ul>
 				{% verbatim %}
 					<li jq-repeat="inbox">{{ message }}</li>
 				{% endverbatim %}
 				</ul>
-			<!-- </div> -->
+			</div>
 		</div>
 	</div>
 <!-- new identity modal -->
