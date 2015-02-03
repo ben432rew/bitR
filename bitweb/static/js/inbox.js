@@ -1,3 +1,5 @@
+var test;
+
 $(document).ready(function(){
     $.material.ripples();
     $('.dropdown-toggle').dropdown();
@@ -7,14 +9,15 @@ $(document).ready(function(){
 //  just for testing, needs to be changed to only get messages for specific user
     $.get('/bmapi/allmessages', function (data){
         data['messages']['data'].forEach(function(value) {
-            $.scope.inbox.push(value)
+            $.scope.inbox.push(value);
         })
     })
     $.post('/bmapi/identities', JSON.stringify(tokenValue), function (data){
-        if (data['addresses'] == 'none'){
+        test = data;
+        if (data['addresses'].length === 0 ){
 // if there aren't any identities that the user has (like if they just signed up),
 // then they should just see the create identities modal (UNFINISHED)
-            $( '#create_identitiy' ).modal('show')
+            $( '#create_identity' ).modal();
             console.log("here")
         } else if (data['addresses'] == 'invalid token given') {
             console.log('there')
@@ -27,7 +30,6 @@ $(document).ready(function(){
             })
         }
     })
-
 
     $( '#create_id_button' ).click(function() {
         var info = tokenValue;
