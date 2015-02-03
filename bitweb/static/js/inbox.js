@@ -12,7 +12,7 @@ $(document).ready(function(){
                 $.scope.inbox.push(value);
             });
         })
-        localStorage.setItem('inboxMessages', JSON.stringify($.scope.inbox));
+        sessionStorage.setItem('inboxMessages', JSON.stringify($.scope.inbox));
     })
     $.post('/bmapi/identities', JSON.stringify(tokenValue), function (data){
         if (data['addresses'].length === 0 ){
