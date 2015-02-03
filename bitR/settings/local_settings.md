@@ -15,7 +15,10 @@ DATABASES = { 'default': {
 # Bitmessage API info
 
 BMAPI = {
-	"user": 'userName',
-	"password": 'password'
+	'protocol': 'http://',
+	'host': '127.0.0.1',
+	'port': 8442,
+	'user': 'userName',
+	'password': 'password'
 }
 '''

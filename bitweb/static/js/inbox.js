@@ -6,7 +6,7 @@ $(document).ready(function(){
 
 //  just for testing, needs to be changed to only get messages for specific user
     $.get('/bmapi/allmessages', function (data){
-        data['messages'].forEach(function(value) {
+        data['messages']['data'].forEach(function(value) {
             $.scope.inbox.push(value)
         })
     })
@@ -23,7 +23,6 @@ $(document).ready(function(){
             data['addresses'].forEach(function(value) {
                 $.scope.identities.push(value)
             })
-            console.log(data['addresses'])
         }
     })
 
@@ -33,10 +32,12 @@ $(document).ready(function(){
         var href = $(this).find("a")[0].attr("href")
         $.get(href, function(data){
             console.log(data)
+            $.scope.inbox.push(data)
         })
     })
 
 
+// add new identity to list, select it
     $( '#create_id_button' ).click(function() {
         var info = tokenValue;
         console.log('HEY')
@@ -44,7 +45,7 @@ $(document).ready(function(){
         $.post('/bmapi/create_id', JSON.stringify(info), function (data){
             console.log(data);
             $.scope.identities.push(info)
-            })
+        })
 // clear inbox and chans (UNFINISHED)
     })
 
