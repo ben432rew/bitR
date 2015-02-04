@@ -113,7 +113,7 @@ def get_messages( function_name, request ):
     if checked['json']:
         bitkeys = BitKey.objects.filter(user=checked['user'])
         addresses = [ bk.key for bk in bitkeys ]
-        data = [ BMclient.call( function_name, address for address in addresses ]:
+        data = [ BMclient.call( function_name, address ) for address in addresses ]
         return JsonResponse( { 'messages': data } )
     return JsonResponse ( { 'error': checked['error'] } )
 
