@@ -55,7 +55,8 @@ class EveryMinute( View ):
 
 class CreateId( View ):
     def post( self, request ):
-# need to check for status code so doesn't save to db if client doesn't like it
+        if request.json['identity'] in BitKey.objects.filter(user=request.json['_user']):
+                return JsonResponse( { 'error' : 'You have already created an identity with that name'})
         newaddy = BMclient.call('createRandomAddress', BMclient._encode(request.json['identity']) )
         bitty = BitKey.objects.create(name=request.json['identity'], key=newaddy['data'][0]['address'], user=request.json['_user'])
         return JsonResponse( { 'id' : newaddy['data'][0]['address'] } )
@@ -65,7 +66,7 @@ class Send ( View ):
     def post( self, request ):      
         to_address = request.json['to_address']
         from_name = request.json['from']
-        from_add = BitKey.objects.get(name=from_name)
+        from_add = BitKey.objects.get(name=from_name, user=request.json['_user'])
         subject = request.json['subject']
         message = request.json['message']
         sent = BMclient.call(

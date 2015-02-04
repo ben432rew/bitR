@@ -13,3 +13,10 @@ class Token( models.Model):
     user = models.ForeignKey( User )
     created_at = models.DateTimeField( auto_now_add=True )
     token = models.CharField( max_length=50, db_index=True )
+
+
+class Address_entry( models.Model ):
+    user = models.ForeignKey( User )
+    name = models.CharField( max_length=200 )
+    address = models.CharField( max_length=200 )
+    
