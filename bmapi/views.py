@@ -60,19 +60,13 @@ class Logout( View ):
 class AllMessagesByAddy( View ):
 
     def get(self, request, identity):
-        print(request.user.id)
         user = User.objects.get(pk=request.user.id)
-        print(identity)
         addy = BitKey.objects.get(user = user, name=identity)
-        print(addy)
         mess_array = []
         messages = BMclient.call("getAllInboxMessages")
-        print(messages['data'])
         for message in messages["data"]:
-            print(message)
             if message['read'] == 1:
                 mess_array.append(message)
-        print(mess_array)
         return JsonResponse ( {'messages': mess_array} )
 
 
@@ -99,6 +93,15 @@ class CreateId( View ):
         newaddy = BMclient.call('createRandomAddress', BMclient._encode(the_jason['identity']) )
         bitty = BitKey.objects.create(name=the_jason["identity"], key=newaddy['data'][0]['address'], user=token.user)
         return JsonResponse( { 'id' : newaddy['data'][0]['address'] } )
+
+class CreateChan( View ):
+
+    def post( self, request ):
+        passphrase = json.loads(request.body.decode('utf-8'))
+        print(passphrase)
+        chan = BMclient.call('createChan', BMclient._encode(passphrase))
+        print(chan)
+        return JsonResponse( { 'chan' : chan} )
 
 
 # class DeleteId( View ):
@@ -218,7 +221,6 @@ class getInboxMessagesByUser( View ):
         data = []
         for address in addresses:
             x= BMclient.call( 'getInboxMessagesByToAddress', address )
-            print( address, x )
             data.append( x )
 
         return JsonResponse( { 'messages': data } )
@@ -241,7 +243,6 @@ class getSentMessageByUser( View ):
         data = []
         
         for address in addresses:
-            print( 'addresses:', addresses )
             data.append( BMclient.call( 'getSentMessagesBySender', address ) )
 
         return JsonResponse( { 'messages': data } )

@@ -48,6 +48,17 @@
 
         inboxMessages();
 
+        $("#chan-form").click(function(event){
+            event.preventDefault();
+            console.log('clicked')
+            var form_data = $(this).serialize();
+            console.log(form_data);
+            $.post('/bmapi/create_chan', form_data, function(data){
+                console.log(data);
+
+            })
+        })
+
         $.post('/bmapi/identities', JSON.stringify(tokenValue), function (data){
             if (data['addresses'].length === 0 ){
     // if there aren't any identities that the user has (like if they just signed up),
