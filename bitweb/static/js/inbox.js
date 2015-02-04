@@ -48,23 +48,11 @@
 
         inboxMessages();
 
-        $("#chan-form").click(function(event){
-            event.preventDefault();
-            console.log('clicked')
-            var form_data = $(this).serialize();
-            console.log(form_data);
-            $.post('/bmapi/create_chan', form_data, function(data){
-                console.log(data);
 
-            })
-        })
-
-        $.post('/bmapi/identities', JSON.stringify(tokenValue), function (data){
+        $.post('/bmapi/identities', JSON.stringify(tokenValue), function(data){
             if (data['addresses'].length === 0 ){
-    // if there aren't any identities that the user has (like if they just signed up),
-    // then they should just see the create identities modal (UNFINISHED)
                 $( '#create_identity' ).modal();
-            } else if (data['addresses'] == 'invalid token given') {
+            } else if (typeof data['addresses'] == "string") {
                 window.location.replace('bmapi/logout');
             } else {
                 data['addresses'].forEach(function(value) {
@@ -74,6 +62,18 @@
             }
         })
 
+        $("#chan-form").submit(function(e){
+            e.preventDefault();
+            console.log('submited')
+            var form_data = $("#chan_name").val();
+            var info = tokenValue
+            info['form'] = form_data
+            console.log(info)
+            $.post('/bmapi/create_chan', JSON.stringify(info), function(data){
+                console.log(data);
+
+            })
+        })
 
     // add new identity to list, select it
         $( '#create_id_button' ).click(function() {
