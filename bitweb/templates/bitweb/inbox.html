@@ -46,7 +46,6 @@
 						<li jq-repeat="identities"><input type="checkbox" id="{{ identity }}"><label for="{{ identity }}">{{ identity }}</label></li>
 					{% endverbatim %}  
 					<li role="presentation" class="divider"></li>
-					<li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#subscribe_chan">Subscribe to Chan</a></li>					
 					<li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#create_identity">Create New Identity</a></li>
 			    </ul>
 			</div>
@@ -70,6 +69,7 @@
 							<li jq-repeat="chans"><input type="checkbox" id="{{ chan }}"><label for="{{ chan }}">{{ chan }}</label></li>
 						{% endverbatim %}  
 						<li role="presentation" class="divider"></li>
+						<li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#subscribe_chan">Subscribe to Chan</a></li>					
 						<li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#create_chan">Create New Chan</a></li>
 				    </ul>
 				</div>
