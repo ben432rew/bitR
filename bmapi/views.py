@@ -12,7 +12,11 @@ from pprint import pprint
 import uuid
 import json
 
-# dry these next two functions out
+def login_token(request, user):
+    login(request, user)
+    token = Token.objects.create(token = uuid.uuid4(), user = user)
+    return JsonResponse({ 'token':str(token.token)})
+
 class Signup( View ):
     def post(self, request):
         the_jason = json.loads(request.body.decode('utf-8'))
@@ -20,10 +24,7 @@ class Signup( View ):
         if form.is_valid():
             form.save()
             user = authenticate(username = the_jason["username"], password=the_jason["password1"])
-            login(request, user)
-            token = Token.objects.create(token = uuid.uuid4(), user = user)
-            string_ver = str(token.token) 
-            return JsonResponse({ 'token':string_ver})
+            return login_token(request, user)
         return JsonResponse({})
 
 
@@ -32,10 +33,7 @@ class Login( View ):
         the_jason = json.loads(request.body.decode('utf-8'))
         user = authenticate( username=the_jason["username"], password=the_jason["password"] )
         if user:
-            login(request, user)
-            token = Token.objects.create(token = uuid.uuid4(), user = user)
-            string_ver = str(token.token) 
-            return JsonResponse({ 'token':string_ver})
+            return login_token(request, user)
         return JsonResponse({})
 
 
@@ -61,7 +59,6 @@ class CreateId( View ):
         newaddy = BMclient.call('createRandomAddress', BMclient._encode(request.json['identity']) )
         bitty = BitKey.objects.create(name=request.json['identity'], key=newaddy['data'][0]['address'], user=request.json['_user'])
         return JsonResponse( { 'id' : newaddy['data'][0]['address'] } )
-
 
 
 class Send ( View ):
@@ -95,7 +92,6 @@ def get_messages( function_name, request ):
     for address in addresses:
         data.append( BMclient.call( function_name, address ) )
     return JsonResponse( { 'messages': data } )
-
 
 
 class getInboxMessagesByUser( View ):
