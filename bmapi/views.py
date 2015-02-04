@@ -24,7 +24,13 @@ def check_token_load_json (request):
     return { 'error':"token does not exist in database", 'json':False}
 
 
-# dry these next two functions out
+def login_token(request, user):
+    login(request, user)
+    token = Token.objects.create(token = uuid.uuid4(), user = user)
+    string_ver = str(token.token) 
+    return JsonResponse({ 'token':string_ver})
+
+
 class Signup( View ):
     def post(self, request):
         the_jason = json.loads(request.body.decode('utf-8'))
@@ -32,10 +38,7 @@ class Signup( View ):
         if form.is_valid():
             form.save()
             user = authenticate(username = the_jason["username"], password=the_jason["password1"])
-            login(request, user)
-            token = Token.objects.create(token = uuid.uuid4(), user = user)
-            string_ver = str(token.token) 
-            return JsonResponse({ 'token':string_ver})
+            return login_token(request, user)
         return JsonResponse({})
 
 
@@ -44,10 +47,7 @@ class Login( View ):
         the_jason = json.loads(request.body.decode('utf-8'))
         user = authenticate(username=the_jason["username"], password=the_jason["password"])
         if user:
-            login(request, user)
-            token = Token.objects.create(token = uuid.uuid4(), user = user)
-            string_ver = str(token.token) 
-            return JsonResponse({ 'token':string_ver})
+            return login_token(request, user)
         return JsonResponse({})
 
 
