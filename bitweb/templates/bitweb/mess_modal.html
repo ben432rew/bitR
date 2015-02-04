@@ -1,0 +1,30 @@
+<div class="modal fade" id="compose_msg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+		<div class="modal-content">
+	        <div class="modal-header">
+	 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+	        	<h4 class="modal-title" id="myModalLabel">New Message</h4>
+	        </div>
+		    <div class="modal-body">
+				<form>
+				  <div class="form-group">
+				  <label for="From">From:</label>
+				    <select class="form-control" id="from_addy">
+				    	{% verbatim %}
+		    				<option jq-repeat="senders">{{ identity }}</option>
+						{% endverbatim %}  
+				    </select>
+				    <label for="To">To:</label>
+				    <input type="text" class="form-control" id="send_addy" placeholder="Enter sender's address here">				    
+				    <label for="Subject">Subject:</label>
+				    <input type="text" class="form-control" id="subject" placeholder="Enter subject here">
+				    <label for="message">Message</label>
+				    <textarea class="form-control" rows="10" id="message" placeholder="Enter message here"></textarea>			    
+		            <button type="button" class="btn" data-dismiss="modal">Cancel</button>
+			        <button type="button" id="send_message_btn" class="btn btn-material-blue-grey-500" data-dismiss="modal">Send</button>
+				  </div>
+				</form>
+		    </div>
+	    </div>
+	  </div>
+	 </div>
