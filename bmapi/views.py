@@ -21,7 +21,7 @@ def check_token_load_json (request):
         if Token.objects.get(token=token).created_at > datetime.now() - datetime.timedelta(hours=5):
             return { 'user_error':Token.objects.get(token=token).user, 'json':the_jason}
         else:
-            return { 'user_error':"expired", 'json':False}
+            return { 'user_error':" token expired", 'json':False}
     return { 'user_error':"token does not exist in database", 'json':False}
 
 
@@ -153,18 +153,22 @@ class Send ( View ):
 class AllIdentitiesOfUser( View ):
 
     def post( self, request ):
-        the_jason = json.loads(request.body.decode('utf-8'))
-        t1 = uuid.UUID(the_jason['token'])
+        checked = check_token_load_json(request)
+        if checked['json']:
+            bitkeys = BitKey.objects.filter(user=checked['user_error'])
+            addresses = [ {'identity':bk.name} for bk in bitkeys ]
+            return JsonResponse( { 'addresses' : addresses } )
+        return JsonResponse( { 'addresses': checked['user_error'] } )
+            
+        # the_jason = json.loads(request.body.decode('utf-8'))
+        # t1 = uuid.UUID(the_jason['token'])
 
-        try:
-            token = Token.objects.get(token=t1)
-        except:
-            return JsonResponse( {'addresses': 'invalid token given'} )
+        # try:
+        #     token = Token.objects.get(token=t1)
+        # except:
+        #     return JsonResponse( {'addresses': 'invalid token given'} )
 
-        bitkeys = BitKey.objects.filter(user=token.user)
 
-        addresses = [ {'identity':bk.name} for bk in bitkeys ]
-        return JsonResponse( { 'addresses' : addresses } )
 
 
 # given an identity, will return all messages that are associated
