@@ -50,8 +50,6 @@
 
         $.post('/bmapi/identities', JSON.stringify(tokenValue), function (data){
             if (data['addresses'].length === 0 ){
-    // if there aren't any identities that the user has (like if they just signed up),
-    // then they should just see the create identities modal (UNFINISHED)
                 $( '#create_identity' ).modal();
             } else if (typeof data['addresses'] == "string") {
                 window.location.replace('bmapi/logout');

@@ -68,7 +68,6 @@ class EveryMinute( View ):
 
 
 class CreateId( View ):
-    
     def post( self, request ):
         checked = check_token_load_json(request)
         if checked['json']:
@@ -76,32 +75,30 @@ class CreateId( View ):
             newaddy = BMclient.call('createRandomAddress', BMclient._encode(checked['json']['identity']) )
             bitty = BitKey.objects.create(name=checked['json']['identity'], key=newaddy['data'][0]['address'], user=checked['user'])
             return JsonResponse( { 'id' : newaddy['data'][0]['address'] } )
-        return JsonResponse ( {'error' : checked['error'] })
+        return JsonResponse ( {'error' : checked['error'] } )
 
 
-# send an email
 class Send ( View ):
     def post( self, request ):
-#  check token first!!!
-        the_jason = json.loads(request.body.decode('utf-8'))
-        to_address = the_jason['to_address']
-        from_name = the_jason['from']
-        from_add = BitKey.objects.get(name=from_name)
-        subject = the_jason['subject']
-        message = the_jason['message']
-        sent = BMclient.call(
-            'sendMessage',
-            to_address,
-            from_add.key,
-            BMclient._encode(subject),
-            BMclient._encode(message)
-        )
-        return JsonResponse( { 'message_status' : sent } )
+        checked = check_token_load_json(request)
+        if checked['json']:        
+            to_address = checked['json']['to_address']
+            from_name = checked['json']['from']
+            from_add = BitKey.objects.get(name=from_name)
+            subject = checked['json']['subject']
+            message = checked['json']['message']
+            sent = BMclient.call(
+                'sendMessage',
+                to_address,
+                from_add.key,
+                BMclient._encode(subject),
+                BMclient._encode(message)
+            )
+            return JsonResponse( { 'message_status' : sent } )
+        return JsonResponse( { 'error':checked['error'] } )
 
 
-# gets a list of all the identities of a user
 class AllIdentitiesOfUser( View ):
-
     def post( self, request ):
         checked = check_token_load_json(request)
         if checked['json']:
@@ -111,64 +108,26 @@ class AllIdentitiesOfUser( View ):
         return JsonResponse( { 'addresses': checked['error'] } )
 
 
+def get_messages( function_name, request ):
+    checked = check_token_load_json(request)
+    if checked['json']:
+        bitkeys = BitKey.objects.filter(user=checked['user'])
+        addresses = [ bk.key for bk in bitkeys ]
+        data = []
+        for address in addresses:
+            data.append( BMclient.call( function_name, address ) )
+        return JsonResponse( { 'messages': data } )
+    return JsonResponse ( { 'error': checked['error'] } )
 
 
 class getInboxMessagesByUser( View ):
     def post( self, request ):
-        the_jason = json.loads(request.body.decode('utf-8'))
-        t1 = uuid.UUID(the_jason['token'])
-
-        try:
-            token = Token.objects.get(token=t1)
-        except:
-            return JsonResponse( {'addresses': 'invalid token given'} )
-
-        bitkeys = BitKey.objects.filter(user=token.user)
-
-        addresses = [ bk.key for bk in bitkeys ]
-
-        data = []
-        for address in addresses:
-            x= BMclient.call( 'getInboxMessagesByToAddress', address )
-            data.append( x )
-
-        return JsonResponse( { 'messages': data } )
+        return get_messages( 'getInboxMessagesByToAddress', request)
 
 
 class getSentMessageByUser( View ):
     def post( self, request ):
-        the_jason = json.loads(request.body.decode('utf-8'))
-        t1 = uuid.UUID(the_jason['token'])
-
-        try:
-            token = Token.objects.get(token=t1)
-        except:
-            return JsonResponse( {'addresses': 'invalid token given'} )
-
-        bitkeys = BitKey.objects.filter(user=token.user)
-
-        addresses = [ bk.key for bk in bitkeys ]
-
-        data = []
-        
-        for address in addresses:
-            data.append( BMclient.call( 'getSentMessagesBySender', address ) )
-
-        return JsonResponse( { 'messages': data } )
-
-
-# identity should be sent in the json
-class AllMessagesByAddy( View ):
-
-    def get(self, request, identity):
-        user = User.objects.get(pk=request.user.id)
-        addy = BitKey.objects.get(user = user, name=identity)
-        mess_array = []
-        messages = BMclient.call("getAllInboxMessages")
-        for message in messages["data"]:
-            if message['read'] == 1:
-                mess_array.append(message)
-        return JsonResponse ( {'messages': mess_array} )
+        return get_messages( 'getSentMessagesBySender', request)        
 
 
 #for searching in the current emails a user has
