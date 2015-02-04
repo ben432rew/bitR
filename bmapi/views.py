@@ -27,8 +27,7 @@ def check_token_load_json (request):
 def login_token(request, user):
     login(request, user)
     token = Token.objects.create(token = uuid.uuid4(), user = user)
-    string_ver = str(token.token) 
-    return JsonResponse({ 'token':string_ver})
+    return JsonResponse({ 'token':str(token.token)})
 
 
 class Signup( View ):
