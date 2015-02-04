@@ -70,6 +70,8 @@ class CreateId( View ):
     def post( self, request ):
         checked = check_token_load_json(request)
         if checked['json']:
+            if checked['json']['identity'] in BitKey.objects.filter(user=checked['json']['user']):
+                return JsonResponse( { 'error' : 'You have already created an identity with that name'})
             newaddy = BMclient.call('createRandomAddress', BMclient._encode(checked['json']['identity']) )
             if newaddy['status'] != 200:
                 return JsonResponse( { 'error': newaddy['status'] } )
@@ -84,7 +86,7 @@ class Send ( View ):
         if checked['json']:        
             to_address = checked['json']['to_address']
             from_name = checked['json']['from']
-            from_add = BitKey.objects.get(name=from_name)
+            from_add = BitKey.objects.get(name=from_name, user=checked['json']['user'])
             subject = checked['json']['subject']
             message = checked['json']['message']
             sent = BMclient.call(
