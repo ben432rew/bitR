@@ -70,8 +70,9 @@ class CreateId( View ):
     def post( self, request ):
         checked = check_token_load_json(request)
         if checked['json']:
-# need to check for status code so doesn't save to db if client doesn't like it
             newaddy = BMclient.call('createRandomAddress', BMclient._encode(checked['json']['identity']) )
+            if newaddy['status'] != 200:
+                return JsonResponse( { 'error': newaddy['status'] } )
             bitty = BitKey.objects.create(name=checked['json']['identity'], key=newaddy['data'][0]['address'], user=checked['user'])
             return JsonResponse( { 'id' : newaddy['data'][0]['address'] } )
         return JsonResponse ( {'error' : checked['error'] } )
