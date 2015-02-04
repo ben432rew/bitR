@@ -77,113 +77,18 @@
 			</div>
 		</div>
 	</div>
-	<div class = "row">
-		<div class="inbox-nav btn-group-vertical col-md-2">
-			<button id="inbox" type="button" class="btn">Inbox</button>
-			<button type="button" class="btn">Starred</button>
-			<button id="sent" type="button" class="btn">Sent Mail</button>
-			<button type="button" class="btn">Drafts</button>
-			<button type="button" class="btn">Spam</button>
-			<button type="button" class="btn">Trash</button>
-		</div>
-		<div class="inbox-bucket col-md-8" >
-			<div id="inbox-mess">
-				<ul>
-				{% verbatim %}
-				<div jq-repeat="inbox" class = "new-message row">
-					<div class = "col-xs-3 " >Subject: {{subject}}</div>
-					<div class = "col-xs-3 " >Message: {{message}}</div>
-					<div class = "col-xs-3 message-date" >{{receivedTime}}</div>
-					<div class = "col-xs-3 read-status" >{{read}}</div>
-				</div>
-				{% endverbatim %}
-				</ul>
-			</div>
-			<div id = "sent-mess">
-				<ul>
-				{% verbatim %}
-					<li jq-repeat="sent">{{subject}}:{{ message }}</li>
-				{% endverbatim %}
-				</ul>
-			</div>
-		</div>
-	</div>
+
+
+<!-- inbox include -->
+	{% include "bitweb/inbox_include.html" %}	
 
 <!-- new identity modal -->
-	<div class="modal fade" id="create_identity" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-	  <div class="modal-dialog">
-		<div class="modal-content">
-	        <div class="modal-header">
-	 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-	        	<h4 class="modal-title" id="myModalLabel">New Identity</h4>
-	        </div>
-		    <div class="modal-body">
-				<form>
-				  <div class="form-group">
-				    <label for="Identity Name">Identity Nickname</label>
-				    <input type="text" class="form-control" id="identity_name" placeholder="Enter Identity Nickname">
-				    <p class="help-block">Create an 'Identity' for your mailbox.  You can create more anytime you want, and have different mailboxes for different Identities!</p>
-		            <button type="button" class="btn" data-dismiss="modal">Cancel</button>
-			        <button type="button" id="create_id_button" class="btn btn-material-blue-grey-500" data-dismiss="modal">Create</button>
-				  </div>
-				</form>
-		    </div>
-	    </div>
-	  </div>
-	</div>
+	{% include "bitweb/id_modal.html" %}
 
 <!-- new chan modal -->
-	<div class="modal fade" id="create_chan" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-	  <div class="modal-dialog modal-sm">
-		<div class="modal-content">
-	        <div class="modal-header">
-	 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-	        	<h4 class="modal-title" id="myModalLabel">New Chan</h4>
-	        </div>
-		    <div class="modal-body">
-				<form>
-				  <div class="form-group">
-				    <label for="Chan Name">Chan Passphrase</label>
-				    <input type="text" class="form-control" id="chan_name" placeholder="Enter Chan Name(passphrase)">
-				    <p class="help-block">Enter a name for your chan. If you choose a sufficiently complex chan name (like a strong and unique passphrase) and none of your friends share it publicly then the chan will be secure and private. If you and someone else both create a chan with the same chan name then it is currently very likely that they will be the same chan!</p>
-		            <button type="button" class="btn" data-dismiss="modal">Cancel</button>
-			        <button type="button" id="create_chan_button" class="btn btn-material-blue-grey-500" data-dismiss="modal">Create</button>
-				  </div>
-				</form>
-		    </div>
-	    </div>
-	  </div>
-	</div>
+	{% include "bitweb/chan_modal.html" %}	
 
 <!-- compose modal -->
-	<div class="modal fade" id="compose_msg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-	  <div class="modal-dialog">
-		<div class="modal-content">
-	        <div class="modal-header">
-	 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-	        	<h4 class="modal-title" id="myModalLabel">New Message</h4>
-	        </div>
-		    <div class="modal-body">
-				<form>
-				  <div class="form-group">
-				  <label for="From">From:</label>
-				    <select class="form-control" id="from_addy">
-				    	{% verbatim %}
-		    				<option jq-repeat="senders">{{ identity }}</option>
-						{% endverbatim %}  
-				    </select>
-				    <label for="To">To:</label>
-				    <input type="text" class="form-control" id="send_addy" placeholder="Enter sender's address here">				    
-				    <label for="Subject">Subject:</label>
-				    <input type="text" class="form-control" id="subject" placeholder="Enter subject here">
-				    <label for="message">Message</label>
-				    <textarea class="form-control" rows="10" id="message" placeholder="Enter message here"></textarea>			    
-		            <button type="button" class="btn" data-dismiss="modal">Cancel</button>
-			        <button type="button" id="send_message_btn" class="btn btn-material-blue-grey-500" data-dismiss="modal">Send</button>
-				  </div>
-				</form>
-		    </div>
-	    </div>
-	  </div>
-	</div>
+	{% include "bitweb/mess_modal.html" %}
+	
 {% endblock %}
