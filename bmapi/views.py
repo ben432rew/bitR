@@ -1,13 +1,13 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
+from datetime import datetime, timedelta
 from bmapi.forms import UserCreateForm
 from bmapi.models import Token, BitKey
 from django.views.generic import View
 from django.http import JsonResponse
 from bmapi.wrapper import BMclient
 from bitweb.models import User
-from datetime import datetime
 from pprint import pprint
 import uuid
 import json
@@ -18,7 +18,7 @@ def check_token_load_json (request):
     the_jason = json.loads(request.body.decode('utf-8'))
     token = uuid.UUID(the_jason['token'])
     if Token.objects.filter(token=token).exists():
-        if Token.objects.get(token=token).created_at > datetime.now() - datetime.timedelta(hours=5):
+        if Token.objects.get(token=token).created_at.toordinal() > (datetime.now() - timedelta(days=1)).toordinal():
             return { 'user_error':Token.objects.get(token=token).user, 'json':the_jason}
         else:
             return { 'user_error':" token expired", 'json':False}
@@ -154,21 +154,12 @@ class AllIdentitiesOfUser( View ):
 
     def post( self, request ):
         checked = check_token_load_json(request)
+        print(checked)
         if checked['json']:
             bitkeys = BitKey.objects.filter(user=checked['user_error'])
             addresses = [ {'identity':bk.name} for bk in bitkeys ]
             return JsonResponse( { 'addresses' : addresses } )
         return JsonResponse( { 'addresses': checked['user_error'] } )
-            
-        # the_jason = json.loads(request.body.decode('utf-8'))
-        # t1 = uuid.UUID(the_jason['token'])
-
-        # try:
-        #     token = Token.objects.get(token=t1)
-        # except:
-        #     return JsonResponse( {'addresses': 'invalid token given'} )
-
-
 
 
 # given an identity, will return all messages that are associated
