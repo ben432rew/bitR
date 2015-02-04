@@ -1,4 +1,5 @@
 {% extends "bitweb/base.html" %}
+{#% load unix_time %#}
 {% load staticfiles %}
 {% block title %}{{ user.username }} Inbox - {% endblock %}
 {% block header %}
@@ -89,7 +90,12 @@
 			<div id="inbox-mess">
 				<ul>
 				{% verbatim %}
-					<li jq-repeat="inbox">{{subject}}:{{ message }}</li>
+				<div jq-repeat="inbox" class = "new-message row">
+					<div class = "col-xs-3 " >Subject: {{subject}}</div>
+					<div class = "col-xs-3 " >Message: {{message}}</div>
+					<div class = "col-xs-3 message-date" >{{receivedTime}}</div>
+					<div class = "col-xs-3 read-status" >{{read}}</div>
+				</div>
 				{% endverbatim %}
 				</ul>
 			</div>

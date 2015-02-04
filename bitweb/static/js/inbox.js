@@ -8,6 +8,12 @@
         $.post('/bmapi/allmessages', JSON.stringify(tokenValue), function (data){
             data['messages'].forEach(function(value) {
                 value['data'].forEach(function(value){
+                    if (value['read'] == 1){
+                        value['color'] = "blue"
+                    }
+                    else {
+                        value['color'] = 'white'
+                    }
                     $.scope.inbox.push(value);
                 });
             });
@@ -62,9 +68,7 @@
         $( '#create_id_button' ).click(function() {
             var info = tokenValue;
             info['identity'] = $( '#identity_name' ).val();
-            console.log('HEY')
             $.post('/bmapi/create_id', JSON.stringify(info), function (data){
-                console.log(data);
                 $.scope.identities.push(info)
             })
         })
