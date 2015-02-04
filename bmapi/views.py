@@ -14,13 +14,15 @@ import json
 
 # check if the token is in the database and if it's expired (older than 5 hours)
 # maybe include request and have it decode and load the json and return also
-def check_token (token):
+def check_token_load_json (request):
+    the_jason = json.loads(request.body.decode('utf-8'))
+    token = uuid.UUID(the_jason['token'])
     if Token.objects.filter(token=token).exists():
         if Token.objects.get(token=token).created_at > datetime.now() - datetime.timedelta(hours=5):
-            return Token.objects.get(token=token).user
+            return { 'user_error':Token.objects.get(token=token).user, 'json':the_jason}
         else:
-            return "expired"
-    return "token does not exist in database"
+            return { 'user_error':"expired", 'json':False}
+    return { 'user_error':"token does not exist in database", 'json':False}
 
 
 # dry these next two functions out
@@ -60,19 +62,13 @@ class Logout( View ):
 class AllMessagesByAddy( View ):
 
     def get(self, request, identity):
-        print(request.user.id)
         user = User.objects.get(pk=request.user.id)
-        print(identity)
         addy = BitKey.objects.get(user = user, name=identity)
-        print(addy)
         mess_array = []
         messages = BMclient.call("getAllInboxMessages")
-        print(messages['data'])
         for message in messages["data"]:
-            print(message)
             if message['read'] == 1:
                 mess_array.append(message)
-        print(mess_array)
         return JsonResponse ( {'messages': mess_array} )
 
 
@@ -218,7 +214,6 @@ class getInboxMessagesByUser( View ):
         data = []
         for address in addresses:
             x= BMclient.call( 'getInboxMessagesByToAddress', address )
-            print( address, x )
             data.append( x )
 
         return JsonResponse( { 'messages': data } )
@@ -241,7 +236,6 @@ class getSentMessageByUser( View ):
         data = []
         
         for address in addresses:
-            print( 'addresses:', addresses )
             data.append( BMclient.call( 'getSentMessagesBySender', address ) )
 
         return JsonResponse( { 'messages': data } )
