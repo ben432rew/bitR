@@ -14,7 +14,6 @@ class tokenAuth( object ):
         if path[1] != 'bmapi':
             return None
 
-        print( path[2], settings.SKIP_TOKEN_CHECK)
         if path[2] not in settings.SKIP_TOKEN_CHECK:
             request.json = json.loads( request.body.decode('utf-8') )
             token = uuid.UUID( request.json['token'] )
