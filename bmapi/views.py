@@ -57,12 +57,6 @@ class Logout( View ):
         return redirect ( '/' )
 
 
-#getting all messages from client, not really usefull, only for testing
-class AllMessages( View ):
-    def get(self, request):
-        print(BMclient.call('getAllInboxMessages'))
-        return JsonResponse ( {'messages': BMclient.call('getAllInboxMessages')} )
-
 class AllMessagesByAddy( View ):
 
     def get(self, request, identity):
@@ -105,6 +99,7 @@ class CreateId( View ):
         newaddy = BMclient.call('createRandomAddress', BMclient._encode(the_jason['identity']) )
         bitty = BitKey.objects.create(name=the_jason["identity"], key=newaddy['data'][0]['address'], user=token.user)
         return JsonResponse( { 'id' : newaddy['data'][0]['address'] } )
+
 
 # class DeleteId( View ):
 
@@ -191,11 +186,6 @@ class Starred( View ):
     pass
 
 
-#see all sent messages
-class Sent( View ):
-    pass
-
-
 #see all drafts
 class Drafts( View ):
     pass
@@ -209,6 +199,7 @@ class Spam( View ):
 #get to see trash, post to trash or untrash something
 class Trash( View ):
     pass
+
 
 class getInboxMessagesByUser( View ):
     def post( self, request ):
@@ -231,6 +222,7 @@ class getInboxMessagesByUser( View ):
             data.append( x )
 
         return JsonResponse( { 'messages': data } )
+
 
 class getSentMessageByUser( View ):
     def post( self, request ):

@@ -24,6 +24,26 @@
 
     $(document).ready(function(){
 
+        $.scope.inbox.__put = function(){
+            this.slideDown();
+        };
+
+        $.scope.inbox.__take = function(){
+            this.slideUp('slow', function(){
+                this.remove();
+            });
+        };
+
+        $.scope.sent.__put = function(){
+            this.slideDown();
+        };
+        
+        $.scope.sent.__take = function(){
+            this.slideUp('slow', function(){
+                this.remove();
+            });
+        };
+
         $('.dropdown-toggle').dropdown();
 
         inboxMessages();
@@ -98,7 +118,3 @@
     } );
 
 })(jQuery);
-
-(function(){
-
-})()
