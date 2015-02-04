@@ -49,6 +49,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.cache.FetchFromCacheMiddleware',
+    'bitR.middleware.tokenAuth',
 )
 
 ROOT_URLCONF = 'bitR.urls'
@@ -76,6 +77,12 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 LOGIN_URL = '/'
+
+## list of routes not to check token:
+ALLOW_ROUTE = (
+    'login',
+    'signup',
+)
 
 try:
     from .local_settings import *

@@ -12,19 +12,11 @@ from pprint import pprint
 import uuid
 import json
 
+def login_token(request, user):
+    login(request, user)
+    token = Token.objects.create(token = uuid.uuid4(), user = user)
+    return JsonResponse({ 'token':str(token.token)})
 
-def check_token_load_json (request):
-    the_jason = json.loads(request.body.decode('utf-8'))
-    token = uuid.UUID(the_jason['token'])
-    if Token.objects.filter(token=token).exists():
-        if Token.objects.get(token=token).created_at.toordinal() > (datetime.now() - timedelta(days=1)).toordinal():
-            return { 'user':Token.objects.get(token=token).user, 'json':the_jason}
-        else:
-            return { 'error':" token expired", 'json':False}
-    return { 'error':"token does not exist in database", 'json':False}
-
-
-# dry these next two functions out
 class Signup( View ):
     def post(self, request):
         the_jason = json.loads(request.body.decode('utf-8'))
@@ -32,23 +24,16 @@ class Signup( View ):
         if form.is_valid():
             form.save()
             user = authenticate(username = the_jason["username"], password=the_jason["password1"])
-            login(request, user)
-            token = Token.objects.create(token = uuid.uuid4(), user = user)
-            string_ver = str(token.token)
-            print(string_ver) 
-            return JsonResponse({ 'token':string_ver})
+            return login_token(request, user)
         return JsonResponse({})
 
 
 class Login( View ):
     def post(self, request):
         the_jason = json.loads(request.body.decode('utf-8'))
-        user = authenticate(username=the_jason["username"], password=the_jason["password"])
+        user = authenticate( username=the_jason["username"], password=the_jason["password"] )
         if user:
-            login(request, user)
-            token = Token.objects.create(token = uuid.uuid4(), user = user)
-            string_ver = str(token.token) 
-            return JsonResponse({ 'token':string_ver})
+            return login_token(request, user)
         return JsonResponse({})
 
 
@@ -70,55 +55,43 @@ class EveryMinute( View ):
 
 class CreateId( View ):
     def post( self, request ):
-        checked = check_token_load_json(request)
-        if checked['json']:
 # need to check for status code so doesn't save to db if client doesn't like it
-            newaddy = BMclient.call('createRandomAddress', BMclient._encode(checked['json']['identity']) )
-            bitty = BitKey.objects.create(name=checked['json']['identity'], key=newaddy['data'][0]['address'], user=checked['user'])
-            return JsonResponse( { 'id' : newaddy['data'][0]['address'] } )
-        return JsonResponse ( {'error' : checked['error'] } )
+        newaddy = BMclient.call('createRandomAddress', BMclient._encode(request.json['identity']) )
+        bitty = BitKey.objects.create(name=request.json['identity'], key=newaddy['data'][0]['address'], user=request.json['_user'])
+        return JsonResponse( { 'id' : newaddy['data'][0]['address'] } )
 
 
 class Send ( View ):
-    def post( self, request ):
-        checked = check_token_load_json(request)
-        if checked['json']:        
-            to_address = checked['json']['to_address']
-            from_name = checked['json']['from']
-            from_add = BitKey.objects.get(name=from_name)
-            subject = checked['json']['subject']
-            message = checked['json']['message']
-            sent = BMclient.call(
-                'sendMessage',
-                to_address,
-                from_add.key,
-                BMclient._encode(subject),
-                BMclient._encode(message)
-            )
-            return JsonResponse( { 'message_status' : sent } )
-        return JsonResponse( { 'error':checked['error'] } )
+    def post( self, request ):      
+        to_address = request.json['to_address']
+        from_name = request.json['from']
+        from_add = BitKey.objects.get(name=from_name)
+        subject = request.json['subject']
+        message = request.json['message']
+        sent = BMclient.call(
+            'sendMessage',
+            to_address,
+            from_add.key,
+            BMclient._encode(subject),
+            BMclient._encode(message)
+        )
+        return JsonResponse( { 'message_status' : sent } )
 
 
 class AllIdentitiesOfUser( View ):
     def post( self, request ):
-        checked = check_token_load_json(request)
-        if checked['json']:
-            bitkeys = BitKey.objects.filter(user=checked['user'])
-            addresses = [ {'identity':bk.name} for bk in bitkeys ]
-            return JsonResponse( { 'addresses' : addresses } )
-        return JsonResponse( { 'addresses': checked['error'] } )
+        bitkeys = BitKey.objects.filter(user=request.json['_user'])
+        addresses = [ {'identity':bk.name} for bk in bitkeys ]
+        return JsonResponse( { 'addresses' : addresses } )
 
 
 def get_messages( function_name, request ):
-    checked = check_token_load_json(request)
-    if checked['json']:
-        bitkeys = BitKey.objects.filter(user=checked['user'])
-        addresses = [ bk.key for bk in bitkeys ]
-        data = []
-        for address in addresses:
-            data.append( BMclient.call( function_name, address ) )
-        return JsonResponse( { 'messages': data } )
-    return JsonResponse ( { 'error': checked['error'] } )
+    bitkeys = BitKey.objects.filter(user=request.json['_user'])
+    addresses = [ bk.key for bk in bitkeys ]
+    data = []
+    for address in addresses:
+        data.append( BMclient.call( function_name, address ) )
+    return JsonResponse( { 'messages': data } )
 
 
 class getInboxMessagesByUser( View ):
