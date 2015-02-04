@@ -34,7 +34,8 @@ class Signup( View ):
             user = authenticate(username = the_jason["username"], password=the_jason["password1"])
             login(request, user)
             token = Token.objects.create(token = uuid.uuid4(), user = user)
-            string_ver = str(token.token) 
+            string_ver = str(token.token)
+            print(string_ver) 
             return JsonResponse({ 'token':string_ver})
         return JsonResponse({})
 
