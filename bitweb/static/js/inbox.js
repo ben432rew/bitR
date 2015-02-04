@@ -34,16 +34,6 @@
             });
         };
 
-        $.scope.chans.__put = function(){
-            this.slideDown();
-        };
-
-        $.scope.chans.__take = function(){
-            this.slideUp('slow', function(){
-                this.remove();
-            });
-        };
-
         $.scope.sent.__put = function(){
             this.slideDown();
         };
