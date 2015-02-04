@@ -73,3 +73,10 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+
+## list of routes not to check token:
+SKIP_TOKEN_CHECK = (
+    'login',
+    'signup',
+    'logout',
+)
