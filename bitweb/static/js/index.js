@@ -1,3 +1,17 @@
+var authorize = function(event, string, form) {
+        event.preventDefault()        
+        var loginInfo = $( form ).serializeObject();
+        $.post('/bmapi/' + string, JSON.stringify(loginInfo), function (data){
+            if (data['token']) {
+                $.cookie( 'token', data['token'], { expires: 1 } );
+                window.location.replace('/inbox');
+            } else {
+                alert('Sorry, that ' + string + ' information is not valid')
+                signupInfo.reset()
+            }
+        })
+    };
+
 $(document).ready(function(){
     $.material.ripples()
     $( ".signup" ).hide();
@@ -21,31 +35,12 @@ $(document).ready(function(){
 
 // dry these two out
     $('#signup_form').submit(function(event) {
-        event.preventDefault()
-        var signupInfo = $( this ).serializeObject();
-        $.post('/bmapi/signup', JSON.stringify(signupInfo), function (data){ 
-            if (data['token']) {
-                $.cookie( 'token', data['token'], { expires: 1 } );
-                window.location.replace('/inbox');
-            } else {
-                alert('Sorry, that signup information is not valid')
-                signupInfo.reset()
-            }
-        })
+        authorize(event, 'signup', this)
     })
 
-    $('#login_form').submit(function(event) {
-        event.preventDefault()        
-        var loginInfo = $( this ).serializeObject();
-        $.post('/bmapi/login', JSON.stringify(loginInfo), function (data){
-            if (data['token']) {
-                $.cookie( 'token', data['token'], { expires: 1 } );
-                window.location.replace('/inbox');
-            } else {
-                alert('Sorry, that login information is not valid')
-                signupInfo.reset()
-            }
-        })
+    $('#login_form').submit(function(event){
+        authorize(event, 'login', this)
     })
     
 });
+

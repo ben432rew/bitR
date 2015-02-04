@@ -80,7 +80,10 @@
             var info = tokenValue;
             info['identity'] = $( '#identity_name' ).val();
             $.post('/bmapi/create_id', JSON.stringify(info), function (data){
-                $.scope.identities.push(info)
+                if ( 'error' in info ){
+                } else {
+                    $.scope.identities.push(info);
+                }
             })
         })
 
