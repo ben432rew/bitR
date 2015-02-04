@@ -1,26 +1,27 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
+from datetime import datetime, timedelta
 from bmapi.forms import UserCreateForm
 from bmapi.models import Token, BitKey
 from django.views.generic import View
 from django.http import JsonResponse
 from bmapi.wrapper import BMclient
 from bitweb.models import User
-from datetime import datetime
 from pprint import pprint
 import uuid
 import json
 
-# check if the token is in the database and if it's expired (older than 5 hours)
-# maybe include request and have it decode and load the json and return also
-def check_token (token):
+
+def check_token_load_json (request):
+    the_jason = json.loads(request.body.decode('utf-8'))
+    token = uuid.UUID(the_jason['token'])
     if Token.objects.filter(token=token).exists():
-        if Token.objects.get(token=token).created_at > datetime.now() - datetime.timedelta(hours=5):
-            return Token.objects.get(token=token).user
+        if Token.objects.get(token=token).created_at.toordinal() > (datetime.now() - timedelta(days=1)).toordinal():
+            return { 'user':Token.objects.get(token=token).user, 'json':the_jason}
         else:
-            return "expired"
-    return "token does not exist in database"
+            return { 'error':" token expired", 'json':False}
+    return { 'error':"token does not exist in database", 'json':False}
 
 
 # dry these next two functions out
@@ -57,25 +58,6 @@ class Logout( View ):
         return redirect ( '/' )
 
 
-class AllMessagesByAddy( View ):
-
-    def get(self, request, identity):
-        print(request.user.id)
-        user = User.objects.get(pk=request.user.id)
-        print(identity)
-        addy = BitKey.objects.get(user = user, name=identity)
-        print(addy)
-        mess_array = []
-        messages = BMclient.call("getAllInboxMessages")
-        print(messages['data'])
-        for message in messages["data"]:
-            print(message)
-            if message['read'] == 1:
-                mess_array.append(message)
-        print(mess_array)
-        return JsonResponse ( {'messages': mess_array} )
-
-
 # this probably should be in the wrapper, but for now it's here.  This will: 
 # be given a list of currently logged in identities.  It will check for new
 # messages for those identities by checking the receivedTime against one minute
@@ -86,19 +68,91 @@ class EveryMinute( View ):
 
 
 class CreateId( View ):
-    
     def post( self, request ):
-        the_jason = json.loads(request.body.decode('utf-8'))
-
-        t1 = uuid.UUID(the_jason['token'])
-        try:
-            token = Token.objects.get(token=t1)
-        except:
-            return JsonResponse( {'addresses': 'invalid token given'})
+        checked = check_token_load_json(request)
+        if checked['json']:
 # need to check for status code so doesn't save to db if client doesn't like it
-        newaddy = BMclient.call('createRandomAddress', BMclient._encode(the_jason['identity']) )
-        bitty = BitKey.objects.create(name=the_jason["identity"], key=newaddy['data'][0]['address'], user=token.user)
-        return JsonResponse( { 'id' : newaddy['data'][0]['address'] } )
+            newaddy = BMclient.call('createRandomAddress', BMclient._encode(checked['json']['identity']) )
+            bitty = BitKey.objects.create(name=checked['json']['identity'], key=newaddy['data'][0]['address'], user=checked['user'])
+            return JsonResponse( { 'id' : newaddy['data'][0]['address'] } )
+        return JsonResponse ( {'error' : checked['error'] } )
+
+
+class Send ( View ):
+    def post( self, request ):
+        checked = check_token_load_json(request)
+        if checked['json']:        
+            to_address = checked['json']['to_address']
+            from_name = checked['json']['from']
+            from_add = BitKey.objects.get(name=from_name)
+            subject = checked['json']['subject']
+            message = checked['json']['message']
+            sent = BMclient.call(
+                'sendMessage',
+                to_address,
+                from_add.key,
+                BMclient._encode(subject),
+                BMclient._encode(message)
+            )
+            return JsonResponse( { 'message_status' : sent } )
+        return JsonResponse( { 'error':checked['error'] } )
+
+
+class AllIdentitiesOfUser( View ):
+    def post( self, request ):
+        checked = check_token_load_json(request)
+        if checked['json']:
+            bitkeys = BitKey.objects.filter(user=checked['user'])
+            addresses = [ {'identity':bk.name} for bk in bitkeys ]
+            return JsonResponse( { 'addresses' : addresses } )
+        return JsonResponse( { 'addresses': checked['error'] } )
+
+
+def get_messages( function_name, request ):
+    checked = check_token_load_json(request)
+    if checked['json']:
+        bitkeys = BitKey.objects.filter(user=checked['user'])
+        addresses = [ bk.key for bk in bitkeys ]
+        data = []
+        for address in addresses:
+            data.append( BMclient.call( function_name, address ) )
+        return JsonResponse( { 'messages': data } )
+    return JsonResponse ( { 'error': checked['error'] } )
+
+
+class getInboxMessagesByUser( View ):
+    def post( self, request ):
+        return get_messages( 'getInboxMessagesByToAddress', request)
+
+
+class getSentMessageByUser( View ):
+    def post( self, request ):
+        return get_messages( 'getSentMessagesBySender', request)        
+
+
+#for searching in the current emails a user has
+class Search( View ):
+    pass
+
+
+#get all started, use post to star or unstar
+class Starred( View ):
+    pass
+
+
+#see all drafts
+class Drafts( View ):
+    pass
+
+
+#see spam folder as get, post to make something spam or unspam something
+class Spam( View ):
+    pass
+
+
+#get to see trash, post to trash or untrash something
+class Trash( View ):
+    pass
 
 
 # class DeleteId( View ):
@@ -131,117 +185,3 @@ class CreateId( View ):
 #         the_jason = json.loads(request.body.decode('utf-8'))
 #         address = the_json['address']
 #         return JsonResponse( { 'leave_status' : self.api.leaveChan(address) } )
-
-
-# send an email
-class Send ( View ):
-    def post( self, request ):
-#  check token first!!!
-        the_jason = json.loads(request.body.decode('utf-8'))
-        to_address = the_jason['to_address']
-        from_name = the_jason['from']
-        from_add = BitKey.objects.get(name=from_name)
-        subject = the_jason['subject']
-        message = the_jason['message']
-        sent = BMclient.call(
-            'sendMessage',
-            to_address,
-            from_add.key,
-            BMclient._encode(subject),
-            BMclient._encode(message)
-        )
-        return JsonResponse( { 'message_status' : sent } )
-
-
-# gets a list of all the identities of a user
-class AllIdentitiesOfUser( View ):
-
-    def post( self, request ):
-        the_jason = json.loads(request.body.decode('utf-8'))
-        t1 = uuid.UUID(the_jason['token'])
-
-        try:
-            token = Token.objects.get(token=t1)
-        except:
-            return JsonResponse( {'addresses': 'invalid token given'} )
-
-        bitkeys = BitKey.objects.filter(user=token.user)
-
-        addresses = [ {'identity':bk.name} for bk in bitkeys ]
-        return JsonResponse( { 'addresses' : addresses } )
-
-
-# given an identity, will return all messages that are associated
-class MessagesByIdentity( View ):
-    pass
-
-
-#for searching in the current emails a user has
-class Search( View ):
-    pass
-
-
-#get all started, use post to star or unstar
-class Starred( View ):
-    pass
-
-
-#see all drafts
-class Drafts( View ):
-    pass
-
-
-#see spam folder as get, post to make something spam or unspam something
-class Spam( View ):
-    pass
-
-
-#get to see trash, post to trash or untrash something
-class Trash( View ):
-    pass
-
-
-class getInboxMessagesByUser( View ):
-    def post( self, request ):
-        the_jason = json.loads(request.body.decode('utf-8'))
-        t1 = uuid.UUID(the_jason['token'])
-
-        try:
-            token = Token.objects.get(token=t1)
-        except:
-            return JsonResponse( {'addresses': 'invalid token given'} )
-
-        bitkeys = BitKey.objects.filter(user=token.user)
-
-        addresses = [ bk.key for bk in bitkeys ]
-
-        data = []
-        for address in addresses:
-            x= BMclient.call( 'getInboxMessagesByToAddress', address )
-            print( address, x )
-            data.append( x )
-
-        return JsonResponse( { 'messages': data } )
-
-
-class getSentMessageByUser( View ):
-    def post( self, request ):
-        the_jason = json.loads(request.body.decode('utf-8'))
-        t1 = uuid.UUID(the_jason['token'])
-
-        try:
-            token = Token.objects.get(token=t1)
-        except:
-            return JsonResponse( {'addresses': 'invalid token given'} )
-
-        bitkeys = BitKey.objects.filter(user=token.user)
-
-        addresses = [ bk.key for bk in bitkeys ]
-
-        data = []
-        
-        for address in addresses:
-            print( 'addresses:', addresses )
-            data.append( BMclient.call( 'getSentMessagesBySender', address ) )
-
-        return JsonResponse( { 'messages': data } )
