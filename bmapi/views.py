@@ -12,17 +12,16 @@ from pprint import pprint
 import uuid
 import json
 
-# check if the token is in the database and if it's expired (older than 5 hours)
-# maybe include request and have it decode and load the json and return also
+
 def check_token_load_json (request):
     the_jason = json.loads(request.body.decode('utf-8'))
     token = uuid.UUID(the_jason['token'])
     if Token.objects.filter(token=token).exists():
         if Token.objects.get(token=token).created_at.toordinal() > (datetime.now() - timedelta(days=1)).toordinal():
-            return { 'user_error':Token.objects.get(token=token).user, 'json':the_jason}
+            return { 'user':Token.objects.get(token=token).user, 'json':the_jason}
         else:
-            return { 'user_error':" token expired", 'json':False}
-    return { 'user_error':"token does not exist in database", 'json':False}
+            return { 'error':" token expired", 'json':False}
+    return { 'error':"token does not exist in database", 'json':False}
 
 
 # dry these next two functions out
@@ -59,19 +58,6 @@ class Logout( View ):
         return redirect ( '/' )
 
 
-class AllMessagesByAddy( View ):
-
-    def get(self, request, identity):
-        user = User.objects.get(pk=request.user.id)
-        addy = BitKey.objects.get(user = user, name=identity)
-        mess_array = []
-        messages = BMclient.call("getAllInboxMessages")
-        for message in messages["data"]:
-            if message['read'] == 1:
-                mess_array.append(message)
-        return JsonResponse ( {'messages': mess_array} )
-
-
 # this probably should be in the wrapper, but for now it's here.  This will: 
 # be given a list of currently logged in identities.  It will check for new
 # messages for those identities by checking the receivedTime against one minute
@@ -84,49 +70,13 @@ class EveryMinute( View ):
 class CreateId( View ):
     
     def post( self, request ):
-        the_jason = json.loads(request.body.decode('utf-8'))
-
-        t1 = uuid.UUID(the_jason['token'])
-        try:
-            token = Token.objects.get(token=t1)
-        except:
-            return JsonResponse( {'addresses': 'invalid token given'})
+        checked = check_token_load_json(request)
+        if checked['json']:
 # need to check for status code so doesn't save to db if client doesn't like it
-        newaddy = BMclient.call('createRandomAddress', BMclient._encode(the_jason['identity']) )
-        bitty = BitKey.objects.create(name=the_jason["identity"], key=newaddy['data'][0]['address'], user=token.user)
-        return JsonResponse( { 'id' : newaddy['data'][0]['address'] } )
-
-
-# class DeleteId( View ):
-
-#     def post( self, request ):
-#         the_jason = json.loads(request.body.decode('utf-8'))
-#         address = the_json['address']
-#         return JsonResponse( { 'id' : self.api.deleteAddress(address) } )
-
-
-# class CreateChan( View ):
-
-#     def post( self, request ):
-#         the_jason = json.loads(request.body.decode('utf-8'))
-#         passphrase = the_json['passphrase']
-#         return JsonResponse( { 'chan_address' : self.api.createChan(passphrase) } )
-
-
-# class JoinChan( View ):
-
-#     def post( self, request ):
-#         the_jason = json.loads(request.body.decode('utf-8'))
-#         passphrase = the_json['passphrase']
-#         address = the_json['address']
-#         return JsonResponse( { 'join_status' : self.api.joinChan(passphrase, address) } )
-
-# class LeaveChan( View ):
-
-#     def post( self, request ):
-#         the_jason = json.loads(request.body.decode('utf-8'))
-#         address = the_json['address']
-#         return JsonResponse( { 'leave_status' : self.api.leaveChan(address) } )
+            newaddy = BMclient.call('createRandomAddress', BMclient._encode(checked['json']['identity']) )
+            bitty = BitKey.objects.create(name=checked['json']['identity'], key=newaddy['data'][0]['address'], user=checked['user'])
+            return JsonResponse( { 'id' : newaddy['data'][0]['address'] } )
+        return JsonResponse ( {'error' : checked['error'] })
 
 
 # send an email
@@ -154,42 +104,13 @@ class AllIdentitiesOfUser( View ):
 
     def post( self, request ):
         checked = check_token_load_json(request)
-        print(checked)
         if checked['json']:
-            bitkeys = BitKey.objects.filter(user=checked['user_error'])
+            bitkeys = BitKey.objects.filter(user=checked['user'])
             addresses = [ {'identity':bk.name} for bk in bitkeys ]
             return JsonResponse( { 'addresses' : addresses } )
-        return JsonResponse( { 'addresses': checked['user_error'] } )
+        return JsonResponse( { 'addresses': checked['error'] } )
 
 
-# given an identity, will return all messages that are associated
-class MessagesByIdentity( View ):
-    pass
-
-
-#for searching in the current emails a user has
-class Search( View ):
-    pass
-
-
-#get all started, use post to star or unstar
-class Starred( View ):
-    pass
-
-
-#see all drafts
-class Drafts( View ):
-    pass
-
-
-#see spam folder as get, post to make something spam or unspam something
-class Spam( View ):
-    pass
-
-
-#get to see trash, post to trash or untrash something
-class Trash( View ):
-    pass
 
 
 class getInboxMessagesByUser( View ):
@@ -234,3 +155,74 @@ class getSentMessageByUser( View ):
             data.append( BMclient.call( 'getSentMessagesBySender', address ) )
 
         return JsonResponse( { 'messages': data } )
+
+
+# identity should be sent in the json
+class AllMessagesByAddy( View ):
+
+    def get(self, request, identity):
+        user = User.objects.get(pk=request.user.id)
+        addy = BitKey.objects.get(user = user, name=identity)
+        mess_array = []
+        messages = BMclient.call("getAllInboxMessages")
+        for message in messages["data"]:
+            if message['read'] == 1:
+                mess_array.append(message)
+        return JsonResponse ( {'messages': mess_array} )
+
+
+#for searching in the current emails a user has
+class Search( View ):
+    pass
+
+
+#get all started, use post to star or unstar
+class Starred( View ):
+    pass
+
+
+#see all drafts
+class Drafts( View ):
+    pass
+
+
+#see spam folder as get, post to make something spam or unspam something
+class Spam( View ):
+    pass
+
+
+#get to see trash, post to trash or untrash something
+class Trash( View ):
+    pass
+
+
+# class DeleteId( View ):
+
+#     def post( self, request ):
+#         the_jason = json.loads(request.body.decode('utf-8'))
+#         address = the_json['address']
+#         return JsonResponse( { 'id' : self.api.deleteAddress(address) } )
+
+
+# class CreateChan( View ):
+
+#     def post( self, request ):
+#         the_jason = json.loads(request.body.decode('utf-8'))
+#         passphrase = the_json['passphrase']
+#         return JsonResponse( { 'chan_address' : self.api.createChan(passphrase) } )
+
+
+# class JoinChan( View ):
+
+#     def post( self, request ):
+#         the_jason = json.loads(request.body.decode('utf-8'))
+#         passphrase = the_json['passphrase']
+#         address = the_json['address']
+#         return JsonResponse( { 'join_status' : self.api.joinChan(passphrase, address) } )
+
+# class LeaveChan( View ):
+
+#     def post( self, request ):
+#         the_jason = json.loads(request.body.decode('utf-8'))
+#         address = the_json['address']
+#         return JsonResponse( { 'leave_status' : self.api.leaveChan(address) } )
