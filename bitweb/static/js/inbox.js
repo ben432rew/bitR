@@ -100,10 +100,12 @@
         $("#chan-form").submit(function(e){
             e.preventDefault();
             var form_data = $("#chan_name").val();
-            var info = tokenValue
+            var info = {}
+            info['token'] = $.cookie( 'token' )
             info['form'] = form_data
             $.post('/bmapi/create_chan', JSON.stringify(info), function(data){
                 $.scope.chans.push(data)
+                $('#create_chan').modal('toggle');
             })
         })
 

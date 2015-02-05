@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.core import serializers
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
 from datetime import datetime, timedelta
@@ -53,8 +54,11 @@ class CreateChan( View ):
         if chan['status'] != 200:
             return JsonResponse( { 'error' : chan['status'] } )
         address = chan['data'][0]['address']
-        chan_obj = Chan_subscriptions.objects.create(label=passphrase, address=address, user=request.json['_user'])
-        return JsonResponse( { 'chan' : chan_obj.label } )
+        user_id = request.user.id
+        user = User.objects.get(pk=user_id)
+        chan_obj = Chan_subscriptions.objects.create(label=label, address=address, user=request.json['_user'])
+        return JsonResponse( { 'chan_address' : chan_obj.address, 'chan_label' : chan_obj.label } )
+
 
 
 class CreateId( View ):
