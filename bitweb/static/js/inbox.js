@@ -128,10 +128,11 @@
         })
 
         $('#chanss').on( 'click', function(){
+            console.log("here again")
             $('.inbox-bucket').children().hide()
             $('#chan_mess').show()
         })
-        
+
         $('.inbox-nav').on( 'click', 'button#sent', function(){
             $('.inbox-bucket').children().hide()
             $.scope.sent.splice(0);
