@@ -7,7 +7,7 @@ var authorize = function(event, string, form) {
                 window.location.replace('/inbox');
             } else {
                 alert('Sorry, that ' + string + ' information is not valid')
-                signupInfo.reset()
+                form.reset()
             }
         })
     };
@@ -33,7 +33,6 @@ $(document).ready(function(){
         }
 	});
 
-// dry these two out
     $('#signup_form').submit(function(event) {
         authorize(event, 'signup', this)
     })

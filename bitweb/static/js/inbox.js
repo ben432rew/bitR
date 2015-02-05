@@ -40,7 +40,7 @@
                         else {
                             value['color'] = 'white'
                         }
-                        if ( value['toAddress'] in chan_addresses){ 
+                        if ( chan_addresses.indexOf(value['toAddress']) != -1){ 
                             $.scope.chan_inbox.push(value);
                         } else {
                             $.scope.inbox.push(value);
@@ -182,6 +182,11 @@
         })
         
             $('')
+
+
+        $('#primary-tab').on( 'click', function(){
+            inboxMessages()
+        } );
 
         $('.inbox-nav').on( 'click', 'button#inbox', function(){
             inboxMessages()

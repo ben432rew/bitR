@@ -44,15 +44,6 @@ class Logout( View ):
         return redirect ( '/' )
 
 
-# this probably should be in the wrapper, but for now it's here.  This will: 
-# be given a list of currently logged in identities.  It will check for new
-# messages for those identities by checking the receivedTime against one minute
-# ago, and if there are any messages since the last minute, sends them to the 
-# user's browsers inbox
-class EveryMinute( View ):
-    pass
-
-
 class CreateId( View ):
     def post( self, request ):
         if request.json['identity'] in BitKey.objects.filter(user=request.json['_user']):
@@ -89,6 +80,8 @@ class AllIdentitiesOfUser( View ):
 def get_messages( function_name, request, chans=False ):
     bitkeys = BitKey.objects.filter(user=request.json['_user'])
     addresses = [ bk.key for bk in bitkeys ]
+    if chans:
+        addresses += chans
     data = [ BMclient.call( function_name, address ) for address in addresses ]
     return JsonResponse( { 'messages': data, 'chans':chans } )
 
