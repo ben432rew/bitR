@@ -71,7 +71,7 @@
             console.log(info)
             $.post('/bmapi/create_chan', JSON.stringify(info), function(data){
                 console.log(data)
-                $.scope.chans.push(data['chan']['data'][0])
+                $.scope.chans.push(data)
             })
         })
 
