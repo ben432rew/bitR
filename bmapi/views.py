@@ -81,21 +81,25 @@ class Send ( View ):
 
 class AllIdentitiesOfUser( View ):
     def post( self, request ):
+        print( BMclient.call(' listSubscriptions'))
         bitkeys = BitKey.objects.filter(user=request.json['_user'])
         addresses = [ {'identity':bk.name} for bk in bitkeys ]
         return JsonResponse( { 'addresses' : addresses } )
 
 
-def get_messages( function_name, request ):
+def get_messages( function_name, request, chans=False ):
     bitkeys = BitKey.objects.filter(user=request.json['_user'])
     addresses = [ bk.key for bk in bitkeys ]
     data = [ BMclient.call( function_name, address ) for address in addresses ]
+    if chans:
+        data['chans'] = chans
     return JsonResponse( { 'messages': data } )
 
 
 class getInboxMessagesByUser( View ):
     def post( self, request ):
-        return get_messages( 'getInboxMessagesByToAddress', request)
+        chan_addresses = Chan_subscriptions.objects.filter(user=request.json['_user']).values('address')
+        return get_messages( 'getInboxMessagesByToAddress', request, chan_addresses), 
 
 
 class getSentMessageByUser( View ):
