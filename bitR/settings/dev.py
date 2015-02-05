@@ -79,7 +79,7 @@ STATIC_URL = '/static/'
 LOGIN_URL = '/'
 
 ## list of routes not to check token:
-ALLOW_ROUTE = (
+SKIP_TOKEN_CHECK = (
     'login',
     'signup',
     'logout',

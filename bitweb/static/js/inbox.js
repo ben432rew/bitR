@@ -89,6 +89,19 @@
             }
         });
 
+        APIcal({
+            url: 'allchans',
+            callBack: function (data){
+                if (typeof data['chans'] == "string") {
+                    window.location.replace('bmapi/logout');
+                } else {
+                    data['chans'].forEach(function(value) {
+                        $.scope.chans.push(value)
+                    })
+                }
+            }
+        });
+
     // add new identity to list, select it
         $( '#create_id_button' ).click(function() {
             var info = tokenValue;
@@ -118,6 +131,21 @@
                 data: info,
                 callBack: function(){}
             });
+        })
+
+        $( '#sub_chan_btn' ).click(function() {
+            var info = {}
+            info['label'] = $( '#chan_label' ).val();
+            info['address'] = $( '#chan_addy' ).val();
+            APIcal({
+                url: 'joinchan',
+                callBack: function (data){
+                    if ( 'error' in data ){
+                    } else {
+                        $.scope.chans.push(data);
+                    }
+                }
+            })
         })
 
         $( '#create_chan_button' ).click(function() {

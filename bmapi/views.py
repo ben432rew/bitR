@@ -3,11 +3,11 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
 from datetime import datetime, timedelta
 from bmapi.forms import UserCreateForm
-from bmapi.models import Token, BitKey
 from django.views.generic import View
 from django.http import JsonResponse
 from bmapi.wrapper import BMclient
 from bitweb.models import User
+from bmapi.models import *
 from pprint import pprint
 import uuid
 import json
@@ -55,17 +55,18 @@ class EveryMinute( View ):
 
 class CreateId( View ):
     def post( self, request ):
-# need to check for status code so doesn't save to db if client doesn't like it
+        if request.json['identity'] in BitKey.objects.filter(user=request.json['_user']):
+                return JsonResponse( { 'error' : 'You have already created an identity with that name'})
         newaddy = BMclient.call('createRandomAddress', BMclient._encode(request.json['identity']) )
         bitty = BitKey.objects.create(name=request.json['identity'], key=newaddy['data'][0]['address'], user=request.json['_user'])
-        return JsonResponse( { 'id' : newaddy['data'][0]['address'] } )
+        return JsonResponse( { 'identity' : bitty.name } )
 
 
 class Send ( View ):
     def post( self, request ):      
         to_address = request.json['to_address']
         from_name = request.json['from']
-        from_add = BitKey.objects.get(name=from_name)
+        from_add = BitKey.objects.get(name=from_name, user=request.json['_user'])
         subject = request.json['subject']
         message = request.json['message']
         sent = BMclient.call(
@@ -88,9 +89,7 @@ class AllIdentitiesOfUser( View ):
 def get_messages( function_name, request ):
     bitkeys = BitKey.objects.filter(user=request.json['_user'])
     addresses = [ bk.key for bk in bitkeys ]
-    data = []
-    for address in addresses:
-        data.append( BMclient.call( function_name, address ) )
+    data = [ BMclient.call( function_name, address ) for address in addresses ]
     return JsonResponse( { 'messages': data } )
 
 
@@ -102,6 +101,19 @@ class getInboxMessagesByUser( View ):
 class getSentMessageByUser( View ):
     def post( self, request ):
         return get_messages( 'getSentMessagesBySender', request)        
+
+
+class JoinChan( View ):
+    def post( self, request ):
+        chan = Chan_subscriptions.objects.create( user=request.json['_user'], label=request.json['label'], address=request.json['label'] )
+        BMclient.call( 'addSubscription', chan.address, BMclient._encode(chan.label) )
+        return JsonResponse( { 'chan_label' : chan.label } )
+
+
+class AllChans( View ):
+    def post( self, request ):
+        chans = [ { 'chan_label' : chan.label } for chan in Chan_subscriptions.objects.filter( user=request.json['_user'] )]
+        return JsonResponse( {'chans':chans} )
 
 
 #for searching in the current emails a user has
@@ -145,13 +157,6 @@ class Trash( View ):
 #         return JsonResponse( { 'chan_address' : self.api.createChan(passphrase) } )
 
 
-# class JoinChan( View ):
-
-#     def post( self, request ):
-#         the_jason = json.loads(request.body.decode('utf-8'))
-#         passphrase = the_json['passphrase']
-#         address = the_json['address']
-#         return JsonResponse( { 'join_status' : self.api.joinChan(passphrase, address) } )
 
 # class LeaveChan( View ):
 
