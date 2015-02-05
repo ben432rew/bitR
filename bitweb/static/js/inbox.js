@@ -27,9 +27,11 @@
         $('.inbox-bucket').children().hide();
         $.scope.inbox.splice(0);
 
+        var chan_addresses;
         APIcal({
             url: 'allmessages',
             callBack: function( data ){
+                chan_addresses = data['chans']
                 data['messages'].forEach(function(value) {
                     value['data'].forEach(function(value){
                         if (value['read'] == 1){
@@ -38,12 +40,17 @@
                         else {
                             value['color'] = 'white'
                         }
-                        $.scope.inbox.push(value);
+                        if ( value['toAddress'] in chan_addresses){ 
+                            $.scope.chan_inbox.push(value);
+                        } else {
+                            $.scope.inbox.push(value);
+                        }
                     });
                 });
                 sessionStorage.setItem('inboxMessages', JSON.stringify($.scope.inbox));
             }
         });
+
 
         $('#inbox-mess').show();
     };
@@ -169,9 +176,18 @@
             $('#sent-mess').show()
         } );
 
+        $('#chanss').on( 'click', function(){
+            $('.inbox-bucket').children().hide()
+            $('#chan_mess').show()
+        })
+        
+            $('')
+
         $('.inbox-nav').on( 'click', 'button#inbox', function(){
             inboxMessages()
         } );
+    
     } );
+
 
 })(jQuery);
