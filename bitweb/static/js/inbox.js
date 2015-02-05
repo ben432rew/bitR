@@ -5,7 +5,9 @@
     var inboxMessages = function(){
         $('.inbox-bucket').children().hide();
         $.scope.inbox.splice(0);
+        var chan_addresses;
         $.post('/bmapi/allmessages', JSON.stringify(tokenValue), function (data){
+            chan_addresses = data['chans']
             data['messages'].forEach(function(value) {
                 value['data'].forEach(function(value){
                     if (value['read'] == 1){
@@ -14,7 +16,11 @@
                     else {
                         value['color'] = 'white'
                     }
-                    $.scope.inbox.push(value);
+                    if ( value['toAddress'] in chan_addresses){ 
+                        $.scope.chan_inbox.push(value);
+                    } else {
+                        $.scope.inbox.push(value);
+                    }
                 });
             });
             sessionStorage.setItem('inboxMessages', JSON.stringify($.scope.inbox));
@@ -78,7 +84,6 @@
             $.post('/bmapi/create_id', JSON.stringify(info), function (data){
                 if ( 'error' in data ){
                 } else {
-                    console.log(data)
                     $.scope.identities.push(data);
                 }
             })
@@ -102,7 +107,6 @@
             $.post('/bmapi/joinchan', JSON.stringify(info), function (data){
                 if ( 'error' in data ){
                 } else {
-                    console.log(data)
                     $.scope.chans.push(data);
                 }
             })
@@ -123,6 +127,11 @@
             })
         })
 
+        $('#chanss').on( 'click', function(){
+            $('.inbox-bucket').children().hide()
+            $('#chan_mess').show()
+        })
+        
         $('.inbox-nav').on( 'click', 'button#sent', function(){
             $('.inbox-bucket').children().hide()
             $.scope.sent.splice(0);
@@ -130,15 +139,19 @@
                 data['messages'].forEach(function(value) {
                     value['data'].forEach(function(value){
                         $.scope.sent.push(value);
+                        } );
                     } );
                 } );
+                $('#sent-mess').show()
             } );
-            $('#sent-mess').show()
+
+            $('')
+
+            $('.inbox-nav').on( 'click', 'button#inbox', function(){
+                inboxMessages()
+            } );
+    
         } );
 
-        $('.inbox-nav').on( 'click', 'button#inbox', function(){
-            inboxMessages()
-        } );
-    } );
 
 })(jQuery);

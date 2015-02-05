@@ -86,16 +86,18 @@ class AllIdentitiesOfUser( View ):
         return JsonResponse( { 'addresses' : addresses } )
 
 
-def get_messages( function_name, request ):
+def get_messages( function_name, request, chans=False ):
     bitkeys = BitKey.objects.filter(user=request.json['_user'])
     addresses = [ bk.key for bk in bitkeys ]
     data = [ BMclient.call( function_name, address ) for address in addresses ]
-    return JsonResponse( { 'messages': data } )
+    return JsonResponse( { 'messages': data, 'chans':chans } )
 
 
 class getInboxMessagesByUser( View ):
     def post( self, request ):
-        return get_messages( 'getInboxMessagesByToAddress', request)
+        chans = Chan_subscriptions.objects.filter(user=request.json['_user']).values('address')
+        chan_addresses = [ c['address'] for c in chans]
+        return get_messages( 'getInboxMessagesByToAddress', request, chan_addresses)
 
 
 class getSentMessageByUser( View ):
@@ -105,8 +107,8 @@ class getSentMessageByUser( View ):
 
 class JoinChan( View ):
     def post( self, request ):
-        chan = Chan_subscriptions.objects.create( user=request.json['_user'], label=request.json['label'], address=request.json['label'] )
-        BMclient.call( 'addSubscription', chan.address, BMclient._encode(chan.label) )
+        chan = Chan_subscriptions.objects.create( user=request.json['_user'], label=request.json['label'], address=request.json['address'] )
+        BMclient.call( 'addSubscription', chan.address, chan.label )
         return JsonResponse( { 'chan_label' : chan.label } )
 
 
