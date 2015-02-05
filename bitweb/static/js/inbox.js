@@ -1,4 +1,5 @@
 ( function( $ ){
+    'use strict';
 
     var APIcal = function( args ){
         var data = args.data || {}
@@ -104,7 +105,6 @@
 
     // add new identity to list, select it
         $( '#create_id_button' ).click(function() {
-            var info = tokenValue;
             APIcal({
                 url: 'create_id',
                 data: {
@@ -112,9 +112,9 @@
                 },
                 callBack:function (data){
                     // error check might not be needed...
-                    if ( 'error' in info ){
+                    if ( 'error' in data ){
                     } else {
-                        $.scope.identities.push(info);
+                        $.scope.identities.push( { identity: $( '#identity_name' ).val() } );
                     }
                 }
             })
