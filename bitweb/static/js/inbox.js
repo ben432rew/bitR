@@ -7,6 +7,7 @@
         $.scope.inbox.splice(0);
         var chan_addresses;
         $.post('/bmapi/allmessages', JSON.stringify(tokenValue), function (data){
+            console.log('here')
             chan_addresses = data['chans']
             data['messages'].forEach(function(value) {
                 value['data'].forEach(function(value){
@@ -18,10 +19,10 @@
                         value['color'] = 'white'
                     }
                     if ( value['fromAddress'] in chan_addresses){ 
-                        $.scope.chan_inbox.push(value)
-                        continue
+                        $.scope.chan_inbox.push(value);
+                    } else {
+                        $.scope.inbox.push(value);
                     }
-                    $.scope.inbox.push(value);
                 });
             });
             sessionStorage.setItem('inboxMessages', JSON.stringify($.scope.inbox));
