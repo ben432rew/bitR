@@ -67,16 +67,14 @@ class TestViewDjango(TestCase):
 	def setUp(self):
 		self.client = Client()
 
-	def test_rootrequests(self):
-		resp = self.client.get('/')
-		self.assertEqual(resp.status_code, 200) 
+	# def test_rootrequests(self):
+	# 	resp = self.client.get('/')
+	# 	self.assertEqual(resp.status_code, 200) 
 	
-	def test_signup(self):
-		info = json.dumps({'username': 'a', 'password1': 'a','password2':'a'})
-		response = self.client.post('/bmapi/signup', content_type='application/json', data=info)
-		pprint(response.request)
-		pprint(response.content)
-		self.assertEqual(response.status_code, 200)
+	# def test_signup(self):
+	# 	info = json.dumps({'username': 'a', 'password1': 'a','password2':'a'})
+	# 	response = self.client.post('/bmapi/signup', content_type='application/json', data=info)
+	# 	self.assertEqual(response.status_code, 200)
 	
 	# def test_logout(self):
 	# 	response = self.client.post("/bmapi/logout")
@@ -87,7 +85,11 @@ class TestViewDjango(TestCase):
 	# 	response = self.client.post('/bmapi/login', content_type='application/json', data=info)
 	# 	self.assertEqual(response.status_code, 200)
 	
-	# def test_createId(self):
-	# 	info = json.dumps({'identity':'wtf'})
-	# 	response = self.client.post('/bmapi/create_id',content_type='application/json', data=info)
-	# 	# self.assertEqual(response.status_code, 202)
+	def test_createId(self):
+		info = json.dumps({'username': 'a', 'password1': 'a','password2':'a'})
+		response = self.client.post( '/bmapi/signup', content_type='application/json', data=info )
+		token = json.loads( response.content.decode('utf-8') )['token']
+		jason = json.dumps({"token":token,"identity":"test"})
+		response = self.client.post('/bmapi/create_id',content_type='application/json', data=jason)
+		print(response.status_code)
+		self.assertEqual(response.status_code, 202)
