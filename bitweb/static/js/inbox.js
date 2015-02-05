@@ -7,18 +7,18 @@
         $.scope.inbox.splice(0);
         var chan_addresses;
         $.post('/bmapi/allmessages', JSON.stringify(tokenValue), function (data){
-            console.log('here')
             chan_addresses = data['chans']
             data['messages'].forEach(function(value) {
                 value['data'].forEach(function(value){
-                    console.log(value)
+                    // console.log(value['toAddress'])
+                    // console.log(chan_addresses)
                     if (value['read'] == 1){
                         value['color'] = "blue"
                     }
                     else {
                         value['color'] = 'white'
                     }
-                    if ( value['fromAddress'] in chan_addresses){ 
+                    if ( value['toAddress'] in chan_addresses){ 
                         $.scope.chan_inbox.push(value);
                     } else {
                         $.scope.inbox.push(value);
@@ -131,6 +131,12 @@
             })
         })
 
+        $('#chanss').on( 'click', function(){
+            console.log('getting here')
+            $('.inbox-bucket').children().hide()
+            $('#chan_mess').show()
+        })
+        
         $('.inbox-nav').on( 'click', 'button#sent', function(){
             $('.inbox-bucket').children().hide()
             $.scope.sent.splice(0);
@@ -149,11 +155,8 @@
             $('.inbox-nav').on( 'click', 'button#inbox', function(){
                 inboxMessages()
             } );
+    
         } );
 
-        $('#all_chans_list').on('click', function(){
-            $('.inbox-bucket').children().hide()
-            $('#chan-mess').show()
-        })
 
 })(jQuery);
