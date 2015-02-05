@@ -32,6 +32,7 @@
         APIcal({
             url: 'allmessages',
             callBack: function( data ){
+                console.log(data)
                 chan_addresses = data['chans']
                 data['messages'].forEach(function(value) {
                     value['data'].forEach(function(value){
@@ -84,7 +85,7 @@
 
         APIcal({
             url: 'identities',
-            callBack:function (data){
+            callBack:function(data){
                 if (data['addresses'].length === 0 ){
                     $( '#create_identity' ).modal();
                 } else if (typeof data['addresses'] == "string") {
@@ -97,6 +98,21 @@
                 }
             }
         });
+
+        $('#inbox-list').on('click', '.new-message', function(e){
+            e.preventDefault();
+            var classes = $(this).attr('class').split(/\s+/)
+            var from = classes[2].slice(5, -1)
+            console.log(from)
+            var body = $(this).find('.message-body').text()
+            var subject = $(this).find('.message-subject').text()
+            var date = $(this).find('.message-date').text()
+            $("#mess_view_modal").modal("toggle")
+            $("#mess-subject").html(subject)
+            $("#mess-body").html(body)
+            $("#mess-date").html(date)
+            $("#mess-from").html(from)
+        })
 
         $("#chan-form").submit(function(e){
             e.preventDefault();

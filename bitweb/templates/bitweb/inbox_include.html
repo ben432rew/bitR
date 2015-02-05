@@ -9,11 +9,11 @@
 	</div>
 	<div class="inbox-bucket col-md-8" >
 		<div id="inbox-mess">
-			<ul>
+			<ul id = 'inbox-list'>
 			{% verbatim %}
-			<div jq-repeat="inbox" class = "new-message row" >
-				<div class = "col-xs-3 " >Subject: {{subject}}</div>
-				<div class = "col-xs-3 " >Message: {{message}}</div>
+			<div jq-repeat="inbox" class = "new-message row from-{{fromAddress}}" >
+				<div class = "col-xs-3 message-subject" >{{subject}}</div>
+				<div class = "col-xs-3 message-body" >{{message}}</div>
 				<div class = "col-xs-3 message-date" >{{receivedTime}}</div>
 				<div class = "col-xs-3 read-status" >{{color}}</div>
 			</div>
