@@ -128,7 +128,6 @@
         })
 
         $('#chanss').on( 'click', function(){
-            console.log("here again")
             $('.inbox-bucket').children().hide()
             $('#chan_mess').show()
         })
