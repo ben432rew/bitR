@@ -48,23 +48,12 @@ class Logout( View ):
 class CreateChan( View ):
 
     def post( self, request ):
-        print('this request json:', request.json)
         passphrase = request.json['form']
-        print('hererasfsd', passphrase)
         chan = BMclient.call('createChan', BMclient._encode(passphrase))
-        print('chan real', chan)
         if chan['status'] != 200:
-            return JsonResponse( { 'error' : 'This chan has been made before' } )
-        label = chan['data'][0]['label'][7:]
+            return JsonResponse( { 'error' : chan['status'] } )
         address = chan['data'][0]['address']
-        print('Address:', address)
-        print('label: ', label)
-        user_id = request.user.id
-        user = User.objects.get(pk=user_id)
-        print('user: ', user)
-        chan_obj = Chan_subscriptions.objects.create(label=label, address=address, user=request.json['_user'])
-        print(chan)
-        print(chan_obj)
+        chan_obj = Chan_subscriptions.objects.create(label=passphrase, address=address, user=request.json['_user'])
         return JsonResponse( { 'chan' : chan_obj.label } )
 
 
