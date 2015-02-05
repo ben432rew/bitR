@@ -57,15 +57,13 @@ class CreateChan( View ):
 
     def post( self, request ):
         print('chjan here')
-        checked = check_token_load_json(request)
-        if checked['json']:
-            passphrase = json.loads(request.body.decode('utf-8'))
-            print('hererasfsd', passphrase)
-            print(checked['json'])
-            chan = BMclient.call('createChan', BMclient._encode(checked['json']['form']))
-            print('chan real', chan)
-            return JsonResponse( { 'chan' : chan} )
-        return JsonResponse ( {'error' : checked['error'] } )
+        passphrase = request.json['form']
+        print('hererasfsd', passphrase)
+        chan = BMclient.call('createChan', BMclient._encode(passphrase))
+        print('chan real', chan)
+        if chan['status'] != 200:
+            return JsonResponse( { 'error' : 'This chan has been made before' } ) 
+        return JsonResponse( { 'chan' : chan} )
 
 
 class CreateId( View ):
