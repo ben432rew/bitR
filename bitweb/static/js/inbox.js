@@ -62,7 +62,6 @@
             }
         })
 
-<<<<<<< HEAD
         $("#chan-form").submit(function(e){
             e.preventDefault();
             console.log('submited')
@@ -74,8 +73,10 @@
                 console.log(data['chan']['data'][0]['label']);
                 $.scope.chans.push(data['chan']['data'][0])
             })
-=======
-        $.post('/bmapi/allchans', JSON.stringify(tokenValue), function (data){
+        })
+
+
+        $.post('/bmapi/allchans', JSON.stringify(tokenValue), function(data){
             if (typeof data['chans'] == "string") {
                 window.location.replace('bmapi/logout');
             } else {
@@ -83,7 +84,6 @@
                     $.scope.chans.push(value)
                 })
             }
->>>>>>> 6083d2b66a34437178acb58ee042cef875948717
         })
 
     // add new identity to list, select it
