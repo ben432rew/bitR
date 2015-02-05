@@ -80,6 +80,8 @@ class AllIdentitiesOfUser( View ):
 def get_messages( function_name, request, chans=False ):
     bitkeys = BitKey.objects.filter(user=request.json['_user'])
     addresses = [ bk.key for bk in bitkeys ]
+    if chans:
+        addresses += chans
     data = [ BMclient.call( function_name, address ) for address in addresses ]
     return JsonResponse( { 'messages': data, 'chans':chans } )
 
