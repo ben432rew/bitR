@@ -26,6 +26,7 @@
     var inboxMessages = function(){
         $('.inbox-bucket').children().hide();
         $.scope.inbox.splice(0);
+        $.scope.chan_inbox.splice(0);
 
         var chan_addresses;
         APIcal({
