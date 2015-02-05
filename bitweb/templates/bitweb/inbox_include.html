@@ -12,6 +12,7 @@
 			<ul id = 'inbox-list'>
 			{% verbatim %}
 			<div jq-repeat="inbox" class = "new-message row from-{{fromAddress}}" >
+				<p hidden id="msg-id">{{ msgid }}</p>
 				<div class = "col-xs-3 message-subject" >{{subject}}</div>
 				<div class = "col-xs-3 message-body" >{{message}}</div>
 				<div class = "col-xs-3 message-date" >{{receivedTime}}</div>
