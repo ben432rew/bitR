@@ -33,7 +33,6 @@ $(document).ready(function(){
         }
 	});
 
-// dry these two out
     $('#signup_form').submit(function(event) {
         authorize(event, 'signup', this)
     })
