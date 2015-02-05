@@ -148,6 +148,10 @@
 
             $('')
 
+            $('#primary-tab').on( 'click', function(){
+                inboxMessages()
+            } );
+
             $('.inbox-nav').on( 'click', 'button#inbox', function(){
                 inboxMessages()
             } );
