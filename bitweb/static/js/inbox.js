@@ -70,7 +70,7 @@
             info['form'] = form_data
             console.log(info)
             $.post('/bmapi/create_chan', JSON.stringify(info), function(data){
-                console.log(data['chan']['data'][0]['label']);
+                console.log(data)
                 $.scope.chans.push(data['chan']['data'][0])
             })
         })
