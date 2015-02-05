@@ -32,7 +32,6 @@
         APIcal({
             url: 'allmessages',
             callBack: function( data ){
-                console.log(data)
                 chan_addresses = data['chans']
                 data['messages'].forEach(function(value) {
                     value['data'].forEach(function(value){
@@ -103,11 +102,11 @@
             e.preventDefault();
             var classes = $(this).attr('class').split(/\s+/)
             var from = classes[2].slice(5, -1)
-            console.log(from)
             var body = $(this).find('.message-body').text()
             var subject = $(this).find('.message-subject').text()
             var date = $(this).find('.message-date').text()
             $("#mess_view_modal").modal("toggle")
+            $("#mess-id").val($(this).find('#msg-id').text())
             $("#mess-subject").html(subject)
             $("#mess-body").html(body)
             $("#mess-date").html(date)
@@ -184,6 +183,17 @@
             });
         })
 
+        $( '#delete_msg' ).click(function() {
+            var info = {}
+            info['msgid'] =  $( '#mess-id' ).val();
+            inboxMessages()
+            APIcal({
+                url: 'deletemessage',
+                data: info,
+                callBack: function(){}
+            });
+        })
+
         $( '#sub_chan_btn' ).click(function() {
             var info = {}
             info['label'] = $( '#chan_label' ).val();
@@ -220,7 +230,7 @@
             $('#sent-mess').show()
         } );
 
-        $('#chanss').on( 'click', function(){
+        $('#chan_tab').on( 'click', function(){
             $( this ).toggleClass( 'btn-material-blue-grey-100' )
             $( '#primary-tab' ).toggleClass( 'btn-material-blue-grey-100' )
             $('.inbox-bucket').children().hide()
@@ -232,7 +242,7 @@
 
         $('#primary-tab').on( 'click', function(){
             $( this ).toggleClass( 'btn-material-blue-grey-100' )
-            $( '#chanss' ).toggleClass( 'btn-material-blue-grey-100' )
+            $( '#chan_tab' ).toggleClass( 'btn-material-blue-grey-100' )
             inboxMessages()
         } );
 
