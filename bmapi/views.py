@@ -54,8 +54,6 @@ class CreateChan( View ):
         if chan['status'] != 200:
             return JsonResponse( { 'error' : chan['status'] } )
         address = chan['data'][0]['address']
-        user_id = request.user.id
-        user = User.objects.get(pk=user_id)
         chan_obj = Chan_subscriptions.objects.create(label=passphrase, address=address, user=request.json['_user'])
         return JsonResponse( { 'chan_address' : chan_obj.address, 'chan_label' : chan_obj.label } )
 
@@ -72,15 +70,18 @@ class CreateId( View ):
 
 class Send ( View ):
     def post( self, request ):      
-        to_address = request.json['to_address']
         from_name = request.json['from']
-        from_add = BitKey.objects.get(name=from_name, user=request.json['_user'])
+        if request.json['to_address'] == 'chan_post':
+            to_address = from_add = Chan_subscriptions.objects.get(label=from_name, user=request.json['_user']).address
+        else:
+            to_address = request.json['to_address'] 
+            from_add = BitKey.objects.get(name=from_name, user=request.json['_user']).key
         subject = request.json['subject']
         message = request.json['message']
         sent = BMclient.call(
             'sendMessage',
             to_address,
-            from_add.key,
+            from_add,
             BMclient._encode(subject),
             BMclient._encode(message)
         )
