@@ -52,13 +52,13 @@ class CreateChan( View ):
         passphrase = request.json['form']
         chan = BMclient.call('createChan', BMclient._encode(passphrase))
         if chan['status'] != 200:
-            return JsonResponse( { 'error' : 'This chan has been made before' } )
-        label = chan['data'][0]['label'][7:]
+            return JsonResponse( { 'error' : chan['status'] } )
         address = chan['data'][0]['address']
         user_id = request.user.id
         user = User.objects.get(pk=user_id)
         chan_obj = Chan_subscriptions.objects.create(label=label, address=address, user=request.json['_user'])
         return JsonResponse( { 'chan_address' : chan_obj.address, 'chan_label' : chan_obj.label } )
+
 
 
 class CreateId( View ):

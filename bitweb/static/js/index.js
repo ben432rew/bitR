@@ -26,12 +26,19 @@ $(document).ready(function(){
         $( ".login" ).show('medium');
     })
 
-    $("input").keypress(function(event) {
+    $("input.signup").keypress(function(event) {
         if (event.which == 13) {
             event.preventDefault();
-            $("form").submit();
+            $("signup_form").submit();
         }
 	});
+
+    $("input.login").keypress(function(event) {
+        if (event.which == 13) {
+            event.preventDefault();
+            $("login_form").submit();
+        }
+    });
 
     $('#signup_form').submit(function(event) {
         authorize(event, 'signup', this)

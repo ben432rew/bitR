@@ -104,7 +104,6 @@
             info['token'] = $.cookie( 'token' )
             info['form'] = form_data
             $.post('/bmapi/create_chan', JSON.stringify(info), function(data){
-                console.log(data)
                 $.scope.chans.push(data)
                 $('#create_chan').modal('toggle');
             })
@@ -191,6 +190,8 @@
         } );
 
         $('#chanss').on( 'click', function(){
+            $( this ).toggleClass( 'btn-material-blue-grey-100' )
+            $( '#primary-tab' ).toggleClass( 'btn-material-blue-grey-100' )
             $('.inbox-bucket').children().hide()
             $('#chan_mess').show()
         })
@@ -199,6 +200,8 @@
 
 
         $('#primary-tab').on( 'click', function(){
+            $( this ).toggleClass( 'btn-material-blue-grey-100' )
+            $( '#chanss' ).toggleClass( 'btn-material-blue-grey-100' )
             inboxMessages()
         } );
 
