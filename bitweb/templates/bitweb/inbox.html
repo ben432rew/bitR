@@ -60,14 +60,13 @@
 
 		<div class = "col-md-10">
 			<div class="btn-group btn-group-justified" role="group" aria-label="primaryChan">
-				<div id = 'primary-tab' class='btn'>
+				<div id = 'primary-tab' class='btn btn-material-blue-grey-100'>
 					<p>Primary</p>
 				</div>
 				<div class="dropdown btn-group" role="group">
-				  <button id="chanss" data-toggle="dropdown"  class="btn dropdown-toggle btn-material-blue-grey-100 col-md-offset-2 col-md-offset-6"  data-placeholder="No Chan Selected">No Chan Selected<span class="caret"></span></button>
+				  <button id="chanss" data-toggle="dropdown"  class="btn dropdown-toggle col-md-offset-2 col-md-offset-6"  data-placeholder="No Chan Selected">No Chan Selected<span class="caret"></span></button>
 					<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
 						{% verbatim %}
-
 							<li jq-repeat="chans"><input type="checkbox" id="{{ chan_label }}"><label for="{{ chan_label }}">{{ chan_label }}</label></li>
 						{% endverbatim %}  
 						<li role="presentation" class="divider"></li>

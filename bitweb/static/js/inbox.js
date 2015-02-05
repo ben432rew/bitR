@@ -99,13 +99,10 @@
 
         $("#chan-form").submit(function(e){
             e.preventDefault();
-            console.log('submited')
             var form_data = $("#chan_name").val();
             var info = tokenValue
             info['form'] = form_data
-            console.log(info)
             $.post('/bmapi/create_chan', JSON.stringify(info), function(data){
-                console.log(data)
                 $.scope.chans.push(data)
             })
         })
@@ -191,6 +188,8 @@
         } );
 
         $('#chanss').on( 'click', function(){
+            $( this ).toggleClass( 'btn-material-blue-grey-100' )
+            $( '#primary-tab' ).toggleClass( 'btn-material-blue-grey-100' )
             $('.inbox-bucket').children().hide()
             $('#chan_mess').show()
         })
@@ -199,6 +198,8 @@
 
 
         $('#primary-tab').on( 'click', function(){
+            $( this ).toggleClass( 'btn-material-blue-grey-100' )
+            $( '#chanss' ).toggleClass( 'btn-material-blue-grey-100' )
             inboxMessages()
         } );
 
