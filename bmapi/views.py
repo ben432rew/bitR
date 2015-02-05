@@ -56,7 +56,7 @@ class CreateChan( View ):
         address = chan['data'][0]['address']
         user_id = request.user.id
         user = User.objects.get(pk=user_id)
-        chan_obj = Chan_subscriptions.objects.create(label=label, address=address, user=request.json['_user'])
+        chan_obj = Chan_subscriptions.objects.create(label=passphrase, address=address, user=request.json['_user'])
         return JsonResponse( { 'chan_address' : chan_obj.address, 'chan_label' : chan_obj.label } )
 
 
