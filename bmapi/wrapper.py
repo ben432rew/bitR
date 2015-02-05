@@ -42,7 +42,6 @@ class API():
 
 	def clean( self, response):
 		check = ['message','subject','label','ripe']
-		print(response)
 		for dic in response['data']:
 			for key,value in dic.items():
 				if key in check:
