@@ -82,6 +82,7 @@ LOGIN_URL = '/'
 ALLOW_ROUTE = (
     'login',
     'signup',
+    'logout',
 )
 
 try:
