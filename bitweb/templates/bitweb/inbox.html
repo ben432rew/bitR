@@ -67,7 +67,7 @@
 				  <button data-toggle="dropdown" class="btn dropdown-toggle btn-material-blue-grey-100 col-md-offset-2 col-md-offset-6"  data-placeholder="No Chan Selected">No Chan Selected<span class="caret"></span></button>
 					<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
 						{% verbatim %}
-							<li jq-repeat="chans"><input type="checkbox" id="{{ label }}"><label for="{{ label }}">{{ label }}</label></li>
+							<li jq-repeat="chans"><input type="checkbox" id="{{ chan_label }}"><label for="{{ chan_label }}">{{ chan_label }}</label></li>
 						{% endverbatim %}  
 						<li role="presentation" class="divider"></li>
 						<li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#subscribe_chan">Subscribe to Chan</a></li>					

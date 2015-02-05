@@ -62,6 +62,7 @@
             }
         })
 
+<<<<<<< HEAD
         $("#chan-form").submit(function(e){
             e.preventDefault();
             console.log('submited')
@@ -73,6 +74,16 @@
                 console.log(data['chan']['data'][0]['label']);
                 $.scope.chans.push(data['chan']['data'][0])
             })
+=======
+        $.post('/bmapi/allchans', JSON.stringify(tokenValue), function (data){
+            if (typeof data['chans'] == "string") {
+                window.location.replace('bmapi/logout');
+            } else {
+                data['chans'].forEach(function(value) {
+                    $.scope.chans.push(value)
+                })
+            }
+>>>>>>> 6083d2b66a34437178acb58ee042cef875948717
         })
 
     // add new identity to list, select it
@@ -80,9 +91,10 @@
             var info = tokenValue;
             info['identity'] = $( '#identity_name' ).val();
             $.post('/bmapi/create_id', JSON.stringify(info), function (data){
-                if ( 'error' in info ){
+                if ( 'error' in data ){
                 } else {
-                    $.scope.identities.push(info);
+                    console.log(data)
+                    $.scope.identities.push(data);
                 }
             })
         })
@@ -96,6 +108,19 @@
             $.post('/bmapi/send', JSON.stringify(info), function (data){
     // add message to sent messages folder (UNFINISHED)
                 })
+        })
+
+        $( '#sub_chan_btn' ).click(function() {
+            var info = tokenValue;
+            info['label'] = $( '#chan_label' ).val();
+            info['address'] = $( '#chan_addy' ).val();
+            $.post('/bmapi/joinchan', JSON.stringify(info), function (data){
+                if ( 'error' in data ){
+                } else {
+                    console.log(data)
+                    $.scope.chans.push(data);
+                }
+            })
         })
 
         $( '#create_chan_button' ).click(function() {

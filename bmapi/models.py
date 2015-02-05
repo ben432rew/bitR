@@ -20,3 +20,7 @@ class Address_entry( models.Model ):
     name = models.CharField( max_length=200 )
     address = models.CharField( max_length=200 )
 
+class Chan_subscriptions( models.Model ):
+    user = models.ForeignKey( User )
+    label = models.CharField( max_length=200 )
+    address = models.CharField( max_length=200 )
