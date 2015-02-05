@@ -10,8 +10,6 @@
             chan_addresses = data['chans']
             data['messages'].forEach(function(value) {
                 value['data'].forEach(function(value){
-                    // console.log(value['toAddress'])
-                    // console.log(chan_addresses)
                     if (value['read'] == 1){
                         value['color'] = "blue"
                     }
@@ -86,7 +84,6 @@
             $.post('/bmapi/create_id', JSON.stringify(info), function (data){
                 if ( 'error' in data ){
                 } else {
-                    console.log(data)
                     $.scope.identities.push(data);
                 }
             })
@@ -110,7 +107,6 @@
             $.post('/bmapi/joinchan', JSON.stringify(info), function (data){
                 if ( 'error' in data ){
                 } else {
-                    console.log(data)
                     $.scope.chans.push(data);
                 }
             })
@@ -132,7 +128,6 @@
         })
 
         $('#chanss').on( 'click', function(){
-            console.log('getting here')
             $('.inbox-bucket').children().hide()
             $('#chan_mess').show()
         })
