@@ -2,7 +2,6 @@ var authorize = function(event, string, form) {
         event.preventDefault()        
         var loginInfo = $( form ).serializeObject();
         $.post('/bmapi/' + string, JSON.stringify(loginInfo), function (data){
-            console.log(data)
             if (data['token']) {
                 $.cookie( 'token', data['token'], { expires: 1 } );
                 window.location.replace('/inbox');

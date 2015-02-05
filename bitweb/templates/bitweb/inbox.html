@@ -31,12 +31,12 @@
 		    <span class="caret"></span>
 		  </button>
 		  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-		    	<li role="presentation"><a role="menuitem" tabindex="-1" href="#">All</a></li>
-		    	<li role="presentation"><a role="menuitem" tabindex="-1" href="#">None</a></li>
-		    	<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Read</a></li>
-		    	<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Unread</a></li>
-		    	<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Starred</a></li>
-		    	<li role="presentation"><a role="menuitem" tabindex="-1" href="#">Unstarred</a></li>
+		    	<li role="presentation"><a role="menuitem" href="#">All</a></li>
+		    	<li role="presentation"><a role="menuitem" href="#">None</a></li>
+		    	<li role="presentation"><a role="menuitem" href="#">Read</a></li>
+		    	<li role="presentation"><a role="menuitem" href="#">Unread</a></li>
+		    	<li role="presentation"><a role="menuitem" href="#">Starred</a></li>
+		    	<li role="presentation"><a role="menuitem" href="#">Unstarred</a></li>
 		  </ul>
 		</div>
 
@@ -47,7 +47,7 @@
 						<li jq-repeat="identities"><input type="checkbox" id="{{ identity }}"><label for="{{ identity }}">{{ identity }}</label></li>
 					{% endverbatim %}  
 					<li role="presentation" class="divider"></li>
-					<li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#create_identity">Create New Identity</a></li>
+					<li role="presentation"><a role="menuitem" href="#" data-toggle="modal" data-target="#create_identity">Create New Identity</a></li>
 			    </ul>
 			</div>
 	</div>
@@ -55,30 +55,31 @@
 
 	<div class = "row">
 		<div class="col-md-2">
-			<button class="btn btn-material-blue-grey-100" id = "chan-post-btn">Post to Chan</button>
+			<button class="btn btn-material-blue-grey-100" data-toggle="modal" data-target='#compose_chan_post'>Post to Chan</button>
 		</div>
 
 		<div class = "col-md-10">
 			<div class="btn-group btn-group-justified" role="group" aria-label="primaryChan">
-				<div id = 'primary-tab' class='btn'>
+				<div id = 'primary-tab' class='btn btn-material-blue-grey-100'>
 					<p>Primary</p>
 				</div>
 				<div class="dropdown btn-group" role="group">
-				  <button id="chanss" data-toggle="dropdown"  class="btn dropdown-toggle btn-material-blue-grey-100 col-md-offset-2 col-md-offset-6"  data-placeholder="No Chan Selected">No Chan Selected<span class="caret"></span></button>
+				  <button id="chanss" data-toggle="dropdown"  class="btn dropdown-toggle col-md-offset-2 col-md-offset-6"  data-placeholder="No Chan Selected">No Chan Selected<span class="caret"></span></button>
 					<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
 						{% verbatim %}
-
 							<li jq-repeat="chans"><input type="checkbox" id="{{ chan_label }}"><label for="{{ chan_label }}">{{ chan_label }}</label></li>
 						{% endverbatim %}  
 						<li role="presentation" class="divider"></li>
-						<li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#subscribe_chan">Subscribe to Chan</a></li>					
-						<li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-toggle="modal" data-target="#create_chan">Create New Chan</a></li>
+						<li role="presentation"><a role="menuitem" href="#" data-toggle="modal" data-target="#subscribe_chan">Subscribe to Chan</a></li>					
+						<li role="presentation"><a role="menuitem" href="#" data-toggle="modal" data-target="#create_chan">Create New Chan</a></li>
 				    </ul>
 				</div>
 			</div>
 		</div>
 	</div>
 
+<!-- reply include -->
+	{% include "bitweb/mess_view_modal.html" %}
 
 <!-- inbox include -->
 	{% include "bitweb/inbox_include.html" %}	
@@ -90,9 +91,12 @@
 	{% include "bitweb/chan_modal.html" %}	
 
 <!-- compose modal -->
-	{% include "bitweb/mess_modal.html" %}
+	{% include "bitweb/send_modal.html" %}
 
 <!-- chan subscribe modal -->
 	{% include "bitweb/subscribe_chan_modal.html" %}	
+
+<!-- post to chan modal -->
+	{% include "bitweb/post_chan.html" %}	
 	
 {% endblock %}
