@@ -92,14 +92,14 @@ def get_messages( function_name, request, chans=False ):
     data = [ BMclient.call( function_name, address ) for address in addresses ]
     if chans:
         chan_ads = [ c['address'] for c in chans]
-        print(chan_ads)
     return JsonResponse( { 'messages': data, 'chans':chan_ads } )
 
 
 class getInboxMessagesByUser( View ):
     def post( self, request ):
         chan_addresses = Chan_subscriptions.objects.filter(user=request.json['_user']).values('address')
-        return get_messages( 'getInboxMessagesByToAddress', request, chan_addresses), 
+        x =  get_messages( 'getInboxMessagesByToAddress', request, chan_addresses)
+        return x
 
 
 class getSentMessageByUser( View ):
