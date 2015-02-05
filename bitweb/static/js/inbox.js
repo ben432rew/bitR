@@ -5,7 +5,9 @@
     var inboxMessages = function(){
         $('.inbox-bucket').children().hide();
         $.scope.inbox.splice(0);
+        var chan_addresses;
         $.post('/bmapi/allmessages', JSON.stringify(tokenValue), function (data){
+            chan_addresses = data['chans']
             data['messages'].forEach(function(value) {
                 value['data'].forEach(function(value){
                     if (value['read'] == 1){
@@ -14,7 +16,11 @@
                     else {
                         value['color'] = 'white'
                     }
-                    $.scope.inbox.push(value);
+                    if ( value['toAddress'] in chan_addresses){ 
+                        $.scope.chan_inbox.push(value);
+                    } else {
+                        $.scope.inbox.push(value);
+                    }
                 });
             });
             sessionStorage.setItem('inboxMessages', JSON.stringify($.scope.inbox));
@@ -61,15 +67,24 @@
             }
         })
 
+        $.post('/bmapi/allchans', JSON.stringify(tokenValue), function (data){
+            if (typeof data['chans'] == "string") {
+                window.location.replace('bmapi/logout');
+            } else {
+                data['chans'].forEach(function(value) {
+                    $.scope.chans.push(value)
+                })
+            }
+        })
 
     // add new identity to list, select it
         $( '#create_id_button' ).click(function() {
             var info = tokenValue;
             info['identity'] = $( '#identity_name' ).val();
             $.post('/bmapi/create_id', JSON.stringify(info), function (data){
-                if ( 'error' in info ){
+                if ( 'error' in data ){
                 } else {
-                    $.scope.identities.push(info);
+                    $.scope.identities.push(data);
                 }
             })
         })
@@ -83,6 +98,18 @@
             $.post('/bmapi/send', JSON.stringify(info), function (data){
     // add message to sent messages folder (UNFINISHED)
                 })
+        })
+
+        $( '#sub_chan_btn' ).click(function() {
+            var info = tokenValue;
+            info['label'] = $( '#chan_label' ).val();
+            info['address'] = $( '#chan_addy' ).val();
+            $.post('/bmapi/joinchan', JSON.stringify(info), function (data){
+                if ( 'error' in data ){
+                } else {
+                    $.scope.chans.push(data);
+                }
+            })
         })
 
         $( '#create_chan_button' ).click(function() {
@@ -100,6 +127,11 @@
             })
         })
 
+        $('#chanss').on( 'click', function(){
+            $('.inbox-bucket').children().hide()
+            $('#chan_mess').show()
+        })
+        
         $('.inbox-nav').on( 'click', 'button#sent', function(){
             $('.inbox-bucket').children().hide()
             $.scope.sent.splice(0);
@@ -107,15 +139,19 @@
                 data['messages'].forEach(function(value) {
                     value['data'].forEach(function(value){
                         $.scope.sent.push(value);
+                        } );
                     } );
                 } );
+                $('#sent-mess').show()
             } );
-            $('#sent-mess').show()
+
+            $('')
+
+            $('.inbox-nav').on( 'click', 'button#inbox', function(){
+                inboxMessages()
+            } );
+    
         } );
 
-        $('.inbox-nav').on( 'click', 'button#inbox', function(){
-            inboxMessages()
-        } );
-    } );
 
 })(jQuery);
