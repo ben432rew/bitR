@@ -17,6 +17,14 @@ def login_token(request, user):
     token = Token.objects.create(token = uuid.uuid4(), user = user)
     return JsonResponse({ 'token':str(token.token)})
 
+def replace_unix_time(mess):
+    for index in mess[1:][0]['data']:
+        for key,item in index.items():
+            if key == 'receivedTime':
+                print(key)
+                index[key] =  datetime.fromtimestamp(int(item)).strftime('%Y-%m-%d %H:%M:%S')
+    return(mess)
+
 class Signup( View ):
     def post(self, request):
         the_jason = json.loads(request.body.decode('utf-8'))
@@ -48,23 +56,15 @@ class Logout( View ):
 class CreateChan( View ):
 
     def post( self, request ):
-        print('this request json:', request.json)
         passphrase = request.json['form']
-        print('hererasfsd', passphrase)
         chan = BMclient.call('createChan', BMclient._encode(passphrase))
-        print('chan real', chan)
         if chan['status'] != 200:
             return JsonResponse( { 'error' : 'This chan has been made before' } )
         label = chan['data'][0]['label'][7:]
         address = chan['data'][0]['address']
-        print('Address:', address)
-        print('label: ', label)
         user_id = request.user.id
         user = User.objects.get(pk=user_id)
-        print('user: ', user)
         chan_obj = Chan_subscriptions.objects.create(label=label, address=address, user=request.json['_user'])
-        print(chan)
-        print(chan_obj)
         return JsonResponse( { 'chan' : chan_obj.label } )
 
 
@@ -106,7 +106,8 @@ def get_messages( function_name, request, chans=False ):
     addresses = [ bk.key for bk in bitkeys ]
     if chans:
         addresses += chans
-    data = [ BMclient.call( function_name, address ) for address in addresses ]
+    mess = [ BMclient.call( function_name, address ) for address in addresses ]
+    data = replace_unix_time(mess)
     return JsonResponse( { 'messages': data, 'chans':chans } )
 
 
@@ -158,6 +159,7 @@ class Spam( View ):
 #get to see trash, post to trash or untrash something
 class Trash( View ):
     pass
+
 
 
 # class DeleteId( View ):

@@ -7,18 +7,26 @@
 		<button type="button" class="btn">Spam</button>
 		<button type="button" class="btn">Trash</button>
 	</div>
-	<div class="inbox-bucket col-md-8" >
+	<div class="inbox-bucket col-md-9" >
 		<div id="inbox-mess">
-			<ul>
-			{% verbatim %}
-			<div jq-repeat="inbox" class = "new-message row" >
-				<div class = "col-xs-3 " >Subject: {{subject}}</div>
-				<div class = "col-xs-3 " >Message: {{message}}</div>
-				<div class = "col-xs-3 message-date" >{{receivedTime}}</div>
-				<div class = "col-xs-3 read-status" >{{color}}</div>
+			<div class="row" id="table-head">
+				<h3><span class="label label-default col-md-4">Subject</span></h3>
+				<h3><span class="label label-default col-md-4">Message</span></h3>
+				<h3><span class="label label-default col-md-4">Time</span></h3>
 			</div>
-			{% endverbatim %}
-			</ul>
+			<div class="row">	
+				<ul>
+				{% verbatim %}
+				<li jq-repeat="inbox" class = "new-message row" >
+				<a href="#">
+					<div class = "col-xs-4 " >{{subject}}</div>
+					<div class = "col-xs-4 " >{{message}}</div>
+					<div class = "col-xs-4 message-date" >  {{ receivedTime }}</div>
+				</a>
+				</li>
+				{% endverbatim %}
+				</ul>
+			</div>
 		</div>
 		<div id="chan_mess">
 			<ul>
