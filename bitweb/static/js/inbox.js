@@ -186,6 +186,7 @@
         $( '#delete_msg' ).click(function() {
             var info = {}
             info['msgid'] =  $( '#mess-id' ).val();
+            inboxMessages()
             APIcal({
                 url: 'deletemessage',
                 data: info,
