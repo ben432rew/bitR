@@ -69,15 +69,20 @@ class CreateId( View ):
 
 
 class Send ( View ):
-    def post( self, request ):      
+    def post( self, request ):
         from_name = request.json['from']
         if request.json['to_address'] == 'chan_post':
             to_address = from_add = Chan_subscriptions.objects.get(label=from_name, user=request.json['_user']).address
         else:
-            to_address = request.json['to_address'] 
-            from_add = BitKey.objects.get(name=from_name, user=request.json['_user']).key
+            from_add = request.json['from'] 
+            # from_add = BitKey.objects.get(name=from_name, user=request.json['_user']).key
+        to_address = request.json['to_address']
         subject = request.json['subject']
         message = request.json['message']
+        print('from', from_add)
+        print('to', to_address)
+        print('subject', subject)
+        print('message', message)
         sent = BMclient.call(
             'sendMessage',
             to_address,
@@ -85,6 +90,8 @@ class Send ( View ):
             BMclient._encode(subject),
             BMclient._encode(message)
         )
+        print(sent)
+        print('here in send')
         return JsonResponse( { 'message_status' : sent } )
 
 

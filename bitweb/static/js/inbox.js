@@ -103,6 +103,7 @@
             e.preventDefault();
             var classes = $(this).attr('class').split(/\s+/)
             var from = classes[2].slice(5, -1)
+            var to = classes[3].slice(3, -1)
             console.log(from)
             var body = $(this).find('.message-body').text()
             var subject = $(this).find('.message-subject').text()
@@ -112,6 +113,25 @@
             $("#mess-body").html(body)
             $("#mess-date").html(date)
             $("#mess-from").html(from)
+            $("#mess-to").html(to)
+        })
+
+        $( '#mess-view-form' ).submit(function(e) {
+            e.preventDefault();
+            var info = {}
+            info['from'] = $( '#mess-to' ).text();
+            info['to_address'] = $( '#mess-from' ).text();
+            info['subject'] = "RE:" + $( '#mess-subject' ).text();
+            info['message'] = $( '#mess-reply' ).val();
+            console.log(info)
+            APIcal({
+                url: 'send',
+                data: info,
+                callBack: function(data){
+                    console.log(data)
+                    $("#mess_view_modal").modal("toggle")
+                }
+            });
         })
 
         $("#chan-form").submit(function(e){

@@ -8,6 +8,8 @@
 		    <div class="modal-body">
 				<form id = "mess-view-form" >
 				  <div class="form-group">
+				  	<label for="mess-to">To: </label>
+				    <p id = "mess-to" class="form-control"></p>
 				    <label for="mess-from">From: </label>
 				    <p id = "mess-from" class="form-control"></p>
 				    <label for="mess-date">Date: </label>
@@ -18,9 +20,9 @@
 				    <p id = "mess-body" class="form-control"></p>
 				    <p class="help-block">View your message here! If you want to reply use the text area below: </p>
 				     <label for="mess-from">Reply: </label>
-				    <textarea name = 'reply'  id = "mess-from" class="form-control"></textarea>
+				    <textarea name = 'reply'  id = "mess-reply" class="form-control"></textarea>
 		            <button type="button" class="btn" data-dismiss="modal">Cancel</button>
-			        <input type="submit" id="create_reply_button" class="btn btn-material-blue-grey-500" value = 'submit' >
+			        <input type="submit" id="create_reply_btn" class="btn btn-material-blue-grey-500" value = 'submit' >
 				  </div>
 				</form>
 		    </div>
