@@ -99,14 +99,14 @@
 
         $("#chan-form").submit(function(e){
             e.preventDefault();
-            console.log('submited')
             var form_data = $("#chan_name").val();
-            var info = tokenValue
+            var info = {}
+            info['token'] = $.cookie( 'token' )
             info['form'] = form_data
-            console.log(info)
             $.post('/bmapi/create_chan', JSON.stringify(info), function(data){
                 console.log(data)
                 $.scope.chans.push(data)
+                $('#create_chan').modal('toggle');
             })
         })
 
