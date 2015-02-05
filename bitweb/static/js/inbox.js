@@ -119,6 +119,7 @@
                 } else {
                     data['chans'].forEach(function(value) {
                         $.scope.chans.push(value)
+                        $.scope.post_chan_list.push(value)
                     })
                 }
             }
@@ -147,6 +148,19 @@
             info['from'] = $( '#from_addy' ).val();
             info['subject'] = $( '#subject' ).val();
             info['message'] = $( '#message' ).val();
+            APIcal({
+                url: 'send',
+                data: info,
+                callBack: function(){}
+            });
+        })
+
+        $( '#post_message_btn' ).click(function() {
+            var info = {}
+            info['to_address'] = 'chan_post';
+            info['from'] = $( '#chan_post_list' ).val();
+            info['subject'] = $( '#post_subject' ).val();
+            info['message'] = $( '#post_message' ).val();
             APIcal({
                 url: 'send',
                 data: info,
