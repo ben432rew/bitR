@@ -5,6 +5,7 @@ from bmapi.views import *
 
 
 urlpatterns = patterns('',
+    url(r'^create_chan', CreateChan.as_view(), name="create_chan" ),
     url(r'^signup', Signup.as_view() ),
     url(r'^login', Login.as_view() ),
     url(r'^logout', login_required(Logout.as_view()), name="logout" ),    

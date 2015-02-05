@@ -6,13 +6,13 @@
 	        	<h4 class="modal-title" id="myModalLabel">New Chan</h4>
 	        </div>
 		    <div class="modal-body">
-				<form>
+				<form id = "chan-form" >
 				  <div class="form-group">
 				    <label for="Chan Name">Chan Passphrase</label>
-				    <input type="text" class="form-control" id="chan_name" placeholder="Enter Chan Name(passphrase)">
+				    <input type="text" id = "chan_name" class="form-control" name = "chan_name" placeholder="Enter Chan Name(passphrase)">
 				    <p class="help-block">Enter a name for your chan. If you choose a sufficiently complex chan name (like a strong and unique passphrase) and none of your friends share it publicly then the chan will be secure and private. If you and someone else both create a chan with the same chan name then it is currently very likely that they will be the same chan!</p>
 		            <button type="button" class="btn" data-dismiss="modal">Cancel</button>
-			        <button type="button" id="create_chan_button" class="btn btn-material-blue-grey-500" data-dismiss="modal">Create</button>
+			        <input type="submit" id="create_chan_button" class="btn btn-material-blue-grey-500" value = 'submit' >
 				  </div>
 				</form>
 		    </div>
