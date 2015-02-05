@@ -55,35 +55,35 @@ class WrapperTest(TestCase):
 		self.assertEqual(repson['status'], 200)
 	
 	# "toaddress and fromaddress should be replace with address that are valid and are in your keys.dat"
-	# def test_call_sendMessage(self):
-	# 	toaddress = "BM-2cUsUouTXohE15YA9sJzhghLCndnnxz2Ad"
-	# 	fromaddress = "BM-2cWURDso3XTuCACUSUC17QFcf8488DcjUY"
-	# 	sub = base64.b64encode( bytes("Test 123", "utf-8") ).decode()
-	# 	mes = base64.b64encode( bytes("Test 123", "utf-8") ).decode()
-	# 	repson = self.bmclient.call("sendMessage",toaddress,fromaddress,sub,mes)
-	# 	self.assertEqual(repson['status'], 200) 
+	def test_call_sendMessage(self):
+		toaddress = "BM-2cUsUouTXohE15YA9sJzhghLCndnnxz2Ad"
+		fromaddress = "BM-2cWURDso3XTuCACUSUC17QFcf8488DcjUY"
+		sub = base64.b64encode( bytes("Test 123", "utf-8") ).decode()
+		mes = base64.b64encode( bytes("Test 123", "utf-8") ).decode()
+		repson = self.bmclient.call("sendMessage",toaddress,fromaddress,sub,mes)
+		self.assertEqual(repson['status'], 200) 
 
 class TestViewDjango(TestCase):
 	def setUp(self):
 		self.client = Client()
 
-	# def test_rootrequests(self):
-	# 	resp = self.client.get('/')
-	# 	self.assertEqual(resp.status_code, 200) 
+	def test_rootrequests(self):
+		resp = self.client.get('/')
+		self.assertEqual(resp.status_code, 200) 
 	
-	# def test_signup(self):
-	# 	info = json.dumps({'username': 'a', 'password1': 'a','password2':'a'})
-	# 	response = self.client.post('/bmapi/signup', content_type='application/json', data=info)
-	# 	self.assertEqual(response.status_code, 200)
+	def test_signup(self):
+		info = json.dumps({'username': 'a', 'password1': 'a','password2':'a'})
+		response = self.client.post('/bmapi/signup', content_type='application/json', data=info)
+		self.assertEqual(response.status_code, 200)
 	
-	# def test_logout(self):
-	# 	response = self.client.post("/bmapi/logout")
-	# 	self.assertEqual(response.status_code, 302)
+	def test_logout(self):
+		response = self.client.post("/bmapi/logout")
+		self.assertEqual(response.status_code, 302)
 
-	# def test_login(self):		
-	# 	info = json.dumps({'username': 'a', 'password': 'a'})
-	# 	response = self.client.post('/bmapi/login', content_type='application/json', data=info)
-	# 	self.assertEqual(response.status_code, 200)
+	def test_login(self):		
+		info = json.dumps({'username': 'a', 'password': 'a'})
+		response = self.client.post('/bmapi/login', content_type='application/json', data=info)
+		self.assertEqual(response.status_code, 200)
 	
 	def test_createId(self):
 		info = json.dumps({'username': 'a', 'password1': 'a','password2':'a'})
@@ -91,5 +91,4 @@ class TestViewDjango(TestCase):
 		token = json.loads( response.content.decode('utf-8') )['token']
 		jason = json.dumps({"token":token,"identity":"test"})
 		response = self.client.post('/bmapi/create_id',content_type='application/json', data=jason)
-		print(response.status_code)
 		self.assertEqual(response.status_code, 202)
