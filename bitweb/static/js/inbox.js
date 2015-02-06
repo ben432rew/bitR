@@ -39,7 +39,14 @@
         else{
             return string;
         }
-
+    }
+    var MessageShorter=function(string){
+        if ( (string).length>=12){
+            return (string.slice(0,11) +"...");
+        }
+        else{
+            return string;
+        }
     }
     var SetColor = function(read){
          if (read === 1){
@@ -61,8 +68,8 @@
                         value['receivedTime'] = convertUnixTime(value['receivedTime'])
                         value['fromaddress'] = StringShorter(value['fromAddress'])
                         value['toaddress'] = StringShorter(value['toAddress'])
-                        value['inboxmessage'] = StringShorter(value['message'])
-                        value['inboxsubject'] = StringShorter(value['subject'])
+                        value['inboxmessage'] = MessageShorter(value['message'])
+                        value['inboxsubject'] = MessageShorter(value['subject'])
                         value['color'] = SetColor(value['read'])
                         if ( chan_addresses.indexOf(value['toAddress']) != -1){ 
                             $.scope.chan_inbox.push(value);
