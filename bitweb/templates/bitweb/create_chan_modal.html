@@ -1,0 +1,21 @@
+<div class="modal fade" id="create_chan" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+	<div class="modal-content">
+        <div class="modal-header">
+ 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+        	<h4 class="modal-title" id="myModalLabel">New Chan</h4>
+        </div>
+	    <div class="modal-body">
+			<form id = "chan-form" >
+			  <div class="form-group">
+			    <label for="Chan Name">Chan Passphrase</label>
+			    <input type="text" id = "chan_name" class="form-control" name = "chan_name" placeholder="Enter Chan Name(passphrase)">
+			    <p class="help-block">Enter a name for your chan. If you choose a sufficiently complex chan name (like a strong and unique passphrase) and none of your friends share it publicly then the chan will be secure and private. If you and someone else both create a chan with the same chan name then it is currently very likely that they will be the same chan!</p>
+	            <button type="button" class="btn" data-dismiss="modal">Cancel</button>
+		        <input type="submit" class="btn btn-material-blue-grey-500" value = 'submit' >
+			  </div>
+			</form>
+	    </div>
+    </div>
+  </div>
+</div>

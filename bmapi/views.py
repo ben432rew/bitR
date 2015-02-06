@@ -137,17 +137,15 @@ class AllChans( View ):
         return JsonResponse( {'chans':chans} )
 
 
-class DeleteMessage( View ):
+class DeleteInboxMessage( View ):
     def post( self, request ):
-        print(1111111111)
-        try:
-            BMclient.call( 'trashMessage',  request.json['msgid']  )
-        except:
-            print('temporary fix')
-        print(222222222222)
+        res = BMclient.api.trashInboxMessage( request.json['msgid']  )
         return JsonResponse( {} )
 
-
+class DeleteSentMessage( View ):
+    def post( self, request ):
+        res = BMclient.api.trashInboxMessage( request.json['msgid']  )
+        return JsonResponse( {} )
 #for searching in the current emails a user has
 class Search( View ):
     pass

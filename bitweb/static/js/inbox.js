@@ -146,14 +146,19 @@
 
         $("#chan-form").submit(function(e){
             e.preventDefault();
-            var form_data = $("#chan_name").val();
             var info = {}
-            info['token'] = $.cookie( 'token' )
-            info['form'] = form_data
-            $.post('/bmapi/create_chan', JSON.stringify(info), function(data){
-                $.scope.chans.push(data)
-                $('#create_chan').modal('toggle');
-            })
+            info['form'] = $("#chan_name").val();
+            $( '#chan-form' ).trigger('reset')
+            APIcal({
+                url: 'create_chan',
+                data: info,
+                callBack: function(data){
+                    $.scope.chans.push(data)
+                    $.scope.post_chan_list.push(data)
+                    $('#create_chan').modal('toggle');
+
+                }
+            });            
         })
 
 
@@ -178,12 +183,14 @@
                 data: {
                     identity: $( '#identity_name' ).val()
                 },
+
                 callBack:function (data){
                     // error check might not be needed...
                     if ( 'error' in data ){
                     } else {
                         $.scope.identities.push( { identity: $( '#identity_name' ).val() } );
                     }
+                    $( '#create_id_form' ).trigger('reset')
                 }
             })
         })
@@ -194,6 +201,7 @@
             info['from'] = $( '#from_addy' ).val();
             info['subject'] = $( '#subject' ).val();
             info['message'] = $( '#message' ).val();
+            $( '#compose_msg_form' ).trigger('reset')
             APIcal({
                 url: 'send',
                 data: info,
@@ -207,6 +215,7 @@
             info['from'] = $( '#chan_post_list' ).val();
             info['subject'] = $( '#post_subject' ).val();
             info['message'] = $( '#post_message' ).val();
+            $( '#post_chan_form' ).trigger('reset')
             APIcal({
                 url: 'send',
                 data: info,
@@ -215,15 +224,19 @@
         })
 
         $( '#delete_msg' ).click(function() {
-            var info = {}
-            info['msgid'] =  $( '#mess-id' ).val();
-            inboxMessages()
+            var info = {
+                msgid: $( '#mess-id' ).val()
+            }
+
+            console.log(info)
             APIcal({
-                url: 'deletemessage',
+                url: 'deleteInboxmessage',
                 data: info,
-                callBack: function(){}
+                callBack: function(){
+                    inboxMessages()
+                }
             });
-        })
+        });
 
         $( '#sub_chan_btn' ).click(function() {
             var info = {}
@@ -231,6 +244,7 @@
             info['address'] = $( '#chan_addy' ).val();
             APIcal({
                 url: 'joinchan',
+                data: info,
                 callBack: function (data){
                     if ( 'error' in data ){
                     } else {
@@ -238,11 +252,6 @@
                     }
                 }
             })
-        })
-
-        $( '#create_chan_button' ).click(function() {
-    // send json to createchan function
-    // set new chan as active chan in chan tab
         })
 
         $('.inbox-nav').on( 'click', 'button#sent', function(){
@@ -258,6 +267,7 @@
                     } );
                 }
             })
+            sessionStorage.setItem('sentMessages', JSON.stringify($.scope.sent));
             $('#sent-mess').show()
         } );
 
