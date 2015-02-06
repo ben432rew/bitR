@@ -36,6 +36,15 @@
                 chan_addresses = data['chans']
                 data['messages'].forEach(function(value) {
                     value['data'].forEach(function(value){
+                        if ( (value['fromAddress']).length>=15){
+                            value['fromAddress'] = (value['fromAddress'].slice(0,15) +"...")
+                        }
+                        if ( (value['toAddress']).length>=15){
+                            value['toAddress'] = (value['fromAddress'].slice(0,15) +"...")
+                        }
+                        if ( (value['message']).length>=15){
+                            value['message'] = (value['message'].slice(0,15) +"...")
+                        }
                         if (value['read'] == 1){
                             value['color'] = "blue"
                         }

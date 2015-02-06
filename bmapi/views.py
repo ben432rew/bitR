@@ -22,7 +22,6 @@ def replace_unix_time(mess):
     for index in mess[1:][0]['data']:
         for key,item in index.items():
             if key == 'receivedTime':
-                print(key)
                 index[key] =  datetime.fromtimestamp(int(item)).strftime('%Y-%m-%d %H:%M:%S')
     return(mess)
 
