@@ -72,6 +72,8 @@
                         value['inboxsubject'] = MessageShorter(value['subject'])
                         value['color'] = SetColor(value['read'])
                         if ( chan_addresses.indexOf(value['toAddress']) != -1){
+                            var index = $.scope.chans.indexOf("chan_address", value['toAddress'])
+                            value['chan'] = ($.scope.chans[index])['chan_label']
                             $.scope.chan_inbox.push(value);
                         } else {
                             $.scope.inbox.push(value);
