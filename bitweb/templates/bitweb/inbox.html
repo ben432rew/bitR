@@ -41,10 +41,10 @@
 		</div>
 
 		<div class="dropdown col-md-2">
-			<button data-toggle="dropdown" class="btn btn-material-blue-grey-100 dropdown-toggle" id="identityDrop">No Identities Selected <span class="caret"></span></button>
-			<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+			<button data-toggle="dropdown" class="btn btn-material-blue-grey-100 dropdown-toggle" id="identityDrop">All Identities <span class="caret"></span></button>
+			<ul id="id_ul" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
 				{% verbatim %}
-					<li jq-repeat="identities"><input type="checkbox" id="{{ identity }}"><label id="identity_list" for="{{ identity }}">{{ identity }}</li>
+					<li jq-repeat="identities" data-iden-key="{{key}}"><input type="checkbox" id="{{ identity }}"><label id="identity_list" for="{{ identity }}">{{ identity }}</li>
 				{% endverbatim %}  
 				<li role="presentation" class="divider"></li>
 				<li role="presentation"><a role="menuitem" href="#" data-toggle="modal" data-target="#create_identity">Create New Identity</a></li>
@@ -64,7 +64,7 @@
 					<p>Primary</p>
 				</div>
 				<div class="dropdown btn-group" role="group">
-				  <button id="chan_tab" data-toggle="dropdown"  class="btn dropdown-toggle col-md-offset-2 col-md-offset-6">No Chans Selected <span class="caret"></span></button>
+				  <button id="chan_tab" data-toggle="dropdown"  class="btn dropdown-toggle col-md-offset-2 col-md-offset-6">All Chans <span class="caret"></span></button>
 					<ul class="dropdown-menu" id="chan_ul" role="menu" aria-labelledby="dropdownMenu1">
 						{% verbatim %}
 							<li jq-repeat="chans" data-chan-add="{{chan_address}}"><input type="checkbox" id="{{ chan_label }}"><label for="{{ chan_label }}">{{ chan_label }}</label></li>

@@ -163,21 +163,6 @@
             });
         })
 
-        $('#identity_list').on('click', '.new-message', function(e){
-            // e.preventDefault();
-            // var classes = $(this).attr('class').split(/\s+/)
-            // var from = classes[2].slice(5, -1)
-            // var body = $(this).find('.message-body').text()
-            // var subject = $(this).find('.message-subject').text()
-            // var date = $(this).find('.message-date').text()
-            // $("#mess_view_modal").modal("toggle")
-            // $("#mess-id").val($(this).find('#msg-id').text())
-            // $("#mess-subject").html(subject)
-            // $("#mess-body").html(body)
-            // $("#mess-date").html(date)
-            // $("#mess-from").html(from)
-        })
-
         $("#chan-form").submit(function(e){
             e.preventDefault();
             var info = {}
@@ -317,13 +302,13 @@
         $('#chan_ul').on( 'click', 'li.jq-repeat-chans > label', function(){
             var selected_chans = $('#chan_tab').text()
             var val = '.' + $( this ).parent().attr('data-chan-add')
-            console.log(val)
-            if (selected_chans == "Showing All Chan Messages") {
-                $('#chan_mess').show()
-            } else {
-                $( val ).toggle()
-                console.log('hitt')
-            }
+            $( val ).toggle()
+        })
+
+        $('#id_ul').on( 'click', 'li.jq-repeat-identities > label', function(){
+            var selected_identities = $('#identityDrop').text()
+            var val = '.' + $( this ).parent().attr('data-iden-key')
+            $( val ).toggle()
         })
 
             $('')

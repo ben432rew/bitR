@@ -92,7 +92,7 @@ class Send ( View ):
 class AllIdentitiesOfUser( View ):
     def post( self, request ):
         bitkeys = BitKey.objects.filter(user=request.json['_user'])
-        addresses = [ {'identity':bk.name} for bk in bitkeys ]
+        addresses = [ {'identity':bk.name, 'key':bk.key} for bk in bitkeys ]
         return JsonResponse( { 'addresses' : addresses } )
 
 

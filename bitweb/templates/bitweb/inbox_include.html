@@ -18,7 +18,7 @@
 			<div class="row">	
 				<ul id ='inbox-list'>
 				{% verbatim %}
-				<li jq-repeat="inbox" class = "new-message row" style="background-color:{{ color }}">
+				<li jq-repeat="inbox" class = "new-message row {{toAddress}}" style="background-color:{{ color }}">
 				<a href="#">
 					<p hidden id="msg-id">{{ msgid }}</p>
 					<div class = "col-xs-3 " >{{fromaddress }}</div>
