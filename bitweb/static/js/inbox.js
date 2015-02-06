@@ -73,7 +73,10 @@
                         value['color'] = SetColor(value['read'])
                         if ( chan_addresses.indexOf(value['toAddress']) != -1){
                             var index = $.scope.chans.indexOf("chan_address", value['toAddress'])
-                            value['chan'] = ($.scope.chans[index])['chan_label']
+                            if(value['toAddress'] == value['fromAddress']){
+                                value['fromAddress'] = "Anonymous"
+                            }
+                            value['chan'] = ($.scope.chans[index])['chan_label'];
                             $.scope.chan_inbox.push(value);
                         } else {
                             $.scope.inbox.push(value);
@@ -303,7 +306,7 @@
             $('.inbox-bucket').children().hide()
             $('#chan_mess').show()
             if ( $('#chan_tab').text() == 'No Chans Selected ') {
-                $('#chan_ul_inbox_well > div').hide()
+                // $('#chan_ul_inbox_well > div').hide()
             }
           
         })
