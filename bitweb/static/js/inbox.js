@@ -49,6 +49,7 @@
                     });
                 });
                 sessionStorage.setItem('inboxMessages', JSON.stringify($.scope.inbox));
+                sessionStorage.setItem('chanMessages', JSON.stringify($.scope.chan_inbox));
             }
         });
 
@@ -111,6 +112,21 @@
             $("#mess-body").html(body)
             $("#mess-date").html(date)
             $("#mess-from").html(from)
+        })
+
+        $('#identity_list').on('click', '.new-message', function(e){
+            // e.preventDefault();
+            // var classes = $(this).attr('class').split(/\s+/)
+            // var from = classes[2].slice(5, -1)
+            // var body = $(this).find('.message-body').text()
+            // var subject = $(this).find('.message-subject').text()
+            // var date = $(this).find('.message-date').text()
+            // $("#mess_view_modal").modal("toggle")
+            // $("#mess-id").val($(this).find('#msg-id').text())
+            // $("#mess-subject").html(subject)
+            // $("#mess-body").html(body)
+            // $("#mess-date").html(date)
+            // $("#mess-from").html(from)
         })
 
         $("#chan-form").submit(function(e){
@@ -218,6 +234,7 @@
                     if ( 'error' in data ){
                     } else {
                         $.scope.chans.push(data);
+                        $.scope.post_chan_list.push(data)
                     }
                 }
             })
@@ -233,26 +250,37 @@
                         value['data'].forEach(function(value){
                             $.scope.sent.push(value);
                         } );
+                        sessionStorage.setItem('sentMessages', JSON.stringify($.scope.sent));
                     } );
                 }
             })
-            sessionStorage.setItem('sentMessages', JSON.stringify($.scope.sent));
             $('#sent-mess').show()
         } );
 
         $('#chan_tab').on( 'click', function(){
-            $( this ).toggleClass( 'btn-material-blue-grey-100' )
-            $( '#primary-tab' ).toggleClass( 'btn-material-blue-grey-100' )
+            $( this ).addClass( 'btn-material-blue-grey-100' )
+            $( '#primary-tab' ).removeClass( 'btn-material-blue-grey-100' )
             $('.inbox-bucket').children().hide()
             $('#chan_mess').show()
+          
         })
-        
+
+        $('.tessst').on( 'click', function(){
+            var selected_chans = $('#chan_tab').text()
+            if (selected_chans == "Showing All Chan Messages") {
+                //show all chan messages
+            } else {
+                // show only selected
+            }
+            console.log(selected_chans)            
+        })
+
             $('')
 
 
         $('#primary-tab').on( 'click', function(){
-            $( this ).toggleClass( 'btn-material-blue-grey-100' )
-            $( '#chan_tab' ).toggleClass( 'btn-material-blue-grey-100' )
+            $( this ).addClass( 'btn-material-blue-grey-100' )
+            $( '#chan_tab' ).removeClass( 'btn-material-blue-grey-100' )
             inboxMessages()
         } );
 

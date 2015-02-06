@@ -13,10 +13,12 @@ from pprint import pprint
 import uuid
 import json
 
+
 def login_token(request, user):
     login(request, user)
     token = Token.objects.create(token = uuid.uuid4(), user = user)
     return JsonResponse({ 'token':str(token.token)})
+
 
 class Signup( View ):
     def post(self, request):
@@ -43,7 +45,6 @@ class Logout( View ):
         request.user.token_set.all().delete()
         logout( request )
         return redirect ( '/' )
-
 
 
 class CreateChan( View ):
@@ -134,10 +135,13 @@ class DeleteInboxMessage( View ):
         res = BMclient.api.trashInboxMessage( request.json['msgid']  )
         return JsonResponse( {} )
 
+
 class DeleteSentMessage( View ):
     def post( self, request ):
         res = BMclient.api.trashInboxMessage( request.json['msgid']  )
         return JsonResponse( {} )
+
+
 #for searching in the current emails a user has
 class Search( View ):
     pass
