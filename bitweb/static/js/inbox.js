@@ -191,6 +191,7 @@
                         $.scope.chans.push(value)
                         $.scope.post_chan_list.push(value)
                     })
+                    sessionStorage.setItem('chanNameList', JSON.stringify($.scope.chans));
                 }
             }
         });
