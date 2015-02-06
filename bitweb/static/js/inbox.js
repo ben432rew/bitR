@@ -79,6 +79,7 @@
                     });
                 });
                 sessionStorage.setItem('inboxMessages', JSON.stringify($.scope.inbox));
+                sessionStorage.setItem('chanMessages', JSON.stringify($.scope.chan_inbox));
             }
         });
 
@@ -190,6 +191,7 @@
                         $.scope.chans.push(value)
                         $.scope.post_chan_list.push(value)
                     })
+                    sessionStorage.setItem('chanNameList', JSON.stringify($.scope.chans));
                 }
             }
         });
@@ -267,6 +269,7 @@
                     if ( 'error' in data ){
                     } else {
                         $.scope.chans.push(data);
+                        $.scope.post_chan_list.push(data)
                     }
                 }
             })
@@ -282,26 +285,39 @@
                         value['data'].forEach(function(value){
                             $.scope.sent.push(value);
                         } );
+                        sessionStorage.setItem('sentMessages', JSON.stringify($.scope.sent));
                     } );
                 }
             })
-            sessionStorage.setItem('sentMessages', JSON.stringify($.scope.sent));
             $('#sent-mess').show()
         } );
 
         $('#chan_tab').on( 'click', function(){
-            $( this ).toggleClass( 'btn-material-blue-grey-100' )
-            $( '#primary-tab' ).toggleClass( 'btn-material-blue-grey-100' )
+            $( this ).addClass( 'btn-material-blue-grey-100' )
+            $( '#primary-tab' ).removeClass( 'btn-material-blue-grey-100' )
             $('.inbox-bucket').children().hide()
             $('#chan_mess').show()
+          
         })
-        
+
+        $('#chan_ul').on( 'click', 'li.jq-repeat-chans > label', function(){
+            var selected_chans = $('#chan_tab').text()
+            var val = '.' + $( this ).parent().attr('data-chan-add')
+            $( val ).toggle()
+        })
+
+        $('#id_ul').on( 'click', 'li.jq-repeat-identities > label', function(){
+            var selected_identities = $('#identityDrop').text()
+            var val = '.' + $( this ).parent().attr('data-iden-key')
+            $( val ).toggle()
+        })
+
             $('')
 
 
         $('#primary-tab').on( 'click', function(){
-            $( this ).toggleClass( 'btn-material-blue-grey-100' )
-            $( '#chan_tab' ).toggleClass( 'btn-material-blue-grey-100' )
+            $( this ).addClass( 'btn-material-blue-grey-100' )
+            $( '#chan_tab' ).removeClass( 'btn-material-blue-grey-100' )
             inboxMessages()
         } );
 

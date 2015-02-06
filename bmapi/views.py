@@ -13,10 +13,12 @@ from pprint import pprint
 import uuid
 import json
 
+
 def login_token(request, user):
     login(request, user)
     token = Token.objects.create(token = uuid.uuid4(), user = user)
     return JsonResponse({ 'token':str(token.token)})
+
 
 class Signup( View ):
     def post(self, request):
@@ -43,7 +45,6 @@ class Logout( View ):
         request.user.token_set.all().delete()
         logout( request )
         return redirect ( '/' )
-
 
 
 class CreateChan( View ):
@@ -91,7 +92,7 @@ class Send ( View ):
 class AllIdentitiesOfUser( View ):
     def post( self, request ):
         bitkeys = BitKey.objects.filter(user=request.json['_user'])
-        addresses = [ {'identity':bk.name} for bk in bitkeys ]
+        addresses = [ {'identity':bk.name, 'key':bk.key} for bk in bitkeys ]
         return JsonResponse( { 'addresses' : addresses } )
 
 
@@ -125,7 +126,7 @@ class JoinChan( View ):
 
 class AllChans( View ):
     def post( self, request ):
-        chans = [ { 'chan_label' : chan.label } for chan in Chan_subscriptions.objects.filter( user=request.json['_user'] )]
+        chans = [ { 'chan_label' : chan.label, 'chan_address':chan.address } for chan in Chan_subscriptions.objects.filter( user=request.json['_user'] )]
         return JsonResponse( {'chans':chans} )
 
 
@@ -134,16 +135,20 @@ class DeleteInboxMessage( View ):
         res = BMclient.api.trashInboxMessage( request.json['msgid']  )
         return JsonResponse( {} )
 
+
 class DeleteSentMessage( View ):
     def post( self, request ):
         res = BMclient.api.trashInboxMessage( request.json['msgid']  )
         return JsonResponse( {} )
+
 
 class getInboxMessageByID( View ):
     def post( self, request ):
         res = BMclient.api.getInboxMessageByID( request.json['msgid'], request.json['read'] )
         pprint(res)
         return JsonResponse( {} )
+
+
 #for searching in the current emails a user has
 class Search( View ):
     pass
