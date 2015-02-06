@@ -209,6 +209,7 @@
             info['address'] = $( '#chan_addy' ).val();
             APIcal({
                 url: 'joinchan',
+                data: info,
                 callBack: function (data){
                     if ( 'error' in data ){
                     } else {
@@ -231,6 +232,7 @@
                     } );
                 }
             })
+            sessionStorage.setItem('sentMessages', JSON.stringify($.scope.sent));
             $('#sent-mess').show()
         } );
 
