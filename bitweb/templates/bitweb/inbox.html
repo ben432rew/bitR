@@ -50,12 +50,12 @@
 		<div class = "col-md-10">
 			<div class="btn-group btn-group-justified" role="group" aria-label="primaryChan">
 				<div class="dropdown btn-group" role="group">
-				  <button id="identityDrop" data-toggle="dropdown"  class="btn dropdown-toggle btn-material-blue-grey-100 col-md-offset-2 col-md-offset-6">Mail: All Identities <span class="caret"></span></button>
+				  <button id="identityDrop" data-toggle="dropdown"  class="btn dropdown-toggle btn-material-blue-grey-100 col-md-offset-2 col-md-offset-6">Mail: No Identitites Selected <span class="caret"></span></button>
 					<ul class="dropdown-menu" id="id_ul" role="menu" aria-labelledby="dropdownMenu1">
 						{% verbatim %}
 							<li jq-repeat="identities" data-iden-key="{{key}}">
 								<input type="checkbox" id="{{ identity }}">
-								<label id="identity_list" for="{{ identity }}">{{ identity }}
+								<label id="identity_list" for="{{ identity }}" >{{ identity }}
 							</li>
 						{% endverbatim %}  
 						<li role="presentation" class="divider"></li>
@@ -63,7 +63,7 @@
 				    </ul>
 				</div>
 				<div class="dropdown btn-group" role="group">
-				  <button id="chan_tab" data-toggle="dropdown"  class="btn dropdown-toggle col-md-offset-2 col-md-offset-6">All Chans <span class="caret"></span></button>
+				  <button id="chan_tab" data-toggle="dropdown"  class="btn dropdown-toggle col-md-offset-2 col-md-offset-6">No Chans Selected <span class="caret"></span></button>
 					<ul class="dropdown-menu" id="chan_ul" role="menu" aria-labelledby="dropdownMenu1">
 						{% verbatim %}
 							<li jq-repeat="chans" data-chan-add="{{chan_address}}">
