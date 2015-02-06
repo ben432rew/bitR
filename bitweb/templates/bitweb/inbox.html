@@ -41,21 +41,21 @@
 		</div>
 
 		<div class="dropdown col-md-2">
-			  <button data-toggle="dropdown" class="btn btn-material-blue-grey-100 dropdown-toggle" id="identityDrop" data-placeholder="No Identity Selected">No Identity Selected<span class="caret"></span></button>
-				<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-					{% verbatim %}
-						<li jq-repeat="identities"><input type="checkbox" id="{{ identity }}"><label for="{{ identity }}">{{ identity }}</label></li>
-					{% endverbatim %}  
-					<li role="presentation" class="divider"></li>
-					<li role="presentation"><a role="menuitem" href="#" data-toggle="modal" data-target="#create_identity">Create New Identity</a></li>
-			    </ul>
-			</div>
+			<button data-toggle="dropdown" class="btn btn-material-blue-grey-100 dropdown-toggle" id="identityDrop">All Identities <span class="caret"></span></button>
+			<ul id="id_ul" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+				{% verbatim %}
+					<li jq-repeat="identities" data-iden-key="{{key}}"><input type="checkbox" id="{{ identity }}"><label id="identity_list" for="{{ identity }}">{{ identity }}</li>
+				{% endverbatim %}  
+				<li role="presentation" class="divider"></li>
+				<li role="presentation"><a role="menuitem" href="#" data-toggle="modal" data-target="#create_identity">Create New Identity</a></li>
+			</ul>
+		</div>
 	</div>
 
 
 	<div class = "row">
 		<div class="col-md-2">
-			<button class="btn btn-material-blue-grey-100" data-toggle="modal" data-target='#compose_chan_post'>Post to Chan</button>
+			<button class="btn btn-material-blue-grey-100" data-toggle="modal" data-target='#compose_chan_post'>Post to Chan </button>
 		</div>
 
 		<div class = "col-md-10">
@@ -64,10 +64,10 @@
 					<p>Primary</p>
 				</div>
 				<div class="dropdown btn-group" role="group">
-				  <button id="chan_tab" data-toggle="dropdown"  class="btn dropdown-toggle col-md-offset-2 col-md-offset-6"  data-placeholder="No Chan Selected">No Chan Selected<span class="caret"></span></button>
-					<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+				  <button id="chan_tab" data-toggle="dropdown"  class="btn dropdown-toggle col-md-offset-2 col-md-offset-6">All Chans <span class="caret"></span></button>
+					<ul class="dropdown-menu" id="chan_ul" role="menu" aria-labelledby="dropdownMenu1">
 						{% verbatim %}
-							<li jq-repeat="chans"><input type="checkbox" id="{{ chan_label }}"><label for="{{ chan_label }}">{{ chan_label }}</label></li>
+							<li jq-repeat="chans" data-chan-add="{{chan_address}}"><input type="checkbox" id="{{ chan_label }}"><label for="{{ chan_label }}">{{ chan_label }}</label></li>
 						{% endverbatim %}  
 						<li role="presentation" class="divider"></li>
 						<li role="presentation"><a role="menuitem" href="#" data-toggle="modal" data-target="#subscribe_chan">Subscribe to Chan</a></li>					
@@ -78,10 +78,10 @@
 		</div>
 	</div>
 
-<!-- reply include -->
+<!-- view message and reply modal -->
 	{% include "bitweb/mess_view_modal.html" %}
 
-<!-- inbox include -->
+<!-- inbox modal -->
 	{% include "bitweb/inbox_include.html" %}	
 
 <!-- new identity modal -->
