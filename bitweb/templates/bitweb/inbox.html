@@ -41,7 +41,7 @@
 		</div>
 
 		<div class="dropdown col-md-2">
-			<button data-toggle="dropdown" class="btn btn-material-blue-grey-100 dropdown-toggle" id="identityDrop">Showing All Identities <span class="caret"></span></button>
+			<button data-toggle="dropdown" class="btn btn-material-blue-grey-100 dropdown-toggle" id="identityDrop">No Identities Selected <span class="caret"></span></button>
 			<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
 				{% verbatim %}
 					<li jq-repeat="identities"><input type="checkbox" id="{{ identity }}"><label id="identity_list" for="{{ identity }}">{{ identity }}</li>
@@ -64,10 +64,10 @@
 					<p>Primary</p>
 				</div>
 				<div class="dropdown btn-group" role="group">
-				  <button id="chan_tab" data-toggle="dropdown"  class="btn dropdown-toggle col-md-offset-2 col-md-offset-6">Showing All Chan Messages <span class="caret"></span></button>
+				  <button id="chan_tab" data-toggle="dropdown"  class="btn dropdown-toggle col-md-offset-2 col-md-offset-6">No Chans Selected <span class="caret"></span></button>
 					<ul class="dropdown-menu" id="chan_ul" role="menu" aria-labelledby="dropdownMenu1">
 						{% verbatim %}
-							<li jq-repeat="chans" value="{{chan_address}}"><input type="checkbox" id="{{ chan_label }}"><label for="{{ chan_label }}">{{ chan_label }}</label></li>
+							<li jq-repeat="chans" data-chan-add="{{chan_address}}"><input type="checkbox" id="{{ chan_label }}"><label for="{{ chan_label }}">{{ chan_label }}</label></li>
 						{% endverbatim %}  
 						<li role="presentation" class="divider"></li>
 						<li role="presentation"><a role="menuitem" href="#" data-toggle="modal" data-target="#subscribe_chan">Subscribe to Chan</a></li>					

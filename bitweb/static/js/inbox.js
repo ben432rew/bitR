@@ -314,14 +314,15 @@
           
         })
 
-        $('#chan_ul').on( 'click', 'li', function(){
+        $('#chan_ul').on( 'click', 'li.jq-repeat-chans > label', function(){
             var selected_chans = $('#chan_tab').text()
-            var val = '.' + $( this ).attr('value')
+            var val = '.' + $( this ).parent().attr('data-chan-add')
             console.log(val)
             if (selected_chans == "Showing All Chan Messages") {
                 $('#chan_mess').show()
             } else {
                 $( val ).toggle()
+                console.log('hitt')
             }
         })
 

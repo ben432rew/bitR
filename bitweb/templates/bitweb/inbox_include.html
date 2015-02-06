@@ -34,7 +34,7 @@
 		<div id="chan_mess">
 			<ul>
 			{% verbatim %}
-			<div jq-repeat="chan_inbox" class = "new-message row {{fromAddress}}" >
+			<div jq-repeat="chan_inbox" class = "new-message row {{toAddress}}" >
 				<div class = "col-xs-3 " >Subject: {{subject}}</div>
 				<div class = "col-xs-3 " >Message: {{message}}</div>
 				<div class = "col-xs-3 message-date" >{{receivedTime}}</div>
