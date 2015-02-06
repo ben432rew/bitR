@@ -41,15 +41,15 @@
 		</div>
 
 		<div class="dropdown col-md-2">
-			  <button data-toggle="dropdown" class="btn btn-material-blue-grey-100 dropdown-toggle" id="identityDrop">Showing All Identities <span class="caret"></span></button>
-				<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-					{% verbatim %}
-						<li jq-repeat="identities"><input type="checkbox" id="{{ identity }}"><label id="identity_list" for="{{ identity }}">{{ identity }}<button class="hidden" class="tessst"></button></label></li>
-					{% endverbatim %}  
-					<li role="presentation" class="divider"></li>
-					<li role="presentation"><a role="menuitem" href="#" data-toggle="modal" data-target="#create_identity">Create New Identity</a></li>
-			    </ul>
-			</div>
+			<button data-toggle="dropdown" class="btn btn-material-blue-grey-100 dropdown-toggle" id="identityDrop">Showing All Identities <span class="caret"></span></button>
+			<ul class="dropdown-menu" id="tessst" role="menu" aria-labelledby="dropdownMenu1">
+				{% verbatim %}
+					<li jq-repeat="identities"><input type="checkbox" id="{{ identity }}"><label id="identity_list" for="{{ identity }}">{{ identity }}</li>
+				{% endverbatim %}  
+				<li role="presentation" class="divider"></li>
+				<li role="presentation"><a role="menuitem" href="#" data-toggle="modal" data-target="#create_identity">Create New Identity</a></li>
+			</ul>
+		</div>
 	</div>
 
 

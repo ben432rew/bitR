@@ -27,6 +27,29 @@
         $('.inbox-bucket').children().hide();
         $.scope.inbox.splice(0);
         $.scope.chan_inbox.splice(0);
+    
+    var convertUnixTime = function(data){
+        var date = new Date(data*1000);
+        return(String(date).slice(16,21)+"  "+String(date).slice(0,15))
+    }
+    var StringShorter=function(string){
+        if ( (string).length>=15){
+            return (string.slice(0,15) +"...");
+        }
+        else{
+            return string;
+        }
+
+    }
+    var SetColor = function(read){
+         if (read === 1){
+            return("#cfd8dc")
+        }
+        else {
+            return('#eee')
+        }
+    }
+
 
         var chan_addresses;
         APIcal({
@@ -35,12 +58,12 @@
                 chan_addresses = data['chans']
                 data['messages'].forEach(function(value) {
                     value['data'].forEach(function(value){
-                        if (value['read'] == 1){
-                            value['color'] = "blue"
-                        }
-                        else {
-                            value['color'] = 'white'
-                        }
+                        value['receivedTime'] = convertUnixTime(value['receivedTime'])
+                        value['fromaddress'] = StringShorter(value['fromAddress'])
+                        value['toaddress'] = StringShorter(value['toAddress'])
+                        value['inboxmessage'] = StringShorter(value['message'])
+                        value['inboxsubject'] = StringShorter(value['subject'])
+                        value['color'] = SetColor(value['read'])
                         if ( chan_addresses.indexOf(value['toAddress']) != -1){ 
                             $.scope.chan_inbox.push(value);
                         } else {
@@ -101,17 +124,36 @@
 
         $('#inbox-list').on('click', '.new-message', function(e){
             e.preventDefault();
-            var classes = $(this).attr('class').split(/\s+/)
-            var from = classes[2].slice(5, -1)
-            var body = $(this).find('.message-body').text()
-            var subject = $(this).find('.message-subject').text()
-            var date = $(this).find('.message-date').text()
+            var messages = JSON.parse(sessionStorage.getItem('inboxMessages'));
+            var messid = $(this).find('#msg-id').text()
+
+            for(var j in messages){
+                if(messages[j]['msgid']==messid){
+                    var the_message = messages[j];
+                }
+            }
+            var from = the_message['fromAddress']
+            var body = the_message['message']
+            var subject = the_message['subject']
+            var date = the_message['receivedTime']
             $("#mess_view_modal").modal("toggle")
             $("#mess-id").val($(this).find('#msg-id').text())
             $("#mess-subject").html(subject)
             $("#mess-body").html(body)
             $("#mess-date").html(date)
             $("#mess-from").html(from)
+
+            if( the_message['read'] === 1 ) return ;
+            APIcal({
+                url: 'getInboxMessageByID',
+                data: {
+                    msgid: messid,
+                    read: true
+                },
+                callBack: function(){
+                    inboxMessages();
+                }
+            });
         })
 
         $('#identity_list').on('click', '.new-message', function(e){
@@ -265,7 +307,7 @@
           
         })
 
-        $('.tessst').on( 'click', function(){
+        $('#tessst').on( 'click', 'li', function(){
             var selected_chans = $('#chan_tab').text()
             if (selected_chans == "Showing All Chan Messages") {
                 //show all chan messages

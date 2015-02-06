@@ -142,6 +142,13 @@ class DeleteSentMessage( View ):
         return JsonResponse( {} )
 
 
+class getInboxMessageByID( View ):
+    def post( self, request ):
+        res = BMclient.api.getInboxMessageByID( request.json['msgid'], request.json['read'] )
+        pprint(res)
+        return JsonResponse( {} )
+
+        
 #for searching in the current emails a user has
 class Search( View ):
     pass
@@ -165,6 +172,7 @@ class Spam( View ):
 #get to see trash, post to trash or untrash something
 class Trash( View ):
     pass
+
 
 
 # class DeleteId( View ):
