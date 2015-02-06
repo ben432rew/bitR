@@ -39,7 +39,14 @@
         else{
             return string;
         }
-
+    }
+    var MessageShorter=function(string){
+        if ( (string).length>=12){
+            return (string.slice(0,11) +"...");
+        }
+        else{
+            return string;
+        }
     }
     var SetColor = function(read){
          if (read === 1){
@@ -61,8 +68,8 @@
                         value['receivedTime'] = convertUnixTime(value['receivedTime'])
                         value['fromaddress'] = StringShorter(value['fromAddress'])
                         value['toaddress'] = StringShorter(value['toAddress'])
-                        value['inboxmessage'] = StringShorter(value['message'])
-                        value['inboxsubject'] = StringShorter(value['subject'])
+                        value['inboxmessage'] = MessageShorter(value['message'])
+                        value['inboxsubject'] = MessageShorter(value['subject'])
                         value['color'] = SetColor(value['read'])
                         if ( chan_addresses.indexOf(value['toAddress']) != -1){ 
                             $.scope.chan_inbox.push(value);
@@ -307,14 +314,15 @@
           
         })
 
-        $('#tessst').on( 'click', 'li', function(){
+        $('#chan_ul').on( 'click', 'li', function(){
             var selected_chans = $('#chan_tab').text()
+            var val = '.' + $( this ).attr('value')
+            console.log(val)
             if (selected_chans == "Showing All Chan Messages") {
-                //show all chan messages
+                $('#chan_mess').show()
             } else {
-                // show only selected
+                $( val ).toggle()
             }
-            console.log(selected_chans)            
         })
 
             $('')

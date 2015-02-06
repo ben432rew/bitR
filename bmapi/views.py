@@ -126,7 +126,7 @@ class JoinChan( View ):
 
 class AllChans( View ):
     def post( self, request ):
-        chans = [ { 'chan_label' : chan.label } for chan in Chan_subscriptions.objects.filter( user=request.json['_user'] )]
+        chans = [ { 'chan_label' : chan.label, 'chan_address':chan.address } for chan in Chan_subscriptions.objects.filter( user=request.json['_user'] )]
         return JsonResponse( {'chans':chans} )
 
 
@@ -148,7 +148,7 @@ class getInboxMessageByID( View ):
         pprint(res)
         return JsonResponse( {} )
 
-        
+
 #for searching in the current emails a user has
 class Search( View ):
     pass
