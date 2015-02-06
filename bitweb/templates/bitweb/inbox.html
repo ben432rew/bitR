@@ -39,17 +39,6 @@
 		    	<li role="presentation"><a role="menuitem" href="#">Unstarred</a></li>
 		  </ul>
 		</div>
-
-		<div class="dropdown col-md-2">
-			<button data-toggle="dropdown" class="btn btn-material-blue-grey-100 dropdown-toggle" id="identityDrop">All Identities <span class="caret"></span></button>
-			<ul id="id_ul" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-				{% verbatim %}
-					<li jq-repeat="identities" data-iden-key="{{key}}"><input type="checkbox" id="{{ identity }}"><label id="identity_list" for="{{ identity }}">{{ identity }}</li>
-				{% endverbatim %}  
-				<li role="presentation" class="divider"></li>
-				<li role="presentation"><a role="menuitem" href="#" data-toggle="modal" data-target="#create_identity">Create New Identity</a></li>
-			</ul>
-		</div>
 	</div>
 
 
@@ -60,14 +49,27 @@
 
 		<div class = "col-md-10">
 			<div class="btn-group btn-group-justified" role="group" aria-label="primaryChan">
-				<div id = 'primary-tab' class='btn btn-material-blue-grey-100'>
-					<p>Primary</p>
+				<div class="dropdown btn-group" role="group">
+				  <button id="identityDrop" data-toggle="dropdown"  class="btn dropdown-toggle btn-material-blue-grey-100 col-md-offset-2 col-md-offset-6">Mail: All Identities <span class="caret"></span></button>
+					<ul class="dropdown-menu" id="id_ul" role="menu" aria-labelledby="dropdownMenu1">
+						{% verbatim %}
+							<li jq-repeat="identities" data-iden-key="{{key}}">
+								<input type="checkbox" id="{{ identity }}">
+								<label id="identity_list" for="{{ identity }}">{{ identity }}
+							</li>
+						{% endverbatim %}  
+						<li role="presentation" class="divider"></li>
+						<li role="presentation"><a role="menuitem" href="#" data-toggle="modal" data-target="#create_identity">Create New Identity</a></li>
+				    </ul>
 				</div>
 				<div class="dropdown btn-group" role="group">
 				  <button id="chan_tab" data-toggle="dropdown"  class="btn dropdown-toggle col-md-offset-2 col-md-offset-6">All Chans <span class="caret"></span></button>
 					<ul class="dropdown-menu" id="chan_ul" role="menu" aria-labelledby="dropdownMenu1">
 						{% verbatim %}
-							<li jq-repeat="chans" data-chan-add="{{chan_address}}"><input type="checkbox" id="{{ chan_label }}"><label for="{{ chan_label }}">{{ chan_label }}</label></li>
+							<li jq-repeat="chans" data-chan-add="{{chan_address}}">
+								<input type="checkbox" id="{{ chan_label }}">
+								<label for="{{ chan_label }}">{{ chan_label }}</label>
+							</li>
 						{% endverbatim %}  
 						<li role="presentation" class="divider"></li>
 						<li role="presentation"><a role="menuitem" href="#" data-toggle="modal" data-target="#subscribe_chan">Subscribe to Chan</a></li>					

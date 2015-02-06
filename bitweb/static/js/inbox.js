@@ -294,7 +294,7 @@
 
         $('#chan_tab').on( 'click', function(){
             $( this ).addClass( 'btn-material-blue-grey-100' )
-            $( '#primary-tab' ).removeClass( 'btn-material-blue-grey-100' )
+            $( '#identityDrop' ).removeClass( 'btn-material-blue-grey-100' )
             $('.inbox-bucket').children().hide()
             $('#chan_mess').show()
           
@@ -315,7 +315,7 @@
             $('')
 
 
-        $('#primary-tab').on( 'click', function(){
+        $('#identityDrop').on( 'click', function(){
             $( this ).addClass( 'btn-material-blue-grey-100' )
             $( '#chan_tab' ).removeClass( 'btn-material-blue-grey-100' )
             inboxMessages()
