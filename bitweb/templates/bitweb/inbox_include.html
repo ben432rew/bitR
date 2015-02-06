@@ -35,11 +35,13 @@
 		<div id="chan_mess">
 			<ul id="chan_ul_inbox_well">
 			{% verbatim %}
-			<div jq-repeat="chan_inbox" class = "new-message row {{toAddress}}" >
-				<div class = "col-xs-3 " >Subject: {{subject}}</div>
-				<div class = "col-xs-3 " >Message: {{message}}</div>
-				<div class = "col-xs-3 message-date" >{{receivedTime}}</div>
-				<div class = "col-xs-3 read-status" >{{color}}</div>
+			<div jq-repeat="chan_inbox" class = "new-message row" >
+			<div class="jumbotron">
+				<h2>{{subject}}</h2>
+				<h5>Chan: {{chan}} | From: {{fromAddress}}</h5>
+				<p>{{message}}</p>
+				<p5 class="pull-right">{{receivedTime}}</p5>
+			</div>
 			</div>
 			{% endverbatim %}
 			</ul>
