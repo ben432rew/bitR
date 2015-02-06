@@ -1,6 +1,5 @@
 {% extends "bitweb/base.html" %}
 {% load staticfiles %}
-<script src="{%static 'js/profile.js' %}"></script>
 {% block title %}{{ user.username }} Profile - {% endblock %}
 
 {% block content %}
@@ -19,7 +18,7 @@
             <div class = "row" >
               <div class = "col-md-2" >
                 <p>Username: {{user.username}}</p>
-                <p>Password: ******</p>
+                <p>Password: ********</p>
             </div>
             </div>
             <div class = "row" >

@@ -28,34 +28,34 @@
         $.scope.inbox.splice(0);
         $.scope.chan_inbox.splice(0);
     
-    var convertUnixTime = function(data){
-        var date = new Date(data*1000);
-        return(String(date).slice(16,21)+"  "+String(date).slice(0,15))
-    }
-    var StringShorter=function(string){
-        if ( (string).length>=15){
-            return (string.slice(0,15) +"...");
+        var convertUnixTime = function(data){
+            var date = new Date(data*1000);
+            return(String(date).slice(16,21)+"  "+String(date).slice(0,15))
         }
-        else{
-            return string;
+        var StringShorter=function(string){
+            if ( (string).length>=15){
+                return (string.slice(0,15) +"...");
+            }
+            else{
+                return string;
+            }
         }
-    }
-    var MessageShorter=function(string){
-        if ( (string).length>=12){
-            return (string.slice(0,11) +"...");
+        var MessageShorter=function(string){
+            if ( (string).length>=12){
+                return (string.slice(0,11) +"...");
+            }
+            else{
+                return string;
+            }
         }
-        else{
-            return string;
+        var SetColor = function(read){
+             if (read === 1){
+                return("#cfd8dc")
+            }
+            else {
+                return('#eee')
+            }
         }
-    }
-    var SetColor = function(read){
-         if (read === 1){
-            return("#cfd8dc")
-        }
-        else {
-            return('#eee')
-        }
-    }
 
 
         var chan_addresses;
@@ -82,6 +82,9 @@
                 });
                 sessionStorage.setItem('inboxMessages', JSON.stringify($.scope.inbox));
                 sessionStorage.setItem('chanMessages', JSON.stringify($.scope.chan_inbox));
+                if ( $('#identityDrop').text() == 'Mail: No Identitites Selected ') {
+                    $('#inbox-list > li').hide()
+                }
             }
         });
 
@@ -296,9 +299,12 @@
 
         $('#chan_tab').on( 'click', function(){
             $( this ).addClass( 'btn-material-blue-grey-100' )
-            $( '#primary-tab' ).removeClass( 'btn-material-blue-grey-100' )
+            $( '#identityDrop' ).removeClass( 'btn-material-blue-grey-100' )
             $('.inbox-bucket').children().hide()
             $('#chan_mess').show()
+            if ( $('#chan_tab').text() == 'No Chans Selected ') {
+                $('#chan_ul_inbox_well > div').hide()
+            }
           
         })
 
@@ -317,7 +323,7 @@
             $('')
 
 
-        $('#primary-tab').on( 'click', function(){
+        $('#identityDrop').on( 'click', function(){
             $( this ).addClass( 'btn-material-blue-grey-100' )
             $( '#chan_tab' ).removeClass( 'btn-material-blue-grey-100' )
             inboxMessages()
