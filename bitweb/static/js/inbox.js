@@ -104,7 +104,7 @@
             var classes = $(this).attr('class').split(/\s+/)
             var from = classes[2].slice(5, -1)
             var to = classes[3].slice(3, -1)
-            console.log(from)
+            console.log(to)
             var body = $(this).find('.message-body').text()
             var subject = $(this).find('.message-subject').text()
             var date = $(this).find('.message-date').text()
@@ -119,7 +119,7 @@
         $( '#mess-view-form' ).submit(function(e) {
             e.preventDefault();
             var info = {}
-            info['from'] = $( '#mess-to' ).text();
+            info['from'] = $( '#mess-to' ).html();
             info['to_address'] = $( '#mess-from' ).text();
             info['subject'] = "RE:" + $( '#mess-subject' ).text();
             info['message'] = $( '#mess-reply' ).val();
