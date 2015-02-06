@@ -71,7 +71,7 @@
                         value['inboxmessage'] = MessageShorter(value['message'])
                         value['inboxsubject'] = MessageShorter(value['subject'])
                         value['color'] = SetColor(value['read'])
-                        if ( chan_addresses.indexOf(value['toAddress']) != -1){ 
+                        if ( chan_addresses.indexOf(value['toAddress']) != -1){
                             $.scope.chan_inbox.push(value);
                         } else {
                             $.scope.inbox.push(value);

@@ -35,10 +35,18 @@
 			<ul>
 			{% verbatim %}
 			<div jq-repeat="chan_inbox" class = "new-message row" >
-				<div class = "col-xs-3 " >Subject: {{subject}}</div>
+			<div class="jumbotron">
+				<!-- <div class = "col-xs-3 " >Subject: {{subject}}</div>
 				<div class = "col-xs-3 " >Message: {{message}}</div>
 				<div class = "col-xs-3 message-date" >{{receivedTime}}</div>
-				<div class = "col-xs-3 read-status" >{{color}}</div>
+				<div class = "col-xs-3 read-status" >{{color}}</div> -->
+
+				<h2>Subject: {{subject}}</h2>
+				<p>Message: {{message}}</p>
+				<p5>{{receivedTime}}</p5>
+
+
+			</div>
 			</div>
 			{% endverbatim %}
 			</ul>
