@@ -193,15 +193,19 @@
         })
 
         $( '#delete_msg' ).click(function() {
-            var info = {}
-            info['msgid'] =  $( '#mess-id' ).val();
-            inboxMessages()
+            var info = {
+                msgid: $( '#mess-id' ).val()
+            }
+
+            console.log(info)
             APIcal({
-                url: 'deletemessage',
+                url: 'deleteInboxmessage',
                 data: info,
-                callBack: function(){}
+                callBack: function(){
+                    inboxMessages()
+                }
             });
-        })
+        });
 
         $( '#sub_chan_btn' ).click(function() {
             var info = {}
