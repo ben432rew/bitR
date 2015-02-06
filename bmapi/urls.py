@@ -16,5 +16,6 @@ urlpatterns = patterns('',
     url(r'^send', Send.as_view() ),
     url(r'^create_id', CreateId.as_view() ),
     url(r'^joinchan', JoinChan.as_view() ),
-    url(r'^deletemessage', DeleteMessage.as_view() ),
+    url(r'^deleteInboxmessage', DeleteInboxMessage.as_view() ),
+    url(r'^deleteSentmessage', DeleteSentMessage.as_view() ),
 )
