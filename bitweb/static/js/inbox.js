@@ -36,16 +36,31 @@
                 data['messages'].forEach(function(value) {
                     value['data'].forEach(function(value){
                         if ( (value['fromAddress']).length>=15){
-                            value['fromAddress'] = (value['fromAddress'].slice(0,15) +"...")
+                            value['fromaddress'] = (value['fromAddress'].slice(0,15) +"...");
+                        }
+                        else{
+                             value['fromaddress'] = value['fromAddress'];
                         }
                         if ( (value['toAddress']).length>=15){
-                            value['toAddress'] = (value['fromAddress'].slice(0,15) +"...")
+                            value['toaddress'] = (value['fromAddress'].slice(0,15) +"...");
+                        }
+                        else{
+                            value['toaddress'] = value['fromAddress'];
                         }
                         if ( (value['message']).length>=15){
-                            value['message'] = (value['message'].slice(0,15) +"...")
+                            value['inboxmessage'] = (value['message'].slice(0,15) +"...");
+                        }
+                        else{
+                            value['inboxmessage'] = value['message'];
+                        }
+                        if ( (value['subject']).length>=15){
+                            value['inboxsubject'] = (value['subject'].slice(0,15));
+                        }
+                        else{
+                            value['inboxsubject'] = value['subject'];
                         }
                         if (value['read'] == 1){
-                            value['color'] = "blue"
+                            value['color'] = "#607d8b"
                         }
                         else {
                             value['color'] = 'white'
