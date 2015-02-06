@@ -109,11 +109,18 @@
 
         $('#inbox-list').on('click', '.new-message', function(e){
             e.preventDefault();
-            var classes = $(this).attr('class').split(/\s+/)
-            var from = classes[2].slice(5, -1)
-            var body = $(this).find('.message-body').text()
-            var subject = $(this).find('.message-subject').text()
-            var date = $(this).find('.message-date').text()
+            var messages = JSON.parse(sessionStorage.getItem('inboxMessages'));
+            var messid = $(this).find('#msg-id').text()
+            var the_message
+            for(var j in messages){
+                if(messages[j]['msgid']==messid){
+                    the_message = messages[j];
+                }
+            }
+            var from = the_message['fromAddress']
+            var body = the_message['message']
+            var subject = the_message['subject']
+            var date = the_message['receivedTime']
             $("#mess_view_modal").modal("toggle")
             $("#mess-id").val($(this).find('#msg-id').text())
             $("#mess-subject").html(subject)
