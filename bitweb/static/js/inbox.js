@@ -27,6 +27,31 @@
         $('.inbox-bucket').children().hide();
         $.scope.inbox.splice(0);
         $.scope.chan_inbox.splice(0);
+    
+    var convertUnixTime = function(data){
+        var date = new Date(data*1000);
+        // var hours = date.getHours();
+        // var minutes = "0" + date.getMinutes();
+        return(String(date).slice(16,21)+"  "+String(date).slice(0,15))
+    }
+    var StringShorter=function(string){
+        if ( (string).length>=15){
+            return (string.slice(0,15) +"...");
+        }
+        else{
+            return string;
+        }
+
+    }
+    var SetColor = function(read){
+         if (read == 1){
+            return("#cfd8dc")
+        }
+        else {
+            return('#eee')
+        }
+    }
+
 
         var chan_addresses;
         APIcal({
@@ -35,36 +60,12 @@
                 chan_addresses = data['chans']
                 data['messages'].forEach(function(value) {
                     value['data'].forEach(function(value){
-                        if ( (value['fromAddress']).length>=15){
-                            value['fromaddress'] = (value['fromAddress'].slice(0,15) +"...");
-                        }
-                        else{
-                             value['fromaddress'] = value['fromAddress'];
-                        }
-                        if ( (value['toAddress']).length>=15){
-                            value['toaddress'] = (value['fromAddress'].slice(0,15) +"...");
-                        }
-                        else{
-                            value['toaddress'] = value['fromAddress'];
-                        }
-                        if ( (value['message']).length>=15){
-                            value['inboxmessage'] = (value['message'].slice(0,15) +"...");
-                        }
-                        else{
-                            value['inboxmessage'] = value['message'];
-                        }
-                        if ( (value['subject']).length>=15){
-                            value['inboxsubject'] = (value['subject'].slice(0,15));
-                        }
-                        else{
-                            value['inboxsubject'] = value['subject'];
-                        }
-                        if (value['read'] == 1){
-                            value['color'] = "#607d8b"
-                        }
-                        else {
-                            value['color'] = 'white'
-                        }
+                        value['receivedTime'] = convertUnixTime(value['receivedTime'])
+                        value['fromaddress'] = StringShorter(value['fromAddress'])
+                        value['toaddress'] = StringShorter(value['toAddress'])
+                        value['inboxmessage'] = StringShorter(value['message'])
+                        value['inboxsubject'] = StringShorter(value['subject'])
+                        value['color'] = SetColor(value['read'])
                         if ( chan_addresses.indexOf(value['toAddress']) != -1){ 
                             $.scope.chan_inbox.push(value);
                         } else {

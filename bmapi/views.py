@@ -18,13 +18,6 @@ def login_token(request, user):
     token = Token.objects.create(token = uuid.uuid4(), user = user)
     return JsonResponse({ 'token':str(token.token)})
 
-def replace_unix_time(mess):
-    for index in mess[1:][0]['data']:
-        for key,item in index.items():
-            if key == 'receivedTime':
-                index[key] =  datetime.fromtimestamp(int(item)).strftime('%Y-%m-%d %H:%M:%S')
-    return(mess)
-
 class Signup( View ):
     def post(self, request):
         the_jason = json.loads(request.body.decode('utf-8'))
@@ -107,8 +100,7 @@ def get_messages( function_name, request, chans=False ):
     addresses = [ bk.key for bk in bitkeys ]
     if chans:
         addresses += chans
-    mess = [ BMclient.call( function_name, address ) for address in addresses ]
-    data = replace_unix_time(mess)
+    data = [ BMclient.call( function_name, address ) for address in addresses ]
     return JsonResponse( { 'messages': data, 'chans':chans } )
 
 
