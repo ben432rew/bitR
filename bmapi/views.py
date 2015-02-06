@@ -131,12 +131,7 @@ class AllChans( View ):
 
 class DeleteMessage( View ):
     def post( self, request ):
-        print(1111111111)
-        try:
-            BMclient.call( 'trashMessage',  request.json['msgid']  )
-        except:
-            print('temporary fix')
-        print(222222222222)
+        BMclient.call( 'trashMessage',  request.json['msgid']  )
         return JsonResponse( {} )
 
 

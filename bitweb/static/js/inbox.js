@@ -119,6 +119,7 @@
             var info = {}
             info['token'] = $.cookie( 'token' )
             info['form'] = form_data
+            $( '#chan-form' ).trigger('reset')
             $.post('/bmapi/create_chan', JSON.stringify(info), function(data){
                 $.scope.chans.push(data)
                 $('#create_chan').modal('toggle');
@@ -147,12 +148,14 @@
                 data: {
                     identity: $( '#identity_name' ).val()
                 },
+
                 callBack:function (data){
                     // error check might not be needed...
                     if ( 'error' in data ){
                     } else {
                         $.scope.identities.push( { identity: $( '#identity_name' ).val() } );
                     }
+                    $( '#create_id_form' ).trigger('reset')
                 }
             })
         })
@@ -163,6 +166,7 @@
             info['from'] = $( '#from_addy' ).val();
             info['subject'] = $( '#subject' ).val();
             info['message'] = $( '#message' ).val();
+            $( '#compose_msg_form' ).trigger('reset')
             APIcal({
                 url: 'send',
                 data: info,
@@ -176,6 +180,7 @@
             info['from'] = $( '#chan_post_list' ).val();
             info['subject'] = $( '#post_subject' ).val();
             info['message'] = $( '#post_message' ).val();
+            $( '#post_chan_form' ).trigger('reset')
             APIcal({
                 url: 'send',
                 data: info,
@@ -207,11 +212,6 @@
                     }
                 }
             })
-        })
-
-        $( '#create_chan_button' ).click(function() {
-    // send json to createchan function
-    // set new chan as active chan in chan tab
         })
 
         $('.inbox-nav').on( 'click', 'button#sent', function(){
