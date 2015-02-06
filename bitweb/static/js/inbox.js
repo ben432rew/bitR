@@ -30,8 +30,6 @@
     
     var convertUnixTime = function(data){
         var date = new Date(data*1000);
-        // var hours = date.getHours();
-        // var minutes = "0" + date.getMinutes();
         return(String(date).slice(16,21)+"  "+String(date).slice(0,15))
     }
     var StringShorter=function(string){
@@ -44,7 +42,7 @@
 
     }
     var SetColor = function(read){
-         if (read == 1){
+         if (read === 1){
             return("#cfd8dc")
         }
         else {
