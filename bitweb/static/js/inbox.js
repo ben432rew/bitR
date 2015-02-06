@@ -127,10 +127,10 @@
             e.preventDefault();
             var messages = JSON.parse(sessionStorage.getItem('inboxMessages'));
             var messid = $(this).find('#msg-id').text()
-            var the_message
+
             for(var j in messages){
                 if(messages[j]['msgid']==messid){
-                    the_message = messages[j];
+                    var the_message = messages[j];
                 }
             }
             var from = the_message['fromAddress']
@@ -143,6 +143,18 @@
             $("#mess-body").html(body)
             $("#mess-date").html(date)
             $("#mess-from").html(from)
+
+            if( the_message['read'] === 1 ) return ;
+            APIcal({
+                url: 'getInboxMessageByID',
+                data: {
+                    msgid: messid,
+                    read: true
+                },
+                callBack: function(){
+                    inboxMessages();
+                }
+            });
         })
 
         $("#chan-form").submit(function(e){
