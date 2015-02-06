@@ -115,15 +115,19 @@
 
         $("#chan-form").submit(function(e){
             e.preventDefault();
-            var form_data = $("#chan_name").val();
             var info = {}
-            info['token'] = $.cookie( 'token' )
-            info['form'] = form_data
+            info['form'] = $("#chan_name").val();
             $( '#chan-form' ).trigger('reset')
-            $.post('/bmapi/create_chan', JSON.stringify(info), function(data){
-                $.scope.chans.push(data)
-                $('#create_chan').modal('toggle');
-            })
+            APIcal({
+                url: 'create_chan',
+                data: info,
+                callBack: function(data){
+                    $.scope.chans.push(data)
+                    $.scope.post_chan_list.push(data)
+                    $('#create_chan').modal('toggle');
+
+                }
+            });            
         })
 
 
