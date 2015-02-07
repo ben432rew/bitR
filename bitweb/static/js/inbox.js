@@ -337,6 +337,7 @@
                 url: 'addAddressEntry',
                 data: formData,
                 callBack: function( data ){
+                    console.log( formData )
                     $.scope.addressBook.push( formData );
                 }
             });
