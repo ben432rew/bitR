@@ -120,7 +120,7 @@ class getSentMessageByUser( View ):
 class JoinChan( View ):
     def post( self, request ):
         chan = Chan_subscriptions.objects.create( user=request.json['_user'], label=request.json['label'], address=request.json['address'] )
-        BMclient.call( 'addSubscription', chan.address, chan.label )
+        BMclient.call( 'addSubscription', chan.address, BMclient._encode( chan.label  ))
         return JsonResponse( { 'chan_label' : chan.label } )
 
 

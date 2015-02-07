@@ -12,9 +12,7 @@
             success: args.callBack,
             statusCode: {
                 401: function(){
-                    alert( "Token expired" );
-                    $.removeCookie('token');
-                    window.location.replace('/')
+                    window.location.replace('/bmapi/logout?message=Expired')
                 },
                 500: function(){
                     alert( "Sever Error" );
@@ -255,8 +253,6 @@
             var info = {
                 msgid: $( '#mess-id' ).val()
             }
-
-            console.log(info)
             APIcal({
                 url: 'deleteInboxmessage',
                 data: info,
@@ -322,9 +318,6 @@
             var val = '.' + $( this ).parent().attr('data-iden-key')
             $( val ).toggle()
         })
-
-            $('')
-
 
         $('#identityDrop').on( 'click', function(){
             $( this ).addClass( 'btn-material-blue-grey-100' )
