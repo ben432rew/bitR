@@ -48,7 +48,6 @@ class Logout( View ):
 
 
 class CreateChan( View ):
-
     def post( self, request ):
         passphrase = request.json['form']
         chan = BMclient.call('createChan', BMclient._encode(passphrase))
@@ -132,13 +131,13 @@ class AllChans( View ):
 
 class DeleteInboxMessage( View ):
     def post( self, request ):
-        res = BMclient.api.trashInboxMessage( request.json['msgid']  )
+        BMclient.api.trashInboxMessage( request.json['msgid']  )
         return JsonResponse( {} )
 
 
 class DeleteSentMessage( View ):
     def post( self, request ):
-        res = BMclient.api.trashInboxMessage( request.json['msgid']  )
+        BMclient.api.trashInboxMessage( request.json['msgid']  )
         return JsonResponse( {} )
 
 
@@ -147,6 +146,35 @@ class getInboxMessageByID( View ):
         res = BMclient.api.getInboxMessageByID( request.json['msgid'], request.json['read'] )
         pprint(res)
         return JsonResponse( {} )
+
+
+class addAddressEntry( View ):
+    def post( self, request ):
+        if Address_entry.objects.filter( user=request.json['_user'], address=request.json['address'] ).exists():
+            return JsonResponse( { 'error': 'Address already exists.' } )
+
+        Address_entry.objects.create(
+            user=request.json['_user'],
+            name=request.json['name'],
+            address=request.json['address']
+        )
+
+        return JsonResponse ( {} )
+
+
+class deleteAddressEntry( View ):
+    def post( self, request ):
+        if Address_entry.objects.filter( user=request.json['_user'], address=request.json['address'] ).exists():
+            Address_entry.objects.get( user=request.json['_user'], address=request.json['address'] ).delete()
+
+            return JsonResponse( {} )
+
+        
+class GetAddressBook( View ):
+    def post( self, request ):
+        books = [ {'address': book.address, 'name': book.name} for book in Address_entry.objects.filter( user=request.json['_user'] ) ]
+        
+        return JsonResponse( { 'book': books } )
 
 
 #for searching in the current emails a user has
