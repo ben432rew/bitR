@@ -16,18 +16,18 @@
 				<h3><span class="label label-default col-md-3">Time</span></h3>
 			</div>
 			<div class="row">	
-				<ul id ='inbox-list'>
-				{% verbatim %}
-				<li jq-repeat="inbox" class = "new-message row {{toAddress}}" style="background-color:{{ color }}">
-				<a href="#">
-					<p hidden id="msg-id">{{ msgid }}</p>
-					<div class = "col-xs-3 " >{{fromaddress }}</div>
-					<div class = "col-xs-3" >{{ toaddress }}</div>
-					<div class = "col-xs-3 " ><b>{{ inboxsubject }}</b> : {{ inboxmessage }} </div>
-					<div class = "col-xs-3 message-date" >  {{ receivedTime }}</div>
-				</a>
-				</li>
-				{% endverbatim %}
+				<ul id='inbox-list'>
+					{% verbatim %}
+					<li jq-repeat="inbox" class="new-message row {{toAddress}}" style="background-color:{{ color }}">
+						<a href="#">
+							<p hidden id="msg-id">{{ msgid }}</p>
+							<div class="col-xs-3">{{fromaddress }}</div>
+							<div class="col-xs-3">{{ toaddress }}</div>
+							<div class="col-xs-3"><b>{{ inboxsubject }}</b> : {{ inboxmessage }}</div>
+							<div class="col-xs-3 message-date">  {{ receivedTime }}</div>
+						</a>
+					</li>
+					{% endverbatim %}
 				</ul>
 			</div>
 		</div>

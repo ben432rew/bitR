@@ -98,7 +98,6 @@
         APIcal({
             url: 'GetAddressBook',
             callBack: function( data ){
-                console.log( data['book'] )
                 $.scope.addressBook.push.apply( $.scope.addressBook, data['book'] )
             }
         });
@@ -244,7 +243,6 @@
             APIcal({
                 url: 'send',
                 data: info,
-                callBack: function(){}
             });
         })
 
@@ -258,7 +256,6 @@
             APIcal({
                 url: 'send',
                 data: info,
-                callBack: function(){}
             });
         })
 
