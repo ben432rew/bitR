@@ -146,7 +146,7 @@ class getInboxMessageByID( View ):
         res = BMclient.api.getInboxMessageByID( request.json['msgid'], request.json['read'] )
         pprint(res)
         return JsonResponse( {} )
-        
+
 
 class addAddressEntry( View ):
     def post( self, request ):
@@ -172,9 +172,9 @@ class deleteAddressEntry( View ):
         
 class GetAddressBook( View ):
     def post( self, request ):
-        book = Address_entry.objects.filter( user=request.json['_user'] )
-
-        return JsonResponse( { 'book': book } )
+        books = [ {'address': book.address, 'name': book.name} for book in Address_entry.objects.filter( user=request.json['_user'] ) ]
+        
+        return JsonResponse( { 'book': books } )
 
 
 #for searching in the current emails a user has

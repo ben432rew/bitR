@@ -18,7 +18,9 @@
                 </form>
                 <ul>
                     <li jq-repeat="addressBook">
+                        {% verbatim %}
                         <i>{{ name }}</i>:<b> {{ address }}</b>
+                        {% endverbatim %}
                     </li>
                 </ul>
             </div>

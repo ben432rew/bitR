@@ -94,7 +94,19 @@
         $('#inbox-mess').show();
     };
 
+    var addressesBook = function(){
+        APIcal({
+            url: 'GetAddressBook',
+            callBack: function( data ){
+                console.log( data['book'] )
+                $.scope.addressBook.push.apply( $.scope.addressBook, data['book'] )
+            }
+        });
+    };
+
     $(document).ready(function(){
+
+        addressesBook();
 
         $.scope.inbox.__put = function(){
             this.slideDown();
@@ -337,7 +349,6 @@
                 url: 'addAddressEntry',
                 data: formData,
                 callBack: function( data ){
-                    console.log( formData )
                     $.scope.addressBook.push( formData );
                 }
             });
