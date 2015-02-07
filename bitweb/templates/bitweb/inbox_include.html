@@ -21,8 +21,8 @@
 					<li jq-repeat="inbox" class="new-message row {{toAddress}}" style="background-color:{{ color }}">
 						<a href="#">
 							<p hidden id="msg-id">{{ msgid }}</p>
-							<div class="col-xs-3">{{fromaddress }}</div>
-							<div class="col-xs-3">{{ toaddress }}</div>
+							<div class="col-xs-3 addyBook">{{fromaddress }}</div>
+							<div class="col-xs-3 addyBook">{{ toaddress }}</div>
 							<div class="col-xs-3"><b>{{ inboxsubject }}</b> : {{ inboxmessage }}</div>
 							<div class="col-xs-3 message-date">  {{ receivedTime }}</div>
 						</a>

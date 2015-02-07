@@ -22,6 +22,16 @@
         });
     };
 
+    var StringShorter = function( string, len ){
+        len = ( len || 15 ) - 3
+
+        if ( (string).length>=len ){
+            string = (string.slice(0,15) +"...");
+        }
+
+        return string;
+    };
+
     var inboxMessages = function(){
         $('.inbox-bucket').children().hide();
         $.scope.inbox.splice(0);
@@ -30,14 +40,6 @@
         var convertUnixTime = function(data){
             var date = new Date(data*1000);
             return(String(date).slice(16,21)+"  "+String(date).slice(0,15))
-        };
-        var StringShorter=function(string){
-            if ( (string).length>=15){
-                return (string.slice(0,15) +"...");
-            }
-            else{
-                return string;
-            }
         };
         var MessageShorter=function(string){
             if ( (string).length>=12){
@@ -65,8 +67,8 @@
                 data['messages'].forEach(function(value) {
                     value['data'].forEach(function(value){
                         value['receivedTime'] = convertUnixTime(value['receivedTime'])
-                        value['fromaddress'] = StringShorter(value['fromAddress'])
-                        value['toaddress'] = StringShorter(value['toAddress'])
+                        value['fromaddress'] = value['fromAddress']
+                        value['toaddress'] = value['toAddress']
                         value['inboxmessage'] = MessageShorter(value['message'])
                         value['inboxsubject'] = MessageShorter(value['subject'])
                         value['color'] = SetColor(value['read'])
@@ -90,7 +92,6 @@
             }
         });
 
-
         $('#inbox-mess').show();
     };
 
@@ -100,11 +101,34 @@
             callBack: function( data ){
                 $.scope.addressBook.push.apply( $.scope.addressBook, data['book'] )
             }
+        }).done(function(){
+             $(document).on('DOMNodeInserted', function(event) {
+                if ( $( event.target ).is('.addyBook') ){
+                    processAddy( $( this ) );
+                }else{
+                    var t = $(event.target).find('.addyBook');
+                    t.each(function(key, value){
+                        processAddy( $( value ) );
+                    });
+                }
+            });
         });
     };
 
-    $(document).ready(function(){
+    var processAddy = function( $element ){
+        var address = $element.html();
+        var index = $.scope.addressBook.indexOf( 'address', address );
+        if( index === -1 ){
+            address = StringShorter( address ) ;
+        } else {
+            address = $.scope.addressBook[index]['name'];
+        }
+        
+        $element.html( address );
+    }
 
+    $(document).ready(function(){
+        
         addressesBook();
 
         $.scope.inbox.__put = function(){
@@ -341,7 +365,7 @@
 
         $('[name="addAddressEntry"]').on( 'submit', function( event ){
             event.preventDefault();
-            var formData = $(this).serializeObject();
+            var formData = $( this ).serializeObject();
             APIcal({
                 url: 'addAddressEntry',
                 data: formData,
