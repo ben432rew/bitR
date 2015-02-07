@@ -64,7 +64,7 @@
 					<p>Primary</p>
 				</div>
 				<div class="dropdown btn-group" role="group">
-				  <button id="chanss" data-toggle="dropdown"  class="btn dropdown-toggle col-md-offset-2 col-md-offset-6"  data-placeholder="No Chan Selected">No Chan Selected<span class="caret"></span></button>
+				  <button id="chan_tab" data-toggle="dropdown"  class="btn dropdown-toggle col-md-offset-2 col-md-offset-6"  data-placeholder="No Chan Selected">No Chan Selected<span class="caret"></span></button>
 					<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
 						{% verbatim %}
 							<li jq-repeat="chans"><input type="checkbox" id="{{ chan_label }}"><label for="{{ chan_label }}">{{ chan_label }}</label></li>
@@ -88,7 +88,7 @@
 	{% include "bitweb/id_modal.html" %}
 
 <!-- new chan modal -->
-	{% include "bitweb/chan_modal.html" %}	
+	{% include "bitweb/create_chan_modal.html" %}	
 
 <!-- compose modal -->
 	{% include "bitweb/send_modal.html" %}

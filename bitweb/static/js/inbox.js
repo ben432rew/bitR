@@ -32,7 +32,6 @@
         APIcal({
             url: 'allmessages',
             callBack: function( data ){
-                console.log(data)
                 chan_addresses = data['chans']
                 data['messages'].forEach(function(value) {
                     value['data'].forEach(function(value){
@@ -109,6 +108,7 @@
             var subject = $(this).find('.message-subject').text()
             var date = $(this).find('.message-date').text()
             $("#mess_view_modal").modal("toggle")
+            $("#mess-id").val($(this).find('#msg-id').text())
             $("#mess-subject").html(subject)
             $("#mess-body").html(body)
             $("#mess-date").html(date)
@@ -136,14 +136,19 @@
 
         $("#chan-form").submit(function(e){
             e.preventDefault();
-            var form_data = $("#chan_name").val();
             var info = {}
-            info['token'] = $.cookie( 'token' )
-            info['form'] = form_data
-            $.post('/bmapi/create_chan', JSON.stringify(info), function(data){
-                $.scope.chans.push(data)
-                $('#create_chan').modal('toggle');
-            })
+            info['form'] = $("#chan_name").val();
+            $( '#chan-form' ).trigger('reset')
+            APIcal({
+                url: 'create_chan',
+                data: info,
+                callBack: function(data){
+                    $.scope.chans.push(data)
+                    $.scope.post_chan_list.push(data)
+                    $('#create_chan').modal('toggle');
+
+                }
+            });            
         })
 
 
@@ -168,12 +173,14 @@
                 data: {
                     identity: $( '#identity_name' ).val()
                 },
+
                 callBack:function (data){
                     // error check might not be needed...
                     if ( 'error' in data ){
                     } else {
                         $.scope.identities.push( { identity: $( '#identity_name' ).val() } );
                     }
+                    $( '#create_id_form' ).trigger('reset')
                 }
             })
         })
@@ -184,6 +191,7 @@
             info['from'] = $( '#from_addy' ).val();
             info['subject'] = $( '#subject' ).val();
             info['message'] = $( '#message' ).val();
+            $( '#compose_msg_form' ).trigger('reset')
             APIcal({
                 url: 'send',
                 data: info,
@@ -197,6 +205,7 @@
             info['from'] = $( '#chan_post_list' ).val();
             info['subject'] = $( '#post_subject' ).val();
             info['message'] = $( '#post_message' ).val();
+            $( '#post_chan_form' ).trigger('reset')
             APIcal({
                 url: 'send',
                 data: info,
@@ -204,12 +213,28 @@
             });
         })
 
+        $( '#delete_msg' ).click(function() {
+            var info = {
+                msgid: $( '#mess-id' ).val()
+            }
+
+            console.log(info)
+            APIcal({
+                url: 'deleteInboxmessage',
+                data: info,
+                callBack: function(){
+                    inboxMessages()
+                }
+            });
+        });
+
         $( '#sub_chan_btn' ).click(function() {
             var info = {}
             info['label'] = $( '#chan_label' ).val();
             info['address'] = $( '#chan_addy' ).val();
             APIcal({
                 url: 'joinchan',
+                data: info,
                 callBack: function (data){
                     if ( 'error' in data ){
                     } else {
@@ -217,11 +242,6 @@
                     }
                 }
             })
-        })
-
-        $( '#create_chan_button' ).click(function() {
-    // send json to createchan function
-    // set new chan as active chan in chan tab
         })
 
         $('.inbox-nav').on( 'click', 'button#sent', function(){
@@ -237,10 +257,11 @@
                     } );
                 }
             })
+            sessionStorage.setItem('sentMessages', JSON.stringify($.scope.sent));
             $('#sent-mess').show()
         } );
 
-        $('#chanss').on( 'click', function(){
+        $('#chan_tab').on( 'click', function(){
             $( this ).toggleClass( 'btn-material-blue-grey-100' )
             $( '#primary-tab' ).toggleClass( 'btn-material-blue-grey-100' )
             $('.inbox-bucket').children().hide()
@@ -252,7 +273,7 @@
 
         $('#primary-tab').on( 'click', function(){
             $( this ).toggleClass( 'btn-material-blue-grey-100' )
-            $( '#chanss' ).toggleClass( 'btn-material-blue-grey-100' )
+            $( '#chan_tab' ).toggleClass( 'btn-material-blue-grey-100' )
             inboxMessages()
         } );
 

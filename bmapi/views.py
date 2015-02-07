@@ -136,6 +136,15 @@ class AllChans( View ):
         return JsonResponse( {'chans':chans} )
 
 
+class DeleteInboxMessage( View ):
+    def post( self, request ):
+        res = BMclient.api.trashInboxMessage( request.json['msgid']  )
+        return JsonResponse( {} )
+
+class DeleteSentMessage( View ):
+    def post( self, request ):
+        res = BMclient.api.trashInboxMessage( request.json['msgid']  )
+        return JsonResponse( {} )
 #for searching in the current emails a user has
 class Search( View ):
     pass
@@ -166,16 +175,6 @@ class Trash( View ):
 #         the_jason = json.loads(request.body.decode('utf-8'))
 #         address = the_json['address']
 #         return JsonResponse( { 'id' : self.api.deleteAddress(address) } )
-
-
-# class CreateChan( View ):
-
-#     def post( self, request ):
-#         the_jason = json.loads(request.body.decode('utf-8'))
-#         passphrase = the_json['passphrase']
-#         return JsonResponse( { 'chan_address' : self.api.createChan(passphrase) } )
-
-
 
 
 # class LeaveChan( View ):
