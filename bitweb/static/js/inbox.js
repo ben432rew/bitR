@@ -1,18 +1,19 @@
 ( function( $ ){
-    'use strict';
+     "use strict";
 
     var APIcal = function( args ){
-        var data = args.data || {}
-        data = $.extend( {}, { 'token': $.cookie( 'token' ) }, data )
+        var data = args.data || {};
+        data = $.extend( {}, { 'token': $.cookie( 'token' ) }, data );
+        var callBack = args.callBack || function(){};
 
-        $.ajax({
+        return $.ajax({
             url: '/bmapi/' + args.url,
             type: 'POST',
             data: JSON.stringify( data ),
-            success: args.callBack,
+            success: callBack,
             statusCode: {
                 401: function(){
-                    window.location.replace('/bmapi/logout?message=Expired')
+                    window.location.replace('/bmapi/logout?message=Expired');
                 },
                 500: function(){
                     alert( "Sever Error" );
@@ -29,7 +30,7 @@
         var convertUnixTime = function(data){
             var date = new Date(data*1000);
             return(String(date).slice(16,21)+"  "+String(date).slice(0,15))
-        }
+        };
         var StringShorter=function(string){
             if ( (string).length>=15){
                 return (string.slice(0,15) +"...");
@@ -37,7 +38,7 @@
             else{
                 return string;
             }
-        }
+        };
         var MessageShorter=function(string){
             if ( (string).length>=12){
                 return (string.slice(0,11) +"...");
@@ -45,15 +46,15 @@
             else{
                 return string;
             }
-        }
+        };
         var SetColor = function(read){
              if (read === 1){
-                return("#cfd8dc")
+                return("#cfd8dc");
             }
             else {
-                return('#eee')
+                return('#eee');
             }
-        }
+        };
 
 
         var chan_addresses;
