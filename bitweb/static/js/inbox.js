@@ -1,20 +1,19 @@
 ( function( $ ){
-    'use strict';
+     "use strict";
 
     var APIcal = function( args ){
-        var data = args.data || {}
-        data = $.extend( {}, { 'token': $.cookie( 'token' ) }, data )
+        var data = args.data || {};
+        data = $.extend( {}, { 'token': $.cookie( 'token' ) }, data );
+        var callBack = args.callBack || function(){};
 
-        $.ajax({
+        return $.ajax({
             url: '/bmapi/' + args.url,
             type: 'POST',
             data: JSON.stringify( data ),
-            success: args.callBack,
+            success: callBack,
             statusCode: {
                 401: function(){
-                    alert( "Token expired" );
-                    $.removeCookie('token');
-                    window.location.replace('/')
+                    window.location.replace('/bmapi/logout?message=Expired');
                 },
                 500: function(){
                     alert( "Sever Error" );
@@ -27,6 +26,36 @@
         $('.inbox-bucket').children().hide();
         $.scope.inbox.splice(0);
         $.scope.chan_inbox.splice(0);
+    
+        var convertUnixTime = function(data){
+            var date = new Date(data*1000);
+            return(String(date).slice(16,21)+"  "+String(date).slice(0,15))
+        };
+        var StringShorter=function(string){
+            if ( (string).length>=15){
+                return (string.slice(0,15) +"...");
+            }
+            else{
+                return string;
+            }
+        };
+        var MessageShorter=function(string){
+            if ( (string).length>=12){
+                return (string.slice(0,11) +"...");
+            }
+            else{
+                return string;
+            }
+        };
+        var SetColor = function(read){
+             if (read === 1){
+                return("#cfd8dc");
+            }
+            else {
+                return('#eee');
+            }
+        };
+
 
         var chan_addresses;
         APIcal({
@@ -35,13 +64,18 @@
                 chan_addresses = data['chans']
                 data['messages'].forEach(function(value) {
                     value['data'].forEach(function(value){
-                        if (value['read'] == 1){
-                            value['color'] = "blue"
-                        }
-                        else {
-                            value['color'] = 'white'
-                        }
-                        if ( chan_addresses.indexOf(value['toAddress']) != -1){ 
+                        value['receivedTime'] = convertUnixTime(value['receivedTime'])
+                        value['fromaddress'] = StringShorter(value['fromAddress'])
+                        value['toaddress'] = StringShorter(value['toAddress'])
+                        value['inboxmessage'] = MessageShorter(value['message'])
+                        value['inboxsubject'] = MessageShorter(value['subject'])
+                        value['color'] = SetColor(value['read'])
+                        if ( chan_addresses.indexOf(value['toAddress']) != -1){
+                            var index = $.scope.chans.indexOf("chan_address", value['toAddress'])
+                            if(value['toAddress'] == value['fromAddress']){
+                                value['fromAddress'] = "Anonymous"
+                            }
+                            value['chan'] = ($.scope.chans[index])['chan_label'];
                             $.scope.chan_inbox.push(value);
                         } else {
                             $.scope.inbox.push(value);
@@ -49,6 +83,10 @@
                     });
                 });
                 sessionStorage.setItem('inboxMessages', JSON.stringify($.scope.inbox));
+                sessionStorage.setItem('chanMessages', JSON.stringify($.scope.chan_inbox));
+                if ( $('#identityDrop').text() == 'Mail: No Identitites Selected ') {
+                    $('#inbox-list > li').hide()
+                }
             }
         });
 
@@ -56,7 +94,19 @@
         $('#inbox-mess').show();
     };
 
+    var addressesBook = function(){
+        APIcal({
+            url: 'GetAddressBook',
+            callBack: function( data ){
+                console.log( data['book'] )
+                $.scope.addressBook.push.apply( $.scope.addressBook, data['book'] )
+            }
+        });
+    };
+
     $(document).ready(function(){
+
+        addressesBook();
 
         $.scope.inbox.__put = function(){
             this.slideDown();
@@ -100,36 +150,33 @@
 
         $('#inbox-list').on('click', '.new-message', function(e){
             e.preventDefault();
-            var classes = $(this).attr('class').split(/\s+/)
-            var from = classes[2].slice(5, -1)
-            var to = classes[3].slice(3, -1)
-            console.log(to)
-            var body = $(this).find('.message-body').text()
-            var subject = $(this).find('.message-subject').text()
-            var date = $(this).find('.message-date').text()
+            var messages = JSON.parse(sessionStorage.getItem('inboxMessages'));
+            var messid = $(this).find('#msg-id').text()
+
+            for(var j in messages){
+                if(messages[j]['msgid']==messid){
+                    var the_message = messages[j];
+                }
+            }
+            var from = the_message['fromAddress']
+            var body = the_message['message']
+            var subject = the_message['subject']
+            var date = the_message['receivedTime']
             $("#mess_view_modal").modal("toggle")
             $("#mess-id").val($(this).find('#msg-id').text())
             $("#mess-subject").html(subject)
             $("#mess-body").html(body)
             $("#mess-date").html(date)
             $("#mess-from").html(from)
-            $("#mess-to").html(to)
-        })
-
-        $( '#mess-view-form' ).submit(function(e) {
-            e.preventDefault();
-            var info = {}
-            info['from'] = $( '#mess-to' ).html();
-            info['to_address'] = $( '#mess-from' ).text();
-            info['subject'] = "RE:" + $( '#mess-subject' ).text();
-            info['message'] = $( '#mess-reply' ).val();
-            console.log(info)
+            if( the_message['read'] === 1 ) return ;
             APIcal({
-                url: 'send',
-                data: info,
-                callBack: function(data){
-                    console.log(data)
-                    $("#mess_view_modal").modal("toggle")
+                url: 'getInboxMessageByID',
+                data: {
+                    msgid: messid,
+                    read: true
+                },
+                callBack: function(){
+                    inboxMessages();
                 }
             });
         })
@@ -162,6 +209,7 @@
                         $.scope.chans.push(value)
                         $.scope.post_chan_list.push(value)
                     })
+                    sessionStorage.setItem('chanNameList', JSON.stringify($.scope.chans));
                 }
             }
         });
@@ -217,8 +265,6 @@
             var info = {
                 msgid: $( '#mess-id' ).val()
             }
-
-            console.log(info)
             APIcal({
                 url: 'deleteInboxmessage',
                 data: info,
@@ -239,6 +285,7 @@
                     if ( 'error' in data ){
                     } else {
                         $.scope.chans.push(data);
+                        $.scope.post_chan_list.push(data)
                     }
                 }
             })
@@ -254,32 +301,57 @@
                         value['data'].forEach(function(value){
                             $.scope.sent.push(value);
                         } );
+                        sessionStorage.setItem('sentMessages', JSON.stringify($.scope.sent));
                     } );
                 }
             })
-            sessionStorage.setItem('sentMessages', JSON.stringify($.scope.sent));
             $('#sent-mess').show()
         } );
 
         $('#chan_tab').on( 'click', function(){
-            $( this ).toggleClass( 'btn-material-blue-grey-100' )
-            $( '#primary-tab' ).toggleClass( 'btn-material-blue-grey-100' )
+            $( this ).addClass( 'btn-material-blue-grey-100' )
+            $( '#identityDrop' ).removeClass( 'btn-material-blue-grey-100' )
             $('.inbox-bucket').children().hide()
             $('#chan_mess').show()
+            if ( $('#chan_tab').text() == 'No Chans Selected ') {
+                // $('#chan_ul_inbox_well > div').hide()
+            }
+          
         })
-        
-            $('')
 
+        $('#chan_ul').on( 'click', 'li.jq-repeat-chans > label', function(){
+            var selected_chans = $('#chan_tab').text()
+            var val = '.' + $( this ).parent().attr('data-chan-add')
+            $( val ).toggle()
+        })
 
-        $('#primary-tab').on( 'click', function(){
-            $( this ).toggleClass( 'btn-material-blue-grey-100' )
-            $( '#chan_tab' ).toggleClass( 'btn-material-blue-grey-100' )
+        $('#id_ul').on( 'click', 'li.jq-repeat-identities > label', function(){
+            var selected_identities = $('#identityDrop').text()
+            var val = '.' + $( this ).parent().attr('data-iden-key')
+            $( val ).toggle()
+        })
+
+        $('#identityDrop').on( 'click', function(){
+            $( this ).addClass( 'btn-material-blue-grey-100' )
+            $( '#chan_tab' ).removeClass( 'btn-material-blue-grey-100' )
             inboxMessages()
         } );
 
         $('.inbox-nav').on( 'click', 'button#inbox', function(){
             inboxMessages()
         } );
+
+        $('[name="addAddressEntry"]').on( 'submit', function( event ){
+            event.preventDefault();
+            var formData = $(this).serializeObject();
+            APIcal({
+                url: 'addAddressEntry',
+                data: formData,
+                callBack: function( data ){
+                    $.scope.addressBook.push( formData );
+                }
+            });
+        });
     
     } );
 

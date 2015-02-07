@@ -18,4 +18,8 @@ urlpatterns = patterns('',
     url(r'^joinchan', JoinChan.as_view() ),
     url(r'^deleteInboxmessage', DeleteInboxMessage.as_view() ),
     url(r'^deleteSentmessage', DeleteSentMessage.as_view() ),
+    url(r'^getInboxMessageByID', getInboxMessageByID.as_view() ),
+    url(r'^addAddressEntry', addAddressEntry.as_view() ),
+    url(r'^deleteAddressEntry', deleteAddressEntry.as_view() ),
+    url(r'^GetAddressBook', GetAddressBook.as_view() ), 
 )

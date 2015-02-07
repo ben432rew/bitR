@@ -14,13 +14,19 @@ class tokenAuth( object ):
         if path[1] != 'bmapi':
             return None
 
+
         if path[2] not in settings.SKIP_TOKEN_CHECK:
             request.json = json.loads( request.body.decode('utf-8') )
-            token = uuid.UUID( request.json['token'] )
+
+            token = request.json.get( 'token', False )
+            if not token:
+                return JsonResponse( { 'message': 'no token'}, status=401, content_type='application/json' )
+            token = uuid.UUID( token )
 
             if Token.objects.filter(token=token).exists():
                 token = Token.objects.get( token=token )
                 if token.created_at.toordinal() > ( datetime.now() - timedelta(days=1) ).toordinal():
                     request.json['_user'] = token.user
-                else:
-                    return JsonResponse( {}, status=401, content_type='application/json' )
+                    return None
+                    
+            return JsonResponse( {}, status=401, content_type='application/json' )

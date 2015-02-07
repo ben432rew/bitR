@@ -1,2 +1,20 @@
+#inbox-mess{
+	width: 100%;
+	margin-left:7%;
+}
+
+#table-head{
+	width: inherit;
+}
+
 .new-message {
+	list-style-type: none;
+}
+
+.new-message a div {
+	color:black;
+}
+#inbox-list{
+	padding-left: 1.8%;
+	padding-right: 5.2%;
 }

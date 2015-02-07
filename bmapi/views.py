@@ -13,10 +13,12 @@ from pprint import pprint
 import uuid
 import json
 
+
 def login_token(request, user):
     login(request, user)
     token = Token.objects.create(token = uuid.uuid4(), user = user)
     return JsonResponse({ 'token':str(token.token)})
+
 
 class Signup( View ):
     def post(self, request):
@@ -45,9 +47,7 @@ class Logout( View ):
         return redirect ( '/' )
 
 
-
 class CreateChan( View ):
-
     def post( self, request ):
         passphrase = request.json['form']
         chan = BMclient.call('createChan', BMclient._encode(passphrase))
@@ -98,7 +98,7 @@ class Send ( View ):
 class AllIdentitiesOfUser( View ):
     def post( self, request ):
         bitkeys = BitKey.objects.filter(user=request.json['_user'])
-        addresses = [ {'identity':bk.name} for bk in bitkeys ]
+        addresses = [ {'identity':bk.name, 'key':bk.key} for bk in bitkeys ]
         return JsonResponse( { 'addresses' : addresses } )
 
 
@@ -126,25 +126,64 @@ class getSentMessageByUser( View ):
 class JoinChan( View ):
     def post( self, request ):
         chan = Chan_subscriptions.objects.create( user=request.json['_user'], label=request.json['label'], address=request.json['address'] )
-        BMclient.call( 'addSubscription', chan.address, chan.label )
+        BMclient.call( 'addSubscription', chan.address, BMclient._encode( chan.label  ))
         return JsonResponse( { 'chan_label' : chan.label } )
 
 
 class AllChans( View ):
     def post( self, request ):
-        chans = [ { 'chan_label' : chan.label } for chan in Chan_subscriptions.objects.filter( user=request.json['_user'] )]
+        chans = [ { 'chan_label' : chan.label, 'chan_address':chan.address } for chan in Chan_subscriptions.objects.filter( user=request.json['_user'] )]
         return JsonResponse( {'chans':chans} )
 
 
 class DeleteInboxMessage( View ):
     def post( self, request ):
-        res = BMclient.api.trashInboxMessage( request.json['msgid']  )
+        BMclient.api.trashInboxMessage( request.json['msgid']  )
         return JsonResponse( {} )
+
 
 class DeleteSentMessage( View ):
     def post( self, request ):
-        res = BMclient.api.trashInboxMessage( request.json['msgid']  )
+        BMclient.api.trashInboxMessage( request.json['msgid']  )
         return JsonResponse( {} )
+
+
+class getInboxMessageByID( View ):
+    def post( self, request ):
+        res = BMclient.api.getInboxMessageByID( request.json['msgid'], request.json['read'] )
+        pprint(res)
+        return JsonResponse( {} )
+
+
+class addAddressEntry( View ):
+    def post( self, request ):
+        if Address_entry.objects.filter( user=request.json['_user'], address=request.json['address'] ).exists():
+            return JsonResponse( { 'error': 'Address already exists.' } )
+
+        Address_entry.objects.create(
+            user=request.json['_user'],
+            name=request.json['name'],
+            address=request.json['address']
+        )
+
+        return JsonResponse ( {} )
+
+
+class deleteAddressEntry( View ):
+    def post( self, request ):
+        if Address_entry.objects.filter( user=request.json['_user'], address=request.json['address'] ).exists():
+            Address_entry.objects.get( user=request.json['_user'], address=request.json['address'] ).delete()
+
+            return JsonResponse( {} )
+
+        
+class GetAddressBook( View ):
+    def post( self, request ):
+        books = [ {'address': book.address, 'name': book.name} for book in Address_entry.objects.filter( user=request.json['_user'] ) ]
+        
+        return JsonResponse( { 'book': books } )
+
+
 #for searching in the current emails a user has
 class Search( View ):
     pass
@@ -168,6 +207,7 @@ class Spam( View ):
 #get to see trash, post to trash or untrash something
 class Trash( View ):
     pass
+
 
 
 # class DeleteId( View ):

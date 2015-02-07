@@ -7,28 +7,40 @@
 		<button type="button" class="btn">Spam</button>
 		<button type="button" class="btn">Trash</button>
 	</div>
-	<div class="inbox-bucket col-md-8" >
+	<div class="inbox-bucket col-md-9" >
 		<div id="inbox-mess">
-			<ul id = 'inbox-list'>
-			{% verbatim %}
-			<div jq-repeat="inbox" class = "new-message row from-{{fromAddress}} to-{{toAddress}}" >
-				<p hidden id="msg-id">{{ msgid }}</p>
-				<div class = "col-xs-3 message-subject" >{{subject}}</div>
-				<div class = "col-xs-3 message-body" >{{message}}</div>
-				<div class = "col-xs-3 message-date" >{{receivedTime}}</div>
-				<div class = "col-xs-3 read-status" >{{color}}</div>
+			<div class="row" id="table-head">
+				<h3><span class="label label-default col-md-3">From</span></h3>
+				<h3><span class="label label-default col-md-3">To</span></h3>
+				<h3><span class="label label-default col-md-3">Message</span></h3>
+				<h3><span class="label label-default col-md-3">Time</span></h3>
 			</div>
-			{% endverbatim %}
-			</ul>
+			<div class="row">	
+				<ul id ='inbox-list'>
+				{% verbatim %}
+				<li jq-repeat="inbox" class = "new-message row {{toAddress}}" style="background-color:{{ color }}">
+				<a href="#">
+					<p hidden id="msg-id">{{ msgid }}</p>
+					<div class = "col-xs-3 " >{{fromaddress }}</div>
+					<div class = "col-xs-3" >{{ toaddress }}</div>
+					<div class = "col-xs-3 " ><b>{{ inboxsubject }}</b> : {{ inboxmessage }} </div>
+					<div class = "col-xs-3 message-date" >  {{ receivedTime }}</div>
+				</a>
+				</li>
+				{% endverbatim %}
+				</ul>
+			</div>
 		</div>
 		<div id="chan_mess">
-			<ul>
+			<ul id="chan_ul_inbox_well">
 			{% verbatim %}
 			<div jq-repeat="chan_inbox" class = "new-message row" >
-				<div class = "col-xs-3 " >Subject: {{subject}}</div>
-				<div class = "col-xs-3 " >Message: {{message}}</div>
-				<div class = "col-xs-3 message-date" >{{receivedTime}}</div>
-				<div class = "col-xs-3 read-status" >{{color}}</div>
+			<div class="jumbotron">
+				<h2>{{subject}}</h2>
+				<h5>Chan: {{chan}} | From: {{fromAddress}}</h5>
+				<p>{{message}}</p>
+				<p5 class="pull-right">{{receivedTime}}</p5>
+			</div>
 			</div>
 			{% endverbatim %}
 			</ul>
@@ -36,7 +48,7 @@
 		<div id = "sent-mess">
 			<ul>
 			{% verbatim %}
-				<li jq-repeat="sent">{{subject}}:{{ message }}</li>
+				<li jq-repeat="sent">{{subject}}:{{ message }} -{{fromAddress}}</li>
 			{% endverbatim %}
 			</ul>
 		</div>
