@@ -329,6 +329,18 @@
         $('.inbox-nav').on( 'click', 'button#inbox', function(){
             inboxMessages()
         } );
+
+        $('[name="addAddressEntry"]').on( 'submit', function( event ){
+            event.preventDefault();
+            var formData = $(this).serializeObject();
+            APIcal({
+                url: 'addAddressEntry',
+                data: formData,
+                callBack: function( data ){
+                    $.scope.addressBook.push( formData );
+                }
+            });
+        });
     
     } );
 

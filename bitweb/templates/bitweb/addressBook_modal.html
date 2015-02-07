@@ -6,16 +6,21 @@
                 <h4 class="modal-title">Address Book</h4>
             </div>
             <div class="modal-body">
-                <form>
+                <form name="addAddressEntry">
                   <div class="form-group">
                     <label>Name</label>
                     <input type="text" class="form-control" name="name" placeholder="Enter Name">                   
                     <label for="Identity Name">Address</label>
                     <input type="text" class="form-control" name="address" placeholder="BM-address">
                     <button type="button" class="btn" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-material-blue-grey-500" data-dismiss="modal">Add</button>
+                    <button type="submit" class="btn btn-material-blue-grey-500">Add</button>
                   </div>
                 </form>
+                <ul>
+                    <li jq-repeat="addressBook">
+                        <i>{{ name }}</i>:<b> {{ address }}</b>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
