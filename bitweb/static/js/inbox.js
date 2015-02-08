@@ -106,7 +106,7 @@
                 if ( $( event.target ).is('.addyBook') ){
                     processAddy( $( this ) );
                 }else{
-                    var t = $(event.target).find('.addyBook');
+                    var t = $( event.target ).find('.addyBook');
                     t.each(function(key, value){
                         processAddy( $( value ) );
                     });
@@ -116,6 +116,7 @@
     };
 
     var processAddy = function( $element ){
+        //console.log( $element )
         var address = $element.html();
         var index = $.scope.addressBook.indexOf( 'address', address );
         if( index === -1 ){
@@ -124,12 +125,15 @@
             address = $.scope.addressBook[index]['name'];
         }
         
-        $element.html( address );
+        return $element.html( address );
     }
 
     $(document).ready(function(){
         
         addressesBook();
+        $('.addyBook').on('change', function(){
+            console.log(arguments);
+        });
 
         $.scope.inbox.__put = function(){
             this.slideDown();
@@ -172,7 +176,9 @@
         });
 
         $('#inbox-list').on('click', '.new-message', function(e){
+            // what default?
             e.preventDefault();
+
             var messages = JSON.parse(sessionStorage.getItem('inboxMessages'));
             var messid = $(this).find('#msg-id').text()
 
@@ -190,7 +196,7 @@
             $("#mess-subject").html(subject)
             $("#mess-body").html(body)
             $("#mess-date").html(date)
-            $("#mess-from").html(from)
+            processAddy( $("#mess-from").html( from ) )
 
             if( the_message['read'] === 1 ) return ;
             APIcal({
