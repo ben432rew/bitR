@@ -1,5 +1,8 @@
+var addressLookup
 ( function( $ ){
-     "use strict";
+    "use strict";
+
+    addressLookup = []
 
     var APIcal = function( args ){
         var data = args.data || {};
@@ -100,6 +103,7 @@
             url: 'GetAddressBook',
             callBack: function( data ){
                 $.scope.addressBook.push.apply( $.scope.addressBook, data['book'] )
+                addressLookup.push.apply( addressLookup, data['book'] )
             }
         }).done(function(){
              $(document).on('DOMNodeInserted', function(event) {
@@ -118,11 +122,11 @@
     var processAddy = function( $element ){
         //console.log( $element )
         var address = $element.html();
-        var index = $.scope.addressBook.indexOf( 'address', address );
+        var index = $.scope.addressBook.indexOf.call( addressLookup, 'address', address );
         if( index === -1 ){
             address = StringShorter( address ) ;
         } else {
-            address = $.scope.addressBook[index]['name'];
+            address = addressLookup[index]['name'];
         }
         
         return $element.html( address );
@@ -131,9 +135,6 @@
     $(document).ready(function(){
         
         addressesBook();
-        $('.addyBook').on('change', function(){
-            console.log(arguments);
-        });
 
         $.scope.inbox.__put = function(){
             this.slideDown();
@@ -170,6 +171,10 @@
                     data['addresses'].forEach(function(value) {
                         $.scope.identities.push(value)
                         $.scope.senders.push(value)
+                        addressLookup.push({
+                            name: value['identity'],
+                            address: value['key']
+                        })
                     })
                 }
             }
@@ -209,7 +214,7 @@
                     inboxMessages();
                 }
             });
-        })
+        });
 
         $("#chan-form").submit(function(e){
             e.preventDefault();
@@ -238,6 +243,10 @@
                     data['chans'].forEach(function(value) {
                         $.scope.chans.push(value)
                         $.scope.post_chan_list.push(value)
+                        addressLookup.push({
+                            name: value['chan_label'],
+                            address: value['chan_address']
+                        })
                     })
                     sessionStorage.setItem('chanNameList', JSON.stringify($.scope.chans));
                 }
