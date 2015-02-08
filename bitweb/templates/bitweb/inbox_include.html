@@ -49,7 +49,7 @@
 		<div id = "sent-mess">
 			<ul>
 			{% verbatim %}
-				<li jq-repeat="sent">{{subject}}:{{ message }} -{{fromAddress}}</li>
+				<li jq-repeat="sent">{{subject}}:{{ message }} -{{fromAddress}} | {{ receivedTime }}</li>
 			{% endverbatim %}
 			</ul>
 		</div>

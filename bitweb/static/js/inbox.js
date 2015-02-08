@@ -1,3 +1,15 @@
+var convertUnixTime = function(data){
+        var date = new Date(data*1000);
+        return(String(date).slice(16,21)+"  "+String(date).slice(0,15))
+    };
+var MessageShorter=function(string){
+        if ( (string).length>=12){
+            return (string.slice(0,11) +"...");
+        }
+        else{
+            return string;
+        }
+    };
 var addressLookup
 ( function( $ ){
     "use strict";
@@ -40,20 +52,8 @@ var addressLookup
         $.scope.inbox.splice(0);
         $.scope.chan_inbox.splice(0);
     
-        var convertUnixTime = function(data){
-            var date = new Date(data*1000);
-            return(String(date).slice(16,21)+"  "+String(date).slice(0,15))
-        };
-        var MessageShorter=function(string){
-            if ( (string).length>=12){
-                return (string.slice(0,11) +"...");
-            }
-            else{
-                return string;
-            }
-        };
-        var SetColor = function(read){
-             if (read === 1){
+    var SetColor = function(read){
+            if (read === 1){
                 return("#cfd8dc");
             }
             else {
@@ -336,6 +336,13 @@ var addressLookup
                 callBack:function( data ){
                     data['messages'].forEach(function(value) {
                         value['data'].forEach(function(value){
+                            value['receivedTime'] = convertUnixTime(value['lastactiontime'])
+                            value['fromaddress'] = value['fromAddress']
+                            value['toaddress'] = value['toAddress']
+                            value['inboxmessage'] = MessageShorter(value['message'])
+                            value['inboxsubject'] = MessageShorter(value['subject'])
+                            // value['color'] = SetColor(value['read'])
+                            console.log(value)
                             $.scope.sent.push(value);
                         } );
                         sessionStorage.setItem('sentMessages', JSON.stringify($.scope.sent));
