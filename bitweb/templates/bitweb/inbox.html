@@ -4,9 +4,8 @@
 {% block title %}{{ user.username }} Inbox - {% endblock %}
 {% block header %}
     {% load staticfiles %}
-    <script src="{%static 'js/mustache.min.js' %}"></script>
-    <script src="http://ocean.718it.biz/jq-repeat/src/jq-repeat.js"></script>
-    <script src="{%static 'js/inbox.js' %}"></script>
+    <script src="http://ocean.718it.biz/jq-repeat/src/jq-repeat.js" defer></script>
+    <script src="{%static 'js/inbox.js' %}" defer></script>
 	<div class = "row">
 		<div class="col-md-10">
 			<div class="input-group">

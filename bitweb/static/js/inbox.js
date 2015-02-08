@@ -1,5 +1,8 @@
+var addressLookup
 ( function( $ ){
-     "use strict";
+    "use strict";
+
+    addressLookup = []
 
     var APIcal = function( args ){
         var data = args.data || {};
@@ -22,6 +25,16 @@
         });
     };
 
+    var StringShorter = function( string, len ){
+        len = ( len || 15 ) - 3
+
+        if ( (string).length>=len ){
+            string = (string.slice(0,15) +"...");
+        }
+
+        return string;
+    };
+
     var inboxMessages = function(){
         $('.inbox-bucket').children().hide();
         $.scope.inbox.splice(0);
@@ -30,14 +43,6 @@
         var convertUnixTime = function(data){
             var date = new Date(data*1000);
             return(String(date).slice(16,21)+"  "+String(date).slice(0,15))
-        };
-        var StringShorter=function(string){
-            if ( (string).length>=15){
-                return (string.slice(0,15) +"...");
-            }
-            else{
-                return string;
-            }
         };
         var MessageShorter=function(string){
             if ( (string).length>=12){
@@ -65,8 +70,8 @@
                 data['messages'].forEach(function(value) {
                     value['data'].forEach(function(value){
                         value['receivedTime'] = convertUnixTime(value['receivedTime'])
-                        value['fromaddress'] = StringShorter(value['fromAddress'])
-                        value['toaddress'] = StringShorter(value['toAddress'])
+                        value['fromaddress'] = value['fromAddress']
+                        value['toaddress'] = value['toAddress']
                         value['inboxmessage'] = MessageShorter(value['message'])
                         value['inboxsubject'] = MessageShorter(value['subject'])
                         value['color'] = SetColor(value['read'])
@@ -90,7 +95,6 @@
             }
         });
 
-
         $('#inbox-mess').show();
     };
 
@@ -98,14 +102,38 @@
         APIcal({
             url: 'GetAddressBook',
             callBack: function( data ){
-                console.log( data['book'] )
                 $.scope.addressBook.push.apply( $.scope.addressBook, data['book'] )
+                addressLookup.push.apply( addressLookup, data['book'] )
             }
+        }).done(function(){
+             $(document).on('DOMNodeInserted', function(event) {
+                if ( $( event.target ).is('.addyBook') ){
+                    processAddy( $( this ) );
+                }else{
+                    var t = $( event.target ).find('.addyBook');
+                    t.each(function(key, value){
+                        processAddy( $( value ) );
+                    });
+                }
+            });
         });
     };
 
-    $(document).ready(function(){
+    var processAddy = function( $element ){
+        //console.log( $element )
+        var address = $element.html();
+        var index = $.scope.addressBook.indexOf.call( addressLookup, 'address', address );
+        if( index === -1 ){
+            address = StringShorter( address ) ;
+        } else {
+            address = addressLookup[index]['name'];
+        }
+        
+        return $element.html( address );
+    }
 
+    $(document).ready(function(){
+        
         addressesBook();
 
         $.scope.inbox.__put = function(){
@@ -143,13 +171,19 @@
                     data['addresses'].forEach(function(value) {
                         $.scope.identities.push(value)
                         $.scope.senders.push(value)
+                        addressLookup.push({
+                            name: value['identity'],
+                            address: value['key']
+                        })
                     })
                 }
             }
         });
 
         $('#inbox-list').on('click', '.new-message', function(e){
+            // what default?
             e.preventDefault();
+
             var messages = JSON.parse(sessionStorage.getItem('inboxMessages'));
             var messid = $(this).find('#msg-id').text()
 
@@ -167,7 +201,7 @@
             $("#mess-subject").html(subject)
             $("#mess-body").html(body)
             $("#mess-date").html(date)
-            $("#mess-from").html(from)
+            processAddy( $("#mess-from").html( from ) )
 
             if( the_message['read'] === 1 ) return ;
             APIcal({
@@ -180,7 +214,7 @@
                     inboxMessages();
                 }
             });
-        })
+        });
 
         $("#chan-form").submit(function(e){
             e.preventDefault();
@@ -209,6 +243,10 @@
                     data['chans'].forEach(function(value) {
                         $.scope.chans.push(value)
                         $.scope.post_chan_list.push(value)
+                        addressLookup.push({
+                            name: value['chan_label'],
+                            address: value['chan_address']
+                        })
                     })
                     sessionStorage.setItem('chanNameList', JSON.stringify($.scope.chans));
                 }
@@ -244,7 +282,6 @@
             APIcal({
                 url: 'send',
                 data: info,
-                callBack: function(){}
             });
         })
 
@@ -258,7 +295,6 @@
             APIcal({
                 url: 'send',
                 data: info,
-                callBack: function(){}
             });
         })
 
@@ -344,7 +380,7 @@
 
         $('[name="addAddressEntry"]').on( 'submit', function( event ){
             event.preventDefault();
-            var formData = $(this).serializeObject();
+            var formData = $( this ).serializeObject();
             APIcal({
                 url: 'addAddressEntry',
                 data: formData,
