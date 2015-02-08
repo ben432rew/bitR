@@ -47,6 +47,12 @@
 			</ul>
 		</div>
 		<div id = "sent-mess">
+			<div class="row" id="table-head">
+				<h3><span class="label label-default col-md-3">From</span></h3>
+				<h3><span class="label label-default col-md-3">To</span></h3>
+				<h3><span class="label label-default col-md-3">Message</span></h3>
+				<h3><span class="label label-default col-md-3">Time</span></h3>
+			</div>
 			<ul>
 			{% verbatim %}
 					<li jq-repeat="sent" class="new-message row {{toAddress}}" style="background-color:{{ color }}">
