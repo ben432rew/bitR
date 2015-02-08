@@ -3,8 +3,8 @@ var convertUnixTime = function(data){
         return(String(date).slice(16,21)+"  "+String(date).slice(0,15))
     };
 var MessageShorter=function(string){
-        if ( (string).length>=12){
-            return (string.slice(0,11) +"...");
+        if ( (string).length>=10){
+            return (string.slice(0,9) +"...");
         }
         else{
             return string;
@@ -342,7 +342,6 @@ var addressLookup
                             value['inboxmessage'] = MessageShorter(value['message'])
                             value['inboxsubject'] = MessageShorter(value['subject'])
                             // value['color'] = SetColor(value['read'])
-                            console.log(value)
                             $.scope.sent.push(value);
                         } );
                         sessionStorage.setItem('sentMessages', JSON.stringify($.scope.sent));
