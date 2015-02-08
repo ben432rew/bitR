@@ -44,14 +44,7 @@ var addressLookup
             var date = new Date(data*1000);
             return(String(date).slice(16,21)+"  "+String(date).slice(0,15))
         };
-        var MessageShorter=function(string){
-            if ( (string).length>=12){
-                return (string.slice(0,11) +"...");
-            }
-            else{
-                return string;
-            }
-        };
+
         var SetColor = function(read){
              if (read === 1){
                 return("#cfd8dc");
@@ -72,8 +65,8 @@ var addressLookup
                         value['receivedTime'] = convertUnixTime(value['receivedTime'])
                         value['fromaddress'] = value['fromAddress']
                         value['toaddress'] = value['toAddress']
-                        value['inboxmessage'] = MessageShorter(value['message'])
-                        value['inboxsubject'] = MessageShorter(value['subject'])
+                        value['inboxmessage'] = StringShorter( value['message'], 12 )
+                        value['inboxsubject'] = StringShorter( value['subject'], 12 )
                         value['color'] = SetColor(value['read'])
                         if ( chan_addresses.indexOf(value['toAddress']) != -1){
                             var index = $.scope.chans.indexOf("chan_address", value['toAddress'])
@@ -108,28 +101,30 @@ var addressLookup
         }).done(function(){
              $(document).on('DOMNodeInserted', function(event) {
                 if ( $( event.target ).is('.addyBook') ){
-                    processAddy( $( this ) );
+                    var addy = processAddy( $( this ).html() );
+                    $( this ).html(addy)
                 }else{
                     var t = $( event.target ).find('.addyBook');
                     t.each(function(key, value){
-                        processAddy( $( value ) );
+                        var addy = processAddy( $( value ).html() );
+                        $( value ).html(addy)
                     });
                 }
             });
         });
     };
 
-    var processAddy = function( $element ){
+    var processAddy = function( address, len ){
+
         //console.log( $element )
-        var address = $element.html();
         var index = $.scope.addressBook.indexOf.call( addressLookup, 'address', address );
         if( index === -1 ){
-            address = StringShorter( address ) ;
+            address = StringShorter( address, len ) ;
         } else {
             address = addressLookup[index]['name'];
         }
         
-        return $element.html( address );
+        return address ;
     }
 
     $(document).ready(function(){
@@ -201,7 +196,7 @@ var addressLookup
             $("#mess-subject").html(subject)
             $("#mess-body").html(body)
             $("#mess-date").html(date)
-            processAddy( $("#mess-from").html( from ) )
+            $("#mess-from").html( processAddy( from ) )
 
             if( the_message['read'] === 1 ) return ;
             APIcal({
