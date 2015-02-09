@@ -72,8 +72,8 @@ class Send ( View ):
     def post( self, request ):
         if request.json['send_addy'] == 'chan_post':
             from_name = request.json['chan_post_list']
-            to_address = from_address = Chan_subscriptions.objects.get(label=from_name, user=request.json['_user']).address
-       else:
+            to_address = from_address = Chan_subscriptions.objects.get(label=from_name, user=request.json['_user'].address)
+        else:
             from_address = BitKey.objects.get(name=request.json['from_addy'], user=request.json['_user']).key
             to_address = request.json['send_addy']
             subject = request.json['subject']
@@ -102,7 +102,7 @@ class Reply ( View ):
             BMclient._encode(subject),
             BMclient._encode(message)
         )
-       return JsonResponse( { 'message_status' : sent } )
+        return JsonResponse( { 'message_status' : sent } )
 
 
 class AllIdentitiesOfUser( View ):

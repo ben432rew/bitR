@@ -309,7 +309,6 @@
 
 		// delete inbox message
 		$( '#delete_msg' ).click(function() {
-            console.log($('#delete_msg').attr('data-url'))
                 apiCall({
                     url: $('#delete_msg').attr('data-url'),
                     data: {
