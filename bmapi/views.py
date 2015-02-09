@@ -70,46 +70,31 @@ class CreateId( View ):
 
 class Send ( View ):
     def post( self, request ):
-        print(request.json)
         if request.json['send_addy'] == 'chan_post':
-            print('here in chan')
             from_name = request.json['chan_post_list']
             to_address = from_address = Chan_subscriptions.objects.get(label=from_name, user=request.json['_user']).address
-            print('chan', from_address)
-        else:
+       else:
             from_address = BitKey.objects.get(name=request.json['from_addy'], user=request.json['_user']).key
-        print('from', from_address)
         to_address = request.json['send_addy']
-        print('to', to_address)
         subject = request.json['subject']
-        print('subject', subject)
         message = request.json['message']
-        print('message', message)
         sent = BMclient.call(
             'sendBroadcast',
             from_address,
             BMclient._encode(subject),
             BMclient._encode(message)
         )
-        print(sent)
-        print('here in send')
         return JsonResponse( { 'message_status' : sent } )
 
 class Reply ( View ):
     def post( self, request ):
-        print(request.json)
         from_name = request.json['from_addy']
-        print(from_name)
         if request.json['send_addy'] == 'chan_post':
             to_address = from_add = Chan_subscriptions.objects.get(label=from_name, user=request.json['_user']).address
         from_address = request.json['from_addy']
-        print('from', from_address)
         to_address = request.json['send_addy']
-        print('to', to_address)
         subject = request.json['subject']
-        print('subject', subject)
         message = request.json['message']
-        print('message', message)
         sent = BMclient.call(
             'sendMessage',
             to_address,
@@ -117,9 +102,7 @@ class Reply ( View ):
             BMclient._encode(subject),
             BMclient._encode(message)
         )
-        print(sent)
-        print('here in send')
-        return JsonResponse( { 'message_status' : sent } )
+       return JsonResponse( { 'message_status' : sent } )
 
 
 class AllIdentitiesOfUser( View ):
@@ -178,7 +161,6 @@ class DeleteSentMessage( View ):
 class getInboxMessageByID( View ):
     def post( self, request ):
         res = BMclient.api.getInboxMessageByID( request.json['msgid'], request.json['read'] )
-        pprint(res)
         return JsonResponse( {} )
 
 

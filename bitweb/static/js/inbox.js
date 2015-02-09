@@ -273,7 +273,6 @@
 		$( '#compose_msg_form' ).on("submit", function(event) { // why not a submit?
 			event.preventDefault();
             var form_data = $(this).serializeObject();
-            console.log(form_data)
 			$( '#compose_msg_form' ).trigger('reset');
 			apiCall({
 				url: 'send',
@@ -287,7 +286,6 @@
             form_data['send_addy'] = $("#mess-from").text()
             form_data['from_addy'] = $("#mess-to").text()
             form_data['subject'] = "Re: " + $("#mess-subject").text()
-            console.log(form_data)
             $( '#compose_msg_form' ).trigger('reset');
             apiCall({
                 url: 'reply',
@@ -300,7 +298,6 @@
             event.preventDefault();
 			var form_data = $(this).serializeObject();
 			form_data.send_addy = 'chan_post';
-            console.log(form_data)
 			$( '#post_chan_form' ).trigger('reset');
 			apiCall({
 				url: 'send',
