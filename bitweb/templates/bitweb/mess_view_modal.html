@@ -9,6 +9,8 @@
 			<form id = "mess-view-form" >
 			  <div class="form-group">
 			  	<input type="hidden" id="mess-id">
+			  	<label for="mess-from">To: </label>
+			    <p id="mess-to"></p>
 			    <label for="mess-from">From: </label>
 			    <p id="mess-from" class="addyBook"></p>
 			    <label for="mess-date">Date: </label>
@@ -24,7 +26,7 @@
 			    </div>
 	            <button type="button" class="btn" data-dismiss="modal">Close</button>
 	        	<button type="button" class="btn btn-danger" id="delete_msg" data-dismiss="modal">Delete</button>
-		        <input type="submit" id="create_reply_button" class="btn btn-material-blue-grey-500" value = 'reply' >
+		        <button type="submit" id="create_reply_button" class="btn btn-material-blue-grey-500">Reply</button>
 			  </div>
 			</form>
 	    </div>
