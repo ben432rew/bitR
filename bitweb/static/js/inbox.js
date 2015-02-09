@@ -268,16 +268,14 @@
 		});
 
 		// send a message
-		$( '#send_message_btn' ).click(function() { // why not a submit?
-			var info = {};
-			info.to_address = $( '#send_addy' ).val();
-			info.from = $( '#from_addy' ).val();
-			info.subject = $( '#subject' ).val();
-			info.message = $( '#message' ).val();
+		$( '#compose_msg_form' ).on("submit", function(event) { // why not a submit?
+			event.preventDefault();
+            var form_data = $(this).serializeObject();
+            console.log(form_data)
 			$( '#compose_msg_form' ).trigger('reset');
 			apiCall({
 				url: 'send',
-				data: info
+				data: form_data
 			});
 		});
 
