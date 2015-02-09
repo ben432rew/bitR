@@ -296,16 +296,15 @@
         });
 
 		// post message to chan, DRY out with above
-		$( '#post_message_btn' ).click(function() {
-			var info = {};
-			info.to_address = 'chan_post';
-			info.from = $( '#chan_post_list' ).val();
-			info.subject = $( '#post_subject' ).val();
-			info.message = $( '#post_message' ).val();
+		$( '#post_chan_form' ).on("submit", function(event) {
+            event.preventDefault();
+			var form_data = $(this).serializeObject();
+			form_data.send_addy = 'chan_post';
+            console.log(form_data)
 			$( '#post_chan_form' ).trigger('reset');
 			apiCall({
 				url: 'send',
-				data: info
+				data: form_data
 			});
 		});
 

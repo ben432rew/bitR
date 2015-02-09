@@ -10,17 +10,17 @@
               <div class="form-group">
               <p class="help-block">Post anonymously to a chan you belong to.  When you post to the chan, your message will be sent to everybody who subscribes to the chan, and the message has only the chan address as the from address</p>
               <label for="chan_post_list">Post To:</label>
-                <select class="form-control" id="chan_post_list">
+                <select class="form-control" name="chan_post_list">
                     {% verbatim %}
                         <option jq-repeat="post_chan_list">{{ chan_label }}</option>
                     {% endverbatim %}                
                 </select>
                 <label for="Subject">Subject:</label>
-                <input type="text" class="form-control" id="post_subject" placeholder="Enter subject here">
+                <input type="text" class="form-control" name="subject" placeholder="Enter subject here">
                 <label for="message">Message</label>
-                <textarea class="form-control" rows="10" id="post_message" placeholder="Enter message here"></textarea>              
+                <textarea class="form-control" rows="10" name="message" name = "message" placeholder="Enter message here"></textarea>              
                 <button type="button" class="btn" data-dismiss="modal">Cancel</button>
-                <button type="button" id="post_message_btn" class="btn btn-material-blue-grey-500" data-dismiss="modal">Post</button>
+                <button type="submit" id="post_message_btn" class="btn btn-material-blue-grey-500">Post</button>
               </div>
             </form>
         </div>
