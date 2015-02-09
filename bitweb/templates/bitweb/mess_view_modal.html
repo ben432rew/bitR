@@ -3,7 +3,7 @@
 	<div class="modal-content">
         <div class="modal-header">
  			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-        	<h4 class="modal-title" id="messageModalLabel">Reply</h4>
+        	<div id="model-title">Reply</div>
         </div>
 	    <div class="modal-body">
 			<form id = "mess-view-form" >
@@ -18,8 +18,10 @@
 			    <label for="mess-body">Body: </label>
 			    <p id = "mess-body"></p>
 			    <br>
+			    <div id="mess-reply">
 			    <label for="mess-from">Reply: </label>
 			    <textarea name = 'reply'  id = "mess-from" class="form-control"></textarea>
+			    </div>
 	            <button type="button" class="btn" data-dismiss="modal">Close</button>
 	        	<button type="button" class="btn btn-danger" id="delete_msg" data-dismiss="modal">Delete</button>
 		        <input type="submit" id="create_reply_button" class="btn btn-material-blue-grey-500" value = 'reply' >

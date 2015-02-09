@@ -53,9 +53,9 @@
 				<h3><span class="label label-default col-md-3">Message</span></h3>
 				<h3><span class="label label-default col-md-3">Time</span></h3>
 			</div>
-			<ul>
+			<ul id='sent-list'>
 			{% verbatim %}
-					<li jq-repeat="sent" class="new-message row {{toAddress}}" style="background-color:{{ color }}">
+					<li jq-repeat="sent" class="new-message row {{fromAddress}}">
 						<a href="#">
 							<p hidden id="msg-id">{{ msgid }}</p>
 							<div class="col-xs-3 addyBook">{{ fromaddress }}</div>

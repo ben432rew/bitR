@@ -10,6 +10,7 @@ var MessageShorter=function(string){
             return string;
         }
     };
+
 var addressLookup
 ( function( $ ){
     "use strict";
@@ -201,6 +202,9 @@ var addressLookup
             $("#mess-subject").html(subject)
             $("#mess-body").html(body)
             $("#mess-date").html(date)
+            $('#create_reply_button').show()
+            $('#mess-reply').show()
+            $('#model-title').html("<h4 class='modal-title' id='messageModalLabel'>Reply</h4>")
             processAddy( $("#mess-from").html( from ) )
 
             if( the_message['read'] === 1 ) return ;
@@ -302,6 +306,9 @@ var addressLookup
             var info = {
                 msgid: $( '#mess-id' ).val()
             }
+            if($("#messageModalLabel").text()=="Sent Message"){
+                
+            }
             APIcal({
                 url: 'deleteInboxmessage',
                 data: info,
@@ -392,6 +399,45 @@ var addressLookup
                 data: formData,
                 callBack: function( data ){
                     $.scope.addressBook.push( formData );
+                }
+            });
+        });
+        // this the sent box 
+        $('#sent-list').on('click', '.new-message', function(e){
+            // what default?
+            e.preventDefault();
+
+            var messages = JSON.parse(sessionStorage.getItem('sentMessages'));
+            var messid = $(this).find('#msg-id').text()
+
+            for(var j in messages){
+                if(messages[j]['msgid']==messid){
+                    var the_message = messages[j];
+                }
+            }
+            var toaddress = the_message['toAddress']
+            var body = the_message['message']
+            var subject = the_message['subject']
+            var date = the_message['receivedTime']
+            $("#mess_view_modal").modal("toggle")
+            $("#mess-id").val($(this).find('#msg-id').text())
+            $("#mess-subject").html(subject)
+            $("#mess-body").html(body)
+            $("#mess-date").html(date)
+            $('#create_reply_button').hide()
+            $('#mess-reply').hide()
+            $('#model-title').html("<h4 class='modal-title' id='messageModalLabel'>Sent Message</h4>")
+            processAddy( $("#mess-from").html( toaddress ) )
+
+            if( the_message['read'] === 1 ) return ;
+            APIcal({
+                url: 'getInboxMessageByID',
+                data: {
+                    msgid: messid,
+                    read: true
+                },
+                callBack: function(){
+                    inboxMessages();
                 }
             });
         });
