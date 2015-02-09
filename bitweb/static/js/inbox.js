@@ -1,80 +1,96 @@
+var addressCheck = function(string2check){
+    matcher = /BM-2c[a-zA-Z0-9]+/
+    if(typeof(string2check) == 'string'){
+        var match = string2check.match(matcher)
+        if(match){
+            return true
+        }
+        else{
+            return false
+        }
+    }
+    else{
+        return false
+    }
+};
 ( function( $ ){
-	"use strict";
+    "use strict";
 
-	var addressLookup = [];
+    var addressLookup = [];
 
-	var apiCall = function( args ){
-		var data = args.data || {};
-		data = $.extend( {}, { 'token': $.cookie( 'token' ) }, data );
-		var callBack = args.callBack || function(){};
 
-		return $.ajax({
-			url: '/bmapi/' + args.url,
-			type: 'POST',
-			data: JSON.stringify( data ),
-			success: callBack,
-			statusCode: {
-				401: function(){
-					window.location.replace('/bmapi/logout');
-				},
-				500: function(){
-					alert( "Sever Error" );
-				}
-			}
-		});
-	};
+    var apiCall = function( args ){
+        var data = args.data || {};
+        data = $.extend( {}, { 'token': $.cookie( 'token' ) }, data );
+        var callBack = args.callBack || function(){};
 
-	var stringShorter = function( string, len ){
-		len = ( len || 15 ) - 3;
+        return $.ajax({
+            url: '/bmapi/' + args.url,
+            type: 'POST',
+            data: JSON.stringify( data ),
+            success: callBack,
+            statusCode: {
+                401: function(){
+                    window.location.replace('/bmapi/logout');
+                },
+                500: function(){
+                    alert( "Sever Error" );
+                }
+            }
+        });
+    };
 
-		if ( (string).length >= len ){
-			string = (string.slice(0,15) +"...");
-		}
+    var stringShorter = function( string, len ){
+        len = ( len || 15 ) - 3;
 
-		return string;
-	};
+        if ( (string).length >= len ){
+            string = (string.slice(0,15) +"...");
+        }
 
-	var convertUnixTime = function(data){
-		var date = new Date(data*1000);
-		return String(date).slice(16,21)+"  "+String(date).slice(0,15) ;
-	};
+        return string;
+    };
 
-	var inboxMessages = function(){
-		$('.inbox-bucket').children().hide();
-		$.scope.inbox.splice(0);
-		$.scope.chan_inbox.splice(0);
-	
-		var setColor = function(read){
-			if (read === 1){
-				return("#cfd8dc");
-			}
-			else {
-				return('#eee');
-			}
-		};
+    var convertUnixTime = function(data){
+        var date = new Date(data*1000);
+        return String(date).slice(16,21)+"  "+String(date).slice(0,15) ;
+    };
 
-		var chan_addresses;
-		apiCall({
-			url: 'allmessages',
-			callBack: function( data ){
-				chan_addresses = data.chans;
-				data.messages.forEach(function(value) {
-					value.data.forEach(function(value){
-						value.receivedTime = convertUnixTime(value.receivedTime);
-						value.fromaddress = value.fromAddress;
-						value.toaddress = value.toAddress;
-						value.inboxmessage = stringShorter( value.message, 12 );
-						value.inboxsubject = stringShorter( value.subject, 12 );
-						value.color = setColor(value.read);
-						if ( chan_addresses.indexOf(value.toAddress) != -1){
-							var index = $.scope.chans.indexOf("chan_address", value.toAddress);
-							if(value.toAddress == value.fromAddress){
-								value.fromAddress = "Anonymous";
-							}
-							value.chan = ($.scope.chans[index]).chan_label;
-							$.scope.chan_inbox.push(value);
-						} else {
-							$.scope.inbox.push(value);
+    var inboxMessages = function(){
+        $('.inbox-bucket').children().hide();
+        $.scope.inbox.splice(0);
+        $.scope.chan_inbox.splice(0);
+    
+        var setColor = function(read){
+            if (read === 1){
+                return("#cfd8dc");
+            }
+            else {
+                return('#eee');
+            }
+        };
+
+        var chan_addresses;
+        apiCall({
+            url: 'allmessages',
+            callBack: function( data ){
+                chan_addresses = data.chans;
+                data.messages.forEach(function(value) {
+                    value.data.forEach(function(value){
+                        value.receivedTime = convertUnixTime(value.receivedTime);
+                        value.fromaddress = value.fromAddress;
+                        value.toaddress = value.toAddress;
+                        value.inboxmessage = stringShorter( value.message, 12 );
+                        value.inboxsubject = stringShorter( value.subject, 12 );
+                        value.color = setColor(value.read);
+                        if ( chan_addresses.indexOf(value.toAddress) != -1){
+                            var index = $.scope.chans.indexOf("chan_address", value.toAddress);
+                            if(value.toAddress == value.fromAddress){
+                                value.fromAddress = "Anonymous";
+                            }
+                            value.chan = ($.scope.chans[index]).chan_label;
+                            $.scope.chan_inbox.push(value);
+                        } else {
+                            $.scope.inbox.push(value);
 						}
 					});
 				});
