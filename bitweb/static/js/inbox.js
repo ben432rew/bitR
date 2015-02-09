@@ -273,7 +273,6 @@
 		$( '#compose_msg_form' ).on("submit", function(event) { // why not a submit?
 			event.preventDefault();
             var form_data = $(this).serializeObject();
-            console.log(form_data)
 			$( '#compose_msg_form' ).trigger('reset');
 			apiCall({
 				url: 'send',
@@ -287,7 +286,6 @@
             form_data['send_addy'] = $("#mess-from").text()
             form_data['from_addy'] = $("#mess-to").text()
             form_data['subject'] = "Re: " + $("#mess-subject").text()
-            console.log(form_data)
             $( '#compose_msg_form' ).trigger('reset');
             apiCall({
                 url: 'reply',
@@ -296,16 +294,14 @@
         });
 
 		// post message to chan, DRY out with above
-		$( '#post_message_btn' ).click(function() {
-			var info = {};
-			info.to_address = 'chan_post';
-			info.from = $( '#chan_post_list' ).val();
-			info.subject = $( '#post_subject' ).val();
-			info.message = $( '#post_message' ).val();
+		$( '#post_chan_form' ).on("submit", function(event) {
+            event.preventDefault();
+			var form_data = $(this).serializeObject();
+			form_data.send_addy = 'chan_post';
 			$( '#post_chan_form' ).trigger('reset');
 			apiCall({
 				url: 'send',
-				data: info
+				data: form_data
 			});
 		});
 
