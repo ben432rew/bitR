@@ -174,9 +174,6 @@
 
 		//show inbox message
 		$('#inbox-list').on('click', '.new-message', function(e){
-			// what default?
-			e.preventDefault();
-
 			var messages = JSON.parse(sessionStorage.getItem('inboxMessages'));
 			var messid = $(this).find('#msg-id').text();
 
