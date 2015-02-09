@@ -137,7 +137,7 @@ class DeleteInboxMessage( View ):
 
 class DeleteSentMessage( View ):
     def post( self, request ):
-        BMclient.api.trashInboxMessage( request.json['msgid']  )
+        BMclient.api.trashSentMessage( request.json['msgid']  )
         return JsonResponse( {} )
 
 

@@ -198,7 +198,8 @@
             $("#mess-date").html(date)
             $('#create_reply_button').show()
             $('#mess-reply').show()
-            $('#model-title').html("<h4 class='modal-title' id='messageModalLabel'>Reply</h4>")
+            $('#delete_msg').attr('data-url','deleteInboxmessage')
+            $('#messageModalLabel').html("Reply")
 
 			if( the_message.read === 1 ) return ;
 			apiCall({
@@ -300,17 +301,18 @@
 
 		// delete inbox message
 		$( '#delete_msg' ).click(function() {
-			apiCall({
-				url: 'deleteInboxmessage',
-				data: {
-					msgid: $( '#mess-id' ).val()
-				},
-				callBack: function(){
-					// update inbox
-					inboxMessages();
-				}
-			});
-		});
+            console.log($('#delete_msg').attr('data-url'))
+                apiCall({
+                    url: $('#delete_msg').attr('data-url'),
+                    data: {
+                        msgid: $( '#mess-id' ).val()
+                    },
+                    callBack: function(){
+                        // update inbox
+                        inboxMessages();
+                    }
+                });
+        });
 
 		// join chan
 		$( '#sub_chan_btn' ).click(function() { // why not submit
@@ -332,20 +334,27 @@
 
 		// show sent messages
 		$('.inbox-nav').on( 'click', 'button#sent', function(){
-			$('.inbox-bucket').children().hide();
-			$.scope.sent.splice(0);
-			apiCall({
-				url: 'allsentmessages',
-				callBack:function( data ){
-					data.messages.forEach( function(value){
-						$.scope.sent.push.apply( $.scope.sent, value.data );
-					});
-				}
-			}).done(function(){
-				sessionStorage.setItem('sentMessages', JSON.stringify($.scope.sent));
-				$('#sent-mess').show(); 
-			});
-		});
+            $('.inbox-bucket').children().hide();
+            $.scope.sent.splice(0);
+            apiCall({
+                url: 'allsentmessages',
+                callBack:function( data ){
+                    data.messages.forEach( function(value){
+                        value.data.forEach( function( value ){
+                            value['receivedTime'] = convertUnixTime(value['lastactiontime'])
+                            value['fromaddress'] = value['fromAddress']
+                            value['toaddress'] = value['toAddress']
+                            value['inboxmessage'] = stringShorter(value['message'])
+                            value['inboxsubject'] = stringShorter(value['subject'])
+                            $.scope.sent.push( value );
+                        });
+                    });
+                }
+            }).done(function(){
+                sessionStorage.setItem('sentMessages', JSON.stringify($.scope.sent));
+                $('#sent-mess').show(); 
+            });
+        });
 
 		// show the chan tab
 		$('#chan_tab').on( 'click', function(){
@@ -417,7 +426,8 @@
             $("#mess-date").html(date)
             $('#create_reply_button').hide()
             $('#mess-reply').hide()
-            $('#model-title').html("<h4 class='modal-title' id='messageModalLabel'>Sent Message</h4>")
+            $('#messageModalLabel').html("Sent Message")
+            $('#delete_msg').attr('data-url','deleteSentmessage')
             processAddy( $("#mess-from").html( toaddress ) )
 
             if( the_message['read'] === 1 ) return ;
