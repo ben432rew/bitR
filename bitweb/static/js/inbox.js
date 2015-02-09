@@ -199,18 +199,20 @@ var addressCheck = function(string2check){
 					var the_message = messages[j];
 				}
 			}
-			var from = the_message.fromAddress;
-            var to = the_message.toAddress;
-			var body = the_message.message;
-			var subject = the_message.subject;
-			var date = the_message.receivedTime;
-			$("#mess_view_modal").modal("toggle");
-			$("#mess-id").val($(this).find('#msg-id').text());
-			$("#mess-subject").html(subject);
-			$("#mess-body").html(body);
-			$("#mess-date").html(date);
-            $("#mess-to").html(to);
-			$("#mess-from").html( processAddy( from ) );
+
+            var from = the_message['fromAddress']
+            var body = the_message['message']
+            var subject = the_message['subject']
+            var date = the_message['receivedTime']
+            $("#mess_view_modal").modal("toggle")
+            $("#mess-id").val($(this).find('#msg-id').text())
+            $("#mess-subject").html(subject)
+            $("#mess-body").html(body)
+            $("#mess-date").html(date)
+            $('#create_reply_button').show()
+            $('#mess-reply').show()
+            $('#delete_msg').attr('data-url','deleteInboxmessage')
+            $('#messageModalLabel').html("Reply")
 
 			if( the_message.read === 1 ) return ;
 			apiCall({
@@ -320,17 +322,17 @@ var addressCheck = function(string2check){
 
 		// delete inbox message
 		$( '#delete_msg' ).click(function() {
-			apiCall({
-				url: 'deleteInboxmessage',
-				data: {
-					msgid: $( '#mess-id' ).val()
-				},
-				callBack: function(){
-					// update inbox
-					inboxMessages();
-				}
-			});
-		});
+                apiCall({
+                    url: $('#delete_msg').attr('data-url'),
+                    data: {
+                        msgid: $( '#mess-id' ).val()
+                    },
+                    callBack: function(){
+                        // update inbox
+                        inboxMessages();
+                    }
+                });
+        });
 
 		// join chan
 		$( '#sub_chan_btn' ).click(function() { // why not submit
@@ -352,20 +354,27 @@ var addressCheck = function(string2check){
 
 		// show sent messages
 		$('.inbox-nav').on( 'click', 'button#sent', function(){
-			$('.inbox-bucket').children().hide();
-			$.scope.sent.splice(0);
-			apiCall({
-				url: 'allsentmessages',
-				callBack:function( data ){
-					data.messages.forEach( function(value){
-						$.scope.sent.push.apply( $.scope.sent, value.data );
-					});
-				}
-			}).done(function(){
-				sessionStorage.setItem('sentMessages', JSON.stringify($.scope.sent));
-				$('#sent-mess').show(); 
-			});
-		});
+            $('.inbox-bucket').children().hide();
+            $.scope.sent.splice(0);
+            apiCall({
+                url: 'allsentmessages',
+                callBack:function( data ){
+                    data.messages.forEach( function(value){
+                        value.data.forEach( function( value ){
+                            value['receivedTime'] = convertUnixTime(value['lastactiontime'])
+                            value['fromaddress'] = value['fromAddress']
+                            value['toaddress'] = value['toAddress']
+                            value['inboxmessage'] = stringShorter(value['message'])
+                            value['inboxsubject'] = stringShorter(value['subject'])
+                            $.scope.sent.push( value );
+                        });
+                    });
+                }
+            }).done(function(){
+                sessionStorage.setItem('sentMessages', JSON.stringify($.scope.sent));
+                $('#sent-mess').show(); 
+            });
+        });
 
 		// show the chan tab
 		$('#chan_tab').on( 'click', function(){
@@ -414,5 +423,44 @@ var addressCheck = function(string2check){
 				}
 			});
 		});
+        $('#sent-list').on('click', '.new-message', function(e){
+            // what default?
+            e.preventDefault();
+
+            var messages = JSON.parse(sessionStorage.getItem('sentMessages'));
+            var messid = $(this).find('#msg-id').text()
+
+            for(var j in messages){
+                if(messages[j]['msgid']==messid){
+                    var the_message = messages[j];
+                }
+            }
+            var toaddress = the_message['toAddress']
+            var body = the_message['message']
+            var subject = the_message['subject']
+            var date = the_message['receivedTime']
+            $("#mess_view_modal").modal("toggle")
+            $("#mess-id").val($(this).find('#msg-id').text())
+            $("#mess-subject").html(subject)
+            $("#mess-body").html(body)
+            $("#mess-date").html(date)
+            $('#create_reply_button').hide()
+            $('#mess-reply').hide()
+            $('#messageModalLabel').html("Sent Message")
+            $('#delete_msg').attr('data-url','deleteSentmessage')
+            processAddy( $("#mess-from").html( toaddress ) )
+
+            if( the_message['read'] === 1 ) return ;
+            APIcal({
+                url: 'getInboxMessageByID',
+                data: {
+                    msgid: messid,
+                    read: true
+                },
+                callBack: function(){
+                    inboxMessages();
+                }
+            });
+        });
 	} );
 })(jQuery);

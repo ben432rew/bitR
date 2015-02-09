@@ -75,15 +75,15 @@ class Send ( View ):
             to_address = from_address = Chan_subscriptions.objects.get(label=from_name, user=request.json['_user']).address
         else:
             from_address = BitKey.objects.get(name=request.json['from_addy'], user=request.json['_user']).key
-        to_address = request.json['send_addy']
-        subject = request.json['subject']
-        message = request.json['message']
-        sent = BMclient.call(
-            'sendBroadcast',
-            from_address,
-            BMclient._encode(subject),
-            BMclient._encode(message)
-        )
+            to_address = request.json['send_addy']
+            subject = request.json['subject']
+            message = request.json['message']
+            sent = BMclient.call(
+                'sendBroadcast',
+                from_address,
+                BMclient._encode(subject),
+                BMclient._encode(message)
+            )
         return JsonResponse( { 'message_status' : sent } )
 
 class Reply ( View ):
@@ -154,7 +154,7 @@ class DeleteInboxMessage( View ):
 
 class DeleteSentMessage( View ):
     def post( self, request ):
-        BMclient.api.trashInboxMessage( request.json['msgid']  )
+        BMclient.api.trashSentMessage( request.json['msgid']  )
         return JsonResponse( {} )
 
 
