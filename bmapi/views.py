@@ -72,16 +72,43 @@ class Send ( View ):
     def post( self, request ):
         print(request.json)
         from_name = request.json['from_addy']
+        print(from_name)
         if request.json['send_addy'] == 'chan_post':
             to_address = from_add = Chan_subscriptions.objects.get(label=from_name, user=request.json['_user']).address
         else:
             from_address = BitKey.objects.get(name=request.json['from_addy'], user=request.json['_user']).key
-        to_address = request.json['send_addy']
-        subject = request.json['subject']
-        message = request.json['message']
         print('from', from_address)
+        to_address = request.json['send_addy']
         print('to', to_address)
+        subject = request.json['subject']
         print('subject', subject)
+        message = request.json['message']
+        print('message', message)
+        sent = BMclient.call(
+            'sendMessage',
+            to_address,
+            from_address,
+            BMclient._encode(subject),
+            BMclient._encode(message)
+        )
+        print(sent)
+        print('here in send')
+        return JsonResponse( { 'message_status' : sent } )
+
+class Reply ( View ):
+    def post( self, request ):
+        print(request.json)
+        from_name = request.json['from_addy']
+        print(from_name)
+        if request.json['send_addy'] == 'chan_post':
+            to_address = from_add = Chan_subscriptions.objects.get(label=from_name, user=request.json['_user']).address
+        from_address = request.json['from_addy']
+        print('from', from_address)
+        to_address = request.json['send_addy']
+        print('to', to_address)
+        subject = request.json['subject']
+        print('subject', subject)
+        message = request.json['message']
         print('message', message)
         sent = BMclient.call(
             'sendMessage',

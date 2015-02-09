@@ -187,6 +187,7 @@
 				}
 			}
 			var from = the_message.fromAddress;
+            var to = the_message.toAddress;
 			var body = the_message.message;
 			var subject = the_message.subject;
 			var date = the_message.receivedTime;
@@ -195,6 +196,7 @@
 			$("#mess-subject").html(subject);
 			$("#mess-body").html(body);
 			$("#mess-date").html(date);
+            $("#mess-to").html(to);
 			$("#mess-from").html( processAddy( from ) );
 
 			if( the_message.read === 1 ) return ;
@@ -278,6 +280,20 @@
 				data: form_data
 			});
 		});
+
+        $( '#mess-view-form' ).on("submit", function(event) { // why not a submit?
+            event.preventDefault();
+            var form_data = $(this).serializeObject();
+            form_data['send_addy'] = $("#mess-from").text()
+            form_data['from_addy'] = $("#mess-to").text()
+            form_data['subject'] = "Re: " + $("#mess-subject").text()
+            console.log(form_data)
+            $( '#compose_msg_form' ).trigger('reset');
+            apiCall({
+                url: 'reply',
+                data: form_data
+            });
+        });
 
 		// post message to chan, DRY out with above
 		$( '#post_message_btn' ).click(function() {
