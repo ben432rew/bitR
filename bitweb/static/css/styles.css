@@ -9,6 +9,7 @@
 
 .new-message {
 	list-style-type: none;
+	cursor:pointer;
 }
 
 .new-message a div {
