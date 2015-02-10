@@ -176,14 +176,7 @@
 
 			        var display = []
 			        results.map(function( item ){
-			        	var index = function( list, key, value ){
-							for ( var index = 0; index < list.length; ++index ) {
-								if( list[index][key] == value ){
-									return index;
-								}
-							}
-							return -1;
-						}( addressLookup, "name", item );
+			        	var index = $.scope.inbox.indexOf.call( addressLookup, "name", item );
 			        	display.push({
 			        		label: addressLookup[index].name,
 			        		value: addressLookup[index].address
