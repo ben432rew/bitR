@@ -9,14 +9,14 @@
 				<form id="compose_msg_form" class="eventInsForm">
 				  <div class="form-group">
 				  <label class="control-label" for="From">From:</label>
-				    <select class="form-control" name="from_addy">
+				    <select class="form-control" name="from_address">
 				    	{% verbatim %}
 		    				<option jq-repeat="senders">{{ identity }}</option>
 						{% endverbatim %}  
 				    </select>
 				    <label class="control-label" for="To">To:</label>
 				    <div class="ui-front">
-				    	<input type="text" class="form-control autoAddress" name="send_addy" placeholder="Enter sender's address here">
+				    	<input type="text" class="form-control autoAddress" name="to_address" placeholder="Enter sender's address here">
 				    </div>    
 				    <label class="control-label" for="Subject">Subject:</label>
 				    <input type="text" class="form-control" name="subject" placeholder="Enter subject here">

@@ -1,7 +1,8 @@
+var addressLookup;
 ( function( $ ){
     "use strict";
 
-    var addressLookup = [];
+    addressLookup = [];
 
 
     var apiCall = function( args ){
@@ -92,7 +93,7 @@
 		$('#inbox-mess').show();
 	};
 	var addressCheck = function(string2check){
-	    matcher = /BM-[a-zA-Z0-9]+/ ;
+	    var matcher = /BM-[a-zA-Z0-9]+/ ;
 	    if(typeof(string2check) == 'string' && string2check.match(matcher) ){
 	        return true;
 	    }
@@ -225,7 +226,6 @@
 					var the_message = messages[j];
 				}
 			}
-
             var from = the_message['fromAddress']
             var body = the_message['message']
             var subject = the_message['subject']
@@ -234,6 +234,8 @@
             $("#mess-id").val($(this).find('#msg-id').text())
             $("#mess-subject").html(subject)
             $("#mess-body").html(body)
+            $("#mess-from").html(from)
+            $("#mess-to").html(the_message['toAddress'])
             $("#mess-date").html(date)
             $('#create_reply_button').show()
             $('#mess-reply').show()
@@ -311,7 +313,7 @@
 		});
 
 		// send a message
-		$( '#compose_msg_form' ).on("submit", function(event) { // why not a submit?
+		$( '#compose_msg_form' ).on("submit", function(event) {
 			event.preventDefault();
             var form_data = $(this).serializeObject();
 			$( '#compose_msg_form' ).trigger('reset');
@@ -321,15 +323,16 @@
 			});
 		});
 
-        $( '#mess-view-form' ).on("submit", function(event) { // why not a submit?
+        $( '#mess-view-form' ).on("submit", function(event) {
             event.preventDefault();
             var form_data = $(this).serializeObject();
-            form_data['send_addy'] = $("#mess-from").text()
-            form_data['from_addy'] = $("#mess-to").text()
+            form_data['to_address'] = $("#mess-from").text()
+            form_data['from_address'] = $("#mess-to").text()
             form_data['subject'] = "Re: " + $("#mess-subject").text()
+            form_data['message'] = form_data['reply']
             $( '#compose_msg_form' ).trigger('reset');
             apiCall({
-                url: 'reply',
+                url: 'send',
                 data: form_data
             });
         });
@@ -441,11 +444,23 @@
 		$('[name="addAddressEntry"]').on( 'submit', function( event ){
 			event.preventDefault();
 			var formData = $( this ).serializeObject();
+
+			if( !addressCheck( formData.address ) ){
+				alert("Malformed address.");
+				return false;
+			}
+
+			if( $.scope.addressBook.indexOf.call( addressLookup, 'address', formData.address ) !== -1 ){
+				alert("Address already in use.");
+				return false;
+			}
+
 			apiCall({
 				url: 'addAddressEntry',
 				data: formData,
 				callBack: function( data ){
 					$.scope.addressBook.push( formData );
+					$('[name="addAddressEntry"]')[0].reset();
 				}
 			});
 		});
@@ -453,8 +468,6 @@
 			e.preventDefault();
 			
 		})
-
-
 
         $('#sent-list').on('click', '.new-message', function(e){
             // what default?
