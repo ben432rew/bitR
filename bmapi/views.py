@@ -44,8 +44,6 @@ class Logout( View ):
 
     def post(self, request ):
         the_jason = json.loads(request.body.decode("utf-8"))
-        print(the_jason)
-        print(the_jason['token'])
         Token.objects.get(token=the_jason['token']).delete()
         logout( request )
         return JsonResponse({'status':'logged out'})

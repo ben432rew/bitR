@@ -136,27 +136,29 @@ var addressLookup;
 
 
 	$(document).ready(function(){
-		$.scope.inbox.__put = function(){
-			this.slideDown();
-		};
+        $.scope.inbox.__put = function(){
+            this.slideDown();
+        };
 
-		$.scope.inbox.__take = function(){
-			this.slideUp('slow', function(){
-				this.remove();
-			});
-		};
+        $.scope.inbox.__take = function(){
+            this.slideUp('slow', function(){
+                this.remove();
+            });
+        };
 
-		$.scope.sent.__put = function(){
-			this.slideDown();
-		};
-		
-		$.scope.sent.__take = function(){
-			this.slideUp('slow', function(){
-				this.remove();
-			});
-		};
+        $.scope.sent.__put = function(){
+            this.slideDown();
+        };
+        
+        $.scope.sent.__take = function(){
+            this.slideUp('slow', function(){
+                this.remove();
+            });
+        };
+        
+        $.material.ripples();
 
-		$( 'input.autoAddress' ).each(function(){
+        $( 'input.autoAddress' ).each(function(){
 
 			$(this).autocomplete({
 				source: function( req, response ) {
