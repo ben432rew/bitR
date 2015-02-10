@@ -84,9 +84,6 @@ var addressLookup;
 				$.scope.chan_inbox.reverse()
 				sessionStorage.setItem('inboxMessages', JSON.stringify($.scope.inbox));
 				sessionStorage.setItem('chanMessages', JSON.stringify($.scope.chan_inbox));
-				if ( $('#identityDrop').text() == 'Mail: No Identitites Selected ') {
-					$('#inbox-list > li').hide();
-				}
 			}
 		});
 
@@ -193,6 +190,7 @@ var addressLookup;
 
 		addressesBook();
 		inboxMessages();
+        $('#chan_tab').hide()
 
 		// populate list of identities
 		apiCall({
@@ -384,6 +382,10 @@ var addressLookup;
 
 		// show sent messages
 		$('.inbox-nav').on( 'click', 'button#sent', function(){
+            $('#chan_tab').hide()
+            $( '#secondary' ).removeClass( 'btn-material-blue-grey-100' );
+            $('#identityDrop').show()
+            $( '#primary' ).addClass( 'btn-material-blue-grey-100' );
             $('.inbox-bucket').children().hide();
             $.scope.sent.splice(0);
             apiCall({
@@ -407,18 +409,19 @@ var addressLookup;
         });
 
 		// show the chan tab
-		$('#chan_tab').on( 'click', function(){
-			$('.inbox-bucket').children().hide();
-			$( this ).addClass( 'btn-material-blue-grey-100' );
-			$( '#identityDrop' ).removeClass( 'btn-material-blue-grey-100' );
-			$('#chan_mess').show();
-			if ( $('#chan_tab').text() == 'No Chans Selected ') { // what is this doing?
-				// $('#chan_ul_inbox_well > div').hide()
-			}          
-		});
+		$('#secondary').on( 'click', function(){
+            $('#identityDrop').hide()
+            $('.inbox-bucket').children().hide();
+            $( '#primary' ).removeClass( 'btn-material-blue-grey-100' );
+            $( this ).addClass( 'btn-material-blue-grey-100' );
+            $('#chan_tab').show()
+            $('#chan_mess').show();
+            // this next line is not working.  whyyyyyyyyyy
+            $( '.id_checks' ).prop('checked', false)
+        });
 
-		// select chans to display 
-		$('#chan_ul').on( 'click', 'li.jq-repeat-chans > label', function(){
+        // select chans to display 
+        $('#chan_ul').on( 'click', 'li.jq-repeat-chans > label', function(){
 			var selected_chans = $('#chan_tab').text();
 			var val = '.' + $( this ).parent().attr('data-chan-add');
 			$( val ).toggle();
@@ -431,13 +434,19 @@ var addressLookup;
 			$( val ).toggle();
 		});
 
-		$('#identityDrop').on( 'click', function(){
-			$( this ).addClass( 'btn-material-blue-grey-100' );
-			$( '#chan_tab' ).removeClass( 'btn-material-blue-grey-100' );
-			inboxMessages();
-		} );
+		$('#primary').on( 'click', function(){
+            $('#chan_tab').hide()
+            $( '#secondary' ).removeClass( 'btn-material-blue-grey-100' );
+            $('#identityDrop').show()
+            $( this ).addClass( 'btn-material-blue-grey-100' );
+            inboxMessages();
+        } );
 
-		$('.inbox-nav').on( 'click', 'button#inbox', function(){
+        $('.inbox-nav').on( 'click', 'button#inbox', function(){
+            $('#chan_tab').hide()
+            $( '#secondary' ).removeClass( 'btn-material-blue-grey-100' );
+            $('#identityDrop').show()
+            $( '#primary' ).addClass( 'btn-material-blue-grey-100' );
 			inboxMessages();
 		} );
 
