@@ -166,14 +166,14 @@ class addAddressEntry( View ):
 
 class deleteAddressEntry( View ):
     def post( self, request ):
-        if Address_entry.objects.filter( user=request.json['_user'], address=request.json['address'] ).exists():
-            Address_entry.objects.get( user=request.json['_user'], address=request.json['address'] ).delete()
+        if Address_entry.objects.filter( user=request.json['_user'], id=request.json['id'] ).exists():
+            Address_entry.objects.get( user=request.json['_user'], id=request.json['id'] ).delete()
 
             return JsonResponse( {} )
 
         
 class GetAddressBook( View ):
     def post( self, request ):
-        books = [ {'address': book.address, 'name': book.name} for book in Address_entry.objects.filter( user=request.json['_user'] ) ]
+        books = [ {'address': book.address, 'name': book.name, 'id': book.id} for book in Address_entry.objects.filter( user=request.json['_user'] ) ]
         
         return JsonResponse( { 'book': books } )
