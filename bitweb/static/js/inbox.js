@@ -456,6 +456,7 @@
 				}
 			});
 		});
+        
         $('#sent-list').on('click', '.new-message', function(e){
             // what default?
             e.preventDefault();
