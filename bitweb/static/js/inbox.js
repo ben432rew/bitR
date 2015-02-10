@@ -1,18 +1,3 @@
-var addressCheck = function(string2check){
-    matcher = /BM-2c[a-zA-Z0-9]+/
-    if(typeof(string2check) == 'string'){
-        var match = string2check.match(matcher)
-        if(match){
-            return true
-        }
-        else{
-            return false
-        }
-    }
-    else{
-        return false
-    }
-};
 ( function( $ ){
     "use strict";
 
@@ -94,6 +79,8 @@ var addressCheck = function(string2check){
 						}
 					});
 				});
+
+				$.scope.chan_inbox.reverse()
 				sessionStorage.setItem('inboxMessages', JSON.stringify($.scope.inbox));
 				sessionStorage.setItem('chanMessages', JSON.stringify($.scope.chan_inbox));
 				if ( $('#identityDrop').text() == 'Mail: No Identitites Selected ') {
@@ -103,6 +90,12 @@ var addressCheck = function(string2check){
 		});
 
 		$('#inbox-mess').show();
+	};
+	var addressCheck = function(string2check){
+	    matcher = /BM-[a-zA-Z0-9]+/ ;
+	    if(typeof(string2check) == 'string' && string2check.match(matcher) ){
+	        return true;
+	    }
 	};
 
 	var processAddy = function( address, len ){
@@ -162,6 +155,46 @@ var addressCheck = function(string2check){
 			});
 		};
 
+		$( 'input.autoAddress' ).each(function(){
+
+			$(this).autocomplete({
+				source: function( req, response ) {
+					var wordlist = function(){
+						var list = [];
+						addressLookup.forEach(function( value ){
+							list.push( value.name );
+						});
+
+						return list;
+					}();
+
+			        var re = $.ui.autocomplete.escapeRegex( req.term );
+			        var matcher = new RegExp( re, "i" );
+			        var results = $.grep( wordlist, function( item,index ){
+			            return matcher.test( item );
+			        });
+
+			        var display = []
+			        results.map(function( item ){
+			        	var index = function( list, key, value ){
+							for ( var index = 0; index < list.length; ++index ) {
+								if( list[index][key] == value ){
+									return index;
+								}
+							}
+							return -1;
+						}( addressLookup, "name", item );
+			        	display.push({
+			        		label: addressLookup[index].name,
+			        		value: addressLookup[index].address
+			        	});
+			        });
+
+			        response( display );
+			    }
+			});
+		});
+
 		$('.dropdown-toggle').dropdown();
 
 		addressesBook();
@@ -173,9 +206,9 @@ var addressCheck = function(string2check){
 			callBack:function(data){
 				if (data.addresses.length === 0 ){
 					$( '#create_identity' ).modal();
-				} else if (typeof data.addresses == "string"){
+				} else/* if (typeof data.addresses == "string"){
 					window.location.replace('bmapi/logout');
-				} else {
+				} else */{
 					data.addresses.forEach(function(value){
 						$.scope.identities.push(value);
 						$.scope.senders.push(value);
