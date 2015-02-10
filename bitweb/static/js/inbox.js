@@ -3,12 +3,6 @@
 
     var addressLookup = [];
 
-	var addressCheck = function(string2check){
-	    matcher = /BM-[a-zA-Z0-9]+/ ;
-	    if(typeof(string2check) == 'string' && string2check.match(matcher) ){
-	        return true;
-	    }
-	};
 
     var apiCall = function( args ){
         var data = args.data || {};
@@ -97,6 +91,12 @@
 
 		$('#inbox-mess').show();
 	};
+	var addressCheck = function(string2check){
+	    matcher = /BM-[a-zA-Z0-9]+/ ;
+	    if(typeof(string2check) == 'string' && string2check.match(matcher) ){
+	        return true;
+	    }
+	};
 
 	var processAddy = function( address, len ){
 		var index = $.scope.addressBook.indexOf.call( addressLookup, 'address', address );
@@ -155,15 +155,12 @@
 			});
 		};
 
-		// this box works but real one wont..
-		// $(' <input type="text" name="send_addy" placeholder="Enter send">').appendTo('body');
-
-		$('[name="send_addy"]').each(function(){
+		$( 'input.autoAddress' ).each(function(){
 
 			$(this).autocomplete({
-				source: function(req, responseFn) {
+				source: function( req, response ) {
 					var wordlist = function(){
-						var list = []
+						var list = [];
 						addressLookup.forEach(function( value ){
 							list.push( value.name );
 						});
@@ -171,18 +168,30 @@
 						return list;
 					}();
 
-					// http://stackoverflow.com/a/2405109/3140931
-
-			        var re = $.ui.autocomplete.escapeRegex(req.term);
+			        var re = $.ui.autocomplete.escapeRegex( req.term );
 			        var matcher = new RegExp( re, "i" );
-			        var a = $.grep( wordlist, function(item,index){
-			            return matcher.test(item);
+			        var results = $.grep( wordlist, function( item,index ){
+			            return matcher.test( item );
 			        });
 
-			        console.log( a )
-			        responseFn( a );
-			    }
+			        var display = []
+			        results.map(function( item ){
+			        	var index = function( list, key, value ){
+							for ( var index = 0; index < list.length; ++index ) {
+								if( list[index][key] == value ){
+									return index;
+								}
+							}
+							return -1;
+						}( addressLookup, "name", item );
+			        	display.push({
+			        		label: addressLookup[index].name,
+			        		value: addressLookup[index].address
+			        	});
+			        });
 
+			        response( display );
+			    }
 			});
 		});
 
@@ -197,9 +206,9 @@
 			callBack:function(data){
 				if (data.addresses.length === 0 ){
 					$( '#create_identity' ).modal();
-				} else if (typeof data.addresses == "string"){
+				} else/* if (typeof data.addresses == "string"){
 					window.location.replace('bmapi/logout');
-				} else {
+				} else */{
 					data.addresses.forEach(function(value){
 						$.scope.identities.push(value);
 						$.scope.senders.push(value);
