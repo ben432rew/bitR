@@ -233,6 +233,7 @@ var addressLookup;
             $("#mess_view_modal").modal("toggle")
             $("#mess-id").val($(this).find('#msg-id').text())
             $("#mess-subject").html(subject)
+            $("#replyModalLabel").text(subject)
             $("#mess-body").html(body)
             $("#mess-from").html(from)
             $("#mess-to").html(the_message['toAddress'])
