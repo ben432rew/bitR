@@ -322,12 +322,13 @@ var addressLookup;
 			});
 		});
 
+        // reply to message
         $( '#mess-view-form' ).on("submit", function(event) {
             event.preventDefault();
             var form_data = $(this).serializeObject();
             form_data['to_address'] = $("#mess-from").text()
             form_data['from_address'] = $("#mess-to").text()
-            form_data['subject'] = "Re: " + $("#mess-subject").text()
+            form_data['subject'] = "Re: " + $("#replyModalLabel").text()
             form_data['message'] = form_data['reply']
             $( '#compose_msg_form' ).trigger('reset');
             apiCall({
