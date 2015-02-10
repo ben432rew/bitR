@@ -48,3 +48,23 @@ Should be good to go.  To start server,
 `python3 manage.py runserver`
 
 then direct your browser to http://127.0.0.1:8000
+
+`to create the function and trigger that clears out old token in database`
+psql bitr
+\e
+`type i to enter insert mode`
+`copy and paste this`
+``` 
+CREATE FUNCTION delete_old_token() RETURNS trigger
+        LANGUAGE plpgsql
+        as $$
+    BEGIN 
+        DELETE FROM bmapi_token WHERE created_at < NOW() - INTERVAL '5 hours';
+        RETURN NEW;
+    END;
+    $$;
+CREATE TRIGGER clear_old_token
+        AFTER INSERT ON bmapi_token
+        EXECUTE PROCEDURE delete_old_token();
+```
+After pasting hit esc and enter :x
