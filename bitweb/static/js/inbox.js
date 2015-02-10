@@ -1,7 +1,8 @@
+var addressLookup;
 ( function( $ ){
     "use strict";
 
-    var addressLookup = [];
+    addressLookup = [];
 
 
     var apiCall = function( args ){
@@ -92,7 +93,7 @@
 		$('#inbox-mess').show();
 	};
 	var addressCheck = function(string2check){
-	    matcher = /BM-[a-zA-Z0-9]+/ ;
+	    var matcher = /BM-[a-zA-Z0-9]+/ ;
 	    if(typeof(string2check) == 'string' && string2check.match(matcher) ){
 	        return true;
 	    }
@@ -443,15 +444,27 @@
 		$('[name="addAddressEntry"]').on( 'submit', function( event ){
 			event.preventDefault();
 			var formData = $( this ).serializeObject();
+
+			if( !addressCheck( formData.address ) ){
+				alert("Malformed address.");
+				return false;
+			}
+
+			if( $.scope.addressBook.indexOf.call( addressLookup, 'address', formData.address ) !== -1 ){
+				alert("Address already in use.");
+				return false;
+			}
+
 			apiCall({
 				url: 'addAddressEntry',
 				data: formData,
 				callBack: function( data ){
 					$.scope.addressBook.push( formData );
+					$('[name="addAddressEntry"]')[0].reset();
 				}
 			});
 		});
-        
+
         $('#sent-list').on('click', '.new-message', function(e){
             // what default?
             e.preventDefault();
