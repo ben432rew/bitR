@@ -87,7 +87,7 @@ var addressLookup;
 			}
 		});
 
-        $('#inbox-mess').show();
+        $('#inbox-list').show();
 		$('#table-head').show();
 	};
 	var addressCheck = function(string2check){
