@@ -464,6 +464,19 @@ var addressLookup;
 				}
 			});
 		});
+		$('#addressBookModal').on( 'click', 'button.delete', function(){
+			var id = Number( $( this ).parents( '[jq-repeat-index]' ).attr( 'data-id' ) );
+			apiCall({
+				url: 'deleteAddressEntry',
+				data: {
+					id: id
+				},
+				callBack: function(){
+					var index = $.scope.addressBook.indexOf( 'id', id );
+					$.scope.addressBook.splice( index, 1 );
+				}
+			});
+		});
 
         $('#sent-list').on('click', '.new-message', function(e){
             // what default?
@@ -493,7 +506,7 @@ var addressLookup;
             processAddy( $("#mess-from").html( toaddress ) )
 
             if( the_message['read'] === 1 ) return ;
-            APIcal({
+            apiCall({
                 url: 'getInboxMessageByID',
                 data: {
                     msgid: messid,
