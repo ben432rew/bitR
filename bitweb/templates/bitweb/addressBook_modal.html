@@ -17,11 +17,12 @@
 					</div>
 				</form>
 				<ul>
-					<li jq-repeat="addressBook">
-						{% verbatim %}
-						<i>{{ name }}</i>:<b> {{ address }}</b>
-						{% endverbatim %}
+					{% verbatim %}
+					<li jq-repeat="addressBook" data-id="{{ id }}">
+						<i>{{ name }}</i>:<b>{{ address }}</b>
+						<button class="delete">Delete</button>
 					</li>
+					{% endverbatim %}
 				</ul>
 			</div>
 		</div>
