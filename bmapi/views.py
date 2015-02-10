@@ -68,7 +68,6 @@ class CreateId( View ):
         return JsonResponse( { 'identity' : bitty.name } )
 
 
-
 class Send ( View ):
     def post( self, request ):
         from_name = request.json['from_address']
