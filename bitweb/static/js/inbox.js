@@ -87,7 +87,8 @@ var addressLookup;
 			}
 		});
 
-		$('#inbox-mess').show();
+        $('#inbox-list').show();
+		$('#table-head').show();
 	};
 	var addressCheck = function(string2check){
 	    var matcher = /BM-[a-zA-Z0-9]+/ ;
@@ -416,7 +417,8 @@ var addressLookup;
                 }
             }).done(function(){
                 sessionStorage.setItem('sentMessages', JSON.stringify($.scope.sent));
-                $('#sent-mess').show(); 
+                $('#sent-mess').show();
+                $( '#table-head' ).show();
             });
         });
 
@@ -526,10 +528,7 @@ var addressLookup;
             
         })
 
-        $('#sent-list').on('click', '.new-message', function(e){
-            // what default?
-            e.preventDefault();
-
+        $('#sent-mess').on('click', '.new-message', function(e){
             var messages = JSON.parse(sessionStorage.getItem('sentMessages'));
             var messid = $(this).find('#msg-id').text()
 
