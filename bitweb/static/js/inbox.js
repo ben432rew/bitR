@@ -235,8 +235,8 @@ var addressLookup;
             $("#mess-subject").html(subject)
             $("#replyModalLabel").text(subject)
             $("#mess-body").html(body)
-            $("#mess-from").html(from)
-            $("#mess-to").html(the_message['toAddress'])
+            $("#mess-from").html(processAddy( from ) )
+            $("#mess-to").html( processAddy( the_message['toAddress'] ) )
             $("#mess-date").html(date)
             $('#create_reply_button').show()
             $('#mess-reply').show()
@@ -552,7 +552,7 @@ var addressLookup;
             $('#mess-reply').hide()
             $('#messageModalLabel').html("Sent Message")
             $('#delete_msg').attr('data-url','deleteSentmessage')
-            processAddy( $("#mess-from").html( toaddress ) )
+            $("#mess-from").html( processAddy( toaddress ) )
 
             if( the_message['read'] === 1 ) return ;
             apiCall({
