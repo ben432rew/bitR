@@ -226,7 +226,6 @@ var addressLookup;
 					var the_message = messages[j];
 				}
 			}
-
             var from = the_message['fromAddress']
             var body = the_message['message']
             var subject = the_message['subject']
@@ -235,6 +234,8 @@ var addressLookup;
             $("#mess-id").val($(this).find('#msg-id').text())
             $("#mess-subject").html(subject)
             $("#mess-body").html(body)
+            $("#mess-from").html(from)
+            $("#mess-to").html(the_message['toAddress'])
             $("#mess-date").html(date)
             $('#create_reply_button').show()
             $('#mess-reply').show()
@@ -312,7 +313,7 @@ var addressLookup;
 		});
 
 		// send a message
-		$( '#compose_msg_form' ).on("submit", function(event) { // why not a submit?
+		$( '#compose_msg_form' ).on("submit", function(event) {
 			event.preventDefault();
             var form_data = $(this).serializeObject();
 			$( '#compose_msg_form' ).trigger('reset');
@@ -322,15 +323,16 @@ var addressLookup;
 			});
 		});
 
-        $( '#mess-view-form' ).on("submit", function(event) { // why not a submit?
+        $( '#mess-view-form' ).on("submit", function(event) {
             event.preventDefault();
             var form_data = $(this).serializeObject();
-            form_data['send_addy'] = $("#mess-from").text()
-            form_data['from_addy'] = $("#mess-to").text()
+            form_data['to_address'] = $("#mess-from").text()
+            form_data['from_address'] = $("#mess-to").text()
             form_data['subject'] = "Re: " + $("#mess-subject").text()
+            form_data['message'] = form_data['reply']
             $( '#compose_msg_form' ).trigger('reset');
             apiCall({
-                url: 'reply',
+                url: 'send',
                 data: form_data
             });
         });
