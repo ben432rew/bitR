@@ -50,8 +50,11 @@ Should be good to go.  To start server,
 then direct your browser to http://127.0.0.1:8000
 
 to create the function and trigger that clears out old token in database
+
 `psql bitr`
+
 `\e`
+
 type i to enter insert mode
 
 copy and paste this:
