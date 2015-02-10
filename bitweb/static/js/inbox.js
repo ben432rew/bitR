@@ -235,8 +235,8 @@ var addressLookup;
             $("#mess-subject").html(subject)
             $("#replyModalLabel").text(subject)
             $("#mess-body").html(body)
-            $("#mess-from").html(from)
-            $("#mess-to").html(the_message['toAddress'])
+            $("#mess-from").html(processAddy( from ) )
+            $("#mess-to").html( processAddy( the_message['toAddress'] ) )
             $("#mess-date").html(date)
             $('#create_reply_button').show()
             $('#mess-reply').show()
@@ -327,10 +327,19 @@ var addressLookup;
         // reply to message
         $( '#mess-view-form' ).on("submit", function(event) {
             event.preventDefault();
+            var messages = JSON.parse(sessionStorage.getItem('inboxMessages'));
+            var message;
+            var msgid = $( '#mess-id' ).val();
+            // this is repeating another loop, can be dried out
+            for (var i=0; i<messages.length; i++ ){
+                if (messages[i]['msgid'] == msgid){
+                    message = messages[i];
+                }
+            }
             var form_data = $(this).serializeObject();
-            form_data['to_address'] = $("#mess-from").text()
-            form_data['from_address'] = $("#mess-to").text()
-            form_data['subject'] = "Re: " + $("#replyModalLabel").text()
+            form_data['to_address'] = message['fromAddress']
+            form_data['from_address'] = message['toAddress']
+            form_data['subject'] = "Re: " + message['subject']
             form_data['message'] = form_data['reply']
             $( '#compose_msg_form' ).trigger('reset');
             apiCall({
@@ -542,7 +551,7 @@ var addressLookup;
             $('#mess-reply').hide()
             $('#messageModalLabel').html("Sent Message")
             $('#delete_msg').attr('data-url','deleteSentmessage')
-            processAddy( $("#mess-from").html( toaddress ) )
+            $("#mess-from").html( processAddy( toaddress ) )
 
             if( the_message['read'] === 1 ) return ;
             apiCall({
