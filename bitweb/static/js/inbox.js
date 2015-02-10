@@ -477,6 +477,19 @@ var addressLookup;
 				}
 			});
 		});
+		$('#profile-btn').on('click', function(e){
+			e.preventDefault();
+			$.scope.profileIdentities.splice(0);
+			apiCall({
+				url: 'identities',
+				callBack: function( data ){
+					data.addresses.forEach(function(value){
+						$.scope.profileIdentities.push( value );			
+					})
+
+				}
+			});
+		})
 		$('#addressBookModal').on( 'click', 'button.delete', function(){
 			var id = Number( $( this ).parents( '[jq-repeat-index]' ).attr( 'data-id' ) );
 			apiCall({
