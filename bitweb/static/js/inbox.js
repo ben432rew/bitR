@@ -1,23 +1,14 @@
-var addressCheck = function(string2check){
-    matcher = /BM-2c[a-zA-Z0-9]+/
-    if(typeof(string2check) == 'string'){
-        var match = string2check.match(matcher)
-        if(match){
-            return true
-        }
-        else{
-            return false
-        }
-    }
-    else{
-        return false
-    }
-};
 ( function( $ ){
     "use strict";
 
     var addressLookup = [];
 
+	var addressCheck = function(string2check){
+	    matcher = /BM-[a-zA-Z0-9]+/ ;
+	    if(typeof(string2check) == 'string' && string2check.match(matcher) ){
+	        return true;
+	    }
+	};
 
     var apiCall = function( args ){
         var data = args.data || {};
@@ -94,6 +85,8 @@ var addressCheck = function(string2check){
 						}
 					});
 				});
+
+				$.scope.chan_inbox.reverse()
 				sessionStorage.setItem('inboxMessages', JSON.stringify($.scope.inbox));
 				sessionStorage.setItem('chanMessages', JSON.stringify($.scope.chan_inbox));
 				if ( $('#identityDrop').text() == 'Mail: No Identitites Selected ') {
@@ -161,6 +154,37 @@ var addressCheck = function(string2check){
 				this.remove();
 			});
 		};
+
+		// this box works but real one wont..
+		// $(' <input type="text" name="send_addy" placeholder="Enter send">').appendTo('body');
+
+		$('[name="send_addy"]').each(function(){
+
+			$(this).autocomplete({
+				source: function(req, responseFn) {
+					var wordlist = function(){
+						var list = []
+						addressLookup.forEach(function( value ){
+							list.push( value.name );
+						});
+
+						return list;
+					}();
+
+					// http://stackoverflow.com/a/2405109/3140931
+
+			        var re = $.ui.autocomplete.escapeRegex(req.term);
+			        var matcher = new RegExp( re, "i" );
+			        var a = $.grep( wordlist, function(item,index){
+			            return matcher.test(item);
+			        });
+
+			        console.log( a )
+			        responseFn( a );
+			    }
+
+			});
+		});
 
 		$('.dropdown-toggle').dropdown();
 
