@@ -10,8 +10,6 @@
 
 `pip3 install -r requirements.txt`
 
-`createdb bitr`
-
 `sudo su postgres`
 
 You should now be at the postgres user bash prompt
@@ -27,6 +25,8 @@ You should now be in the psql prompt -> postgres=#
 `\q`
 
 `exit`
+
+`createdb bitr`
 
 Put the app secret key and the databases information in a file named "local_settings" in your settings folder
 
@@ -63,7 +63,7 @@ CREATE FUNCTION delete_old_token() RETURNS trigger
         LANGUAGE plpgsql
         as $$
     BEGIN 
-        DELETE FROM bmapi_token WHERE created_at < NOW() - INTERVAL '5 hours';
+        DELETE FROM bmapi_token WHERE created_at < NOW() - INTERVAL '1 day';
         RETURN NEW;
     END;
     $$;
