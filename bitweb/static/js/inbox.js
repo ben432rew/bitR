@@ -482,7 +482,6 @@ var addressLookup;
 				url: 'identities',
 				callBack: function( data ){
 					data.addresses.forEach(function(value){
-						console.log(value)
 						$.scope.profileIdentities.push( value );			
 					})
 
