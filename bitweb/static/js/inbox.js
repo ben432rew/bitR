@@ -133,27 +133,29 @@ var addressLookup;
 
 
 	$(document).ready(function(){
-		$.scope.inbox.__put = function(){
-			this.slideDown();
-		};
+        $.scope.inbox.__put = function(){
+            this.slideDown();
+        };
 
-		$.scope.inbox.__take = function(){
-			this.slideUp('slow', function(){
-				this.remove();
-			});
-		};
+        $.scope.inbox.__take = function(){
+            this.slideUp('slow', function(){
+                this.remove();
+            });
+        };
 
-		$.scope.sent.__put = function(){
-			this.slideDown();
-		};
-		
-		$.scope.sent.__take = function(){
-			this.slideUp('slow', function(){
-				this.remove();
-			});
-		};
+        $.scope.sent.__put = function(){
+            this.slideDown();
+        };
+        
+        $.scope.sent.__take = function(){
+            this.slideUp('slow', function(){
+                this.remove();
+            });
+        };
+        
+        $.material.ripples();
 
-		$( 'input.autoAddress' ).each(function(){
+        $( 'input.autoAddress' ).each(function(){
 
 			$(this).autocomplete({
 				source: function( req, response ) {
@@ -484,6 +486,45 @@ var addressLookup;
 				}
 			});
 		});
+		$('#profile-btn').on('click', function(e){
+			e.preventDefault();
+			$.scope.profileIdentities.splice(0);
+			apiCall({
+				url: 'identities',
+				callBack: function( data ){
+					data.addresses.forEach(function(value){
+						$.scope.profileIdentities.push( value );			
+					})
+
+				}
+			});
+		})
+		$('#addressBookModal').on( 'click', 'button.delete', function(){
+			var id = Number( $( this ).parents( '[jq-repeat-index]' ).attr( 'data-id' ) );
+			apiCall({
+				url: 'deleteAddressEntry',
+				data: {
+					id: id
+				},
+				callBack: function(){
+					var index = $.scope.addressBook.indexOf( 'id', id );
+					$.scope.addressBook.splice( index, 1 );
+				}
+			});
+		});
+
+        $("#logout-btn").on("click", function(e){
+            e.preventDefault();
+            var info = JSON.stringify($.cookie("token"))
+            apiCall({
+                url: 'logout',
+                data: info,
+                callBack: function( data ){
+                    window.location.replace('/')
+                }
+            });
+            
+        })
 
         $('#sent-list').on('click', '.new-message', function(e){
             // what default?
@@ -513,7 +554,7 @@ var addressLookup;
             processAddy( $("#mess-from").html( toaddress ) )
 
             if( the_message['read'] === 1 ) return ;
-            APIcal({
+            apiCall({
                 url: 'getInboxMessageByID',
                 data: {
                     msgid: messid,
