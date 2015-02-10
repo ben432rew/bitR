@@ -71,9 +71,12 @@ class CreateId( View ):
 
 class Send ( View ):
     def post( self, request ):
-        from_name = request.json['from']
+        from_name = request.json['from_address']
         if request.json['to_address'] == 'chan_post':
             to_address = from_add = Chan_subscriptions.objects.get(label=from_name, user=request.json['_user']).address
+        elif 'reply' in request.json:
+            to_address = request.json['to_address']
+            from_add = request.json['from_address']
         else:
             to_address = request.json['to_address']
             from_add = BitKey.objects.get(name=from_name, user=request.json['_user']).key
@@ -86,24 +89,6 @@ class Send ( View ):
             BMclient._encode(subject),
             BMclient._encode(message)
             )
-        return JsonResponse( { 'message_status' : sent } )
-
-class Reply ( View ):
-    def post( self, request ):
-        from_name = request.json['from_addy']
-        if request.json['send_addy'] == 'chan_post':
-            to_address = from_add = Chan_subscriptions.objects.get(label=from_name, user=request.json['_user']).address
-        from_address = request.json['from_addy']
-        to_address = request.json['send_addy']
-        subject = request.json['subject']
-        message = request.json['message']
-        sent = BMclient.call(
-            'sendMessage',
-            to_address,
-            from_address,
-            BMclient._encode(subject),
-            BMclient._encode(message)
-        )
         return JsonResponse( { 'message_status' : sent } )
 
 
@@ -193,44 +178,3 @@ class GetAddressBook( View ):
         books = [ {'address': book.address, 'name': book.name} for book in Address_entry.objects.filter( user=request.json['_user'] ) ]
         
         return JsonResponse( { 'book': books } )
-
-
-#for searching in the current emails a user has
-class Search( View ):
-    pass
-
-
-#get all started, use post to star or unstar
-class Starred( View ):
-    pass
-
-
-#see all drafts
-class Drafts( View ):
-    pass
-
-
-#see spam folder as get, post to make something spam or unspam something
-class Spam( View ):
-    pass
-
-
-#get to see trash, post to trash or untrash something
-class Trash( View ):
-    pass
-
-
-
-# class DeleteId( View ):
-#     def post( self, request ):
-#         the_jason = json.loads(request.body.decode('utf-8'))
-#         address = the_json['address']
-#         return JsonResponse( { 'id' : self.api.deleteAddress(address) } )
-
-
-# class LeaveChan( View ):
-
-#     def post( self, request ):
-#         the_jason = json.loads(request.body.decode('utf-8'))
-#         address = the_json['address']
-#         return JsonResponse( { 'leave_status' : self.api.leaveChan(address) } )
