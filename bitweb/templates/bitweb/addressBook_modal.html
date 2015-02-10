@@ -19,8 +19,8 @@
 				<ul>
 					{% verbatim %}
 					<li jq-repeat="addressBook" data-id="{{ id }}">
-						<i>{{ name }}</i>:<b>{{ address }}</b>
-						<button class="delete">Delete</button>
+						<b>{{ name }}<b>:  <i>{{ address }}</i>
+						<button type="button" class="btn btn-danger delete">Delete</button>
 					</li>
 					{% endverbatim %}
 				</ul>
