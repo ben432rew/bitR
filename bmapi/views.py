@@ -41,10 +41,14 @@ class Login( View ):
 
 
 class Logout( View ):
-    def get( self, request ):
-        request.user.token_set.all().delete()
+
+    def post(self, request ):
+        the_jason = json.loads(request.body.decode("utf-8"))
+        print(the_jason)
+        print(the_jason['token'])
+        Token.objects.get(token=the_jason['token']).delete()
         logout( request )
-        return redirect ( '/' )
+        return JsonResponse({'status':'logged out'})
 
 
 class CreateChan( View ):

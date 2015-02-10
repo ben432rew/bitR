@@ -466,6 +466,19 @@ var addressLookup;
 			});
 		});
 
+        $("#logout-btn").on("click", function(e){
+            e.preventDefault();
+            var info = JSON.stringify($.cookie("token"))
+            apiCall({
+                url: 'logout',
+                data: info,
+                callBack: function( data ){
+                    window.location.replace('/')
+                }
+            });
+            
+        })
+
         $('#sent-list').on('click', '.new-message', function(e){
             // what default?
             e.preventDefault();
