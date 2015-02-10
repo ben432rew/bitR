@@ -478,7 +478,6 @@ var addressLookup;
 			});
 		});
 		$('#profile-btn').on('click', function(e){
-			console.log("here")
 			e.preventDefault();
 			$.scope.profileIdentities.splice(0);
 			apiCall({
