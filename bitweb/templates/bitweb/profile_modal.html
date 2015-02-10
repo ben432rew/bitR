@@ -1,0 +1,56 @@
+<div class="modal fade" id="profile_modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+		<div class="modal-content">
+	        <div class="modal-header">
+	 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+	        	<h4 class="modal-title" id="myModalLabel">Profile</h4>
+	        </div>
+		    <div class="modal-body">
+		    	<div class = "row">
+  </div>
+  <div class = "row" >
+    <div class = "col-md-12" >
+      <div class="panel panel-material-blue-grey-500">
+          <div class="panel-heading">
+            <h3 class="panel-title">Profile Info</h3>
+          </div>
+          <div class="panel-body">
+            <div class = "row" >
+              <div class = "col-md-2" >
+                <p>Username: {{user.username}}</p>
+                <p>Password: ******** </p>
+            </div>
+            </div>
+            <div class = "row" >
+              <div class = "col-md-2" >
+                <a href="">Change Password</a>
+              </div>
+              <div class = "col-md-2" >
+                <a href="">Change Username</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <div class = "row" >
+    <div class = "col-md-12" >
+      <div class="panel panel-material-blue-grey-500">
+          <div class="panel-heading">
+            <h3 class="panel-title">Identities</h3>
+          </div>
+          <div class="panel-body">
+            <table class="table">
+                <tr><th>Nickname</th><th>Address</th></tr>
+                {% for identity in identities %}
+                    <tr><td>{{ identity.name }}</td><td>{{ identity.key }}</td></tr>
+                {% endfor %}
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+		    </div>
+	    </div>
+	  </div>
+	 </div>

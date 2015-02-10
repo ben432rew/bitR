@@ -110,6 +110,7 @@ class AllIdentitiesOfUser( View ):
         bitkeys = BitKey.objects.filter(user=request.json['_user'])
         addresses = [ {'identity':bk.name, 'key':bk.key} for bk in bitkeys ]
         return JsonResponse( { 'addresses' : addresses } )
+# git blame my balls
 
 
 def get_messages( function_name, request, chans=False ):

@@ -449,6 +449,13 @@
 				}
 			});
 		});
+		$('#profile-btn').on('click', function(e){
+			e.preventDefault();
+			
+		})
+
+
+
         $('#sent-list').on('click', '.new-message', function(e){
             // what default?
             e.preventDefault();
