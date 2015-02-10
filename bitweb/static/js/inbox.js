@@ -466,7 +466,17 @@ var addressLookup;
 		});
 		$('#profile-btn').on('click', function(e){
 			e.preventDefault();
-			
+			$.scope.profileIdentities.splice(0);
+			apiCall({
+				url: 'identities',
+				callBack: function( data ){
+					data.addresses.forEach(function(value){
+						console.log(value)
+						$.scope.profileIdentities.push( value );			
+					})
+
+				}
+			});
 		})
 
         $('#sent-list').on('click', '.new-message', function(e){

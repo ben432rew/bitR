@@ -42,9 +42,11 @@
           <div class="panel-body">
             <table class="table">
                 <tr><th>Nickname</th><th>Address</th></tr>
-                {% for identity in identities %}
-                    <tr><td>{{ identity.name }}</td><td>{{ identity.key }}</td></tr>
-                {% endfor %}
+                {% verbatim %}
+					<tr jq-repeat="profileIdentities">
+					<td>{{ identity }}</td><td>{{ key }}</td>
+					</tr>
+				{% endverbatim %}
             </table>
           </div>
         </div>
