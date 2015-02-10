@@ -489,7 +489,6 @@ var addressLookup;
 
 				}
 			});
-			
 		})
 		$('#addressBookModal').on( 'click', 'button.delete', function(){
 			var id = Number( $( this ).parents( '[jq-repeat-index]' ).attr( 'data-id' ) );
