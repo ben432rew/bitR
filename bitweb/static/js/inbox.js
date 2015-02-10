@@ -84,9 +84,6 @@ var addressLookup;
 				$.scope.chan_inbox.reverse()
 				sessionStorage.setItem('inboxMessages', JSON.stringify($.scope.inbox));
 				sessionStorage.setItem('chanMessages', JSON.stringify($.scope.chan_inbox));
-				if ( $('#identityDrop').text() == 'Mail: No Identitites Selected ') {
-					$('#inbox-list > li').hide();
-				}
 			}
 		});
 
@@ -193,6 +190,7 @@ var addressLookup;
 
 		addressesBook();
 		inboxMessages();
+        $('#chan_tab').hide()
 
 		// populate list of identities
 		apiCall({
@@ -233,6 +231,7 @@ var addressLookup;
             $("#mess_view_modal").modal("toggle")
             $("#mess-id").val($(this).find('#msg-id').text())
             $("#mess-subject").html(subject)
+            $("#replyModalLabel").text(subject)
             $("#mess-body").html(body)
             $("#mess-from").html(from)
             $("#mess-to").html(the_message['toAddress'])
@@ -323,12 +322,13 @@ var addressLookup;
 			});
 		});
 
+        // reply to message
         $( '#mess-view-form' ).on("submit", function(event) {
             event.preventDefault();
             var form_data = $(this).serializeObject();
             form_data['to_address'] = $("#mess-from").text()
             form_data['from_address'] = $("#mess-to").text()
-            form_data['subject'] = "Re: " + $("#mess-subject").text()
+            form_data['subject'] = "Re: " + $("#replyModalLabel").text()
             form_data['message'] = form_data['reply']
             $( '#compose_msg_form' ).trigger('reset');
             apiCall({
@@ -383,6 +383,10 @@ var addressLookup;
 
 		// show sent messages
 		$('.inbox-nav').on( 'click', 'button#sent', function(){
+            $('#chan_tab').hide()
+            $( '#secondary' ).removeClass( 'btn-material-blue-grey-100' );
+            $('#identityDrop').show()
+            $( '#primary' ).addClass( 'btn-material-blue-grey-100' );
             $('.inbox-bucket').children().hide();
             $.scope.sent.splice(0);
             apiCall({
@@ -406,18 +410,19 @@ var addressLookup;
         });
 
 		// show the chan tab
-		$('#chan_tab').on( 'click', function(){
-			$('.inbox-bucket').children().hide();
-			$( this ).addClass( 'btn-material-blue-grey-100' );
-			$( '#identityDrop' ).removeClass( 'btn-material-blue-grey-100' );
-			$('#chan_mess').show();
-			if ( $('#chan_tab').text() == 'No Chans Selected ') { // what is this doing?
-				// $('#chan_ul_inbox_well > div').hide()
-			}          
-		});
+		$('#secondary').on( 'click', function(){
+            $('#identityDrop').hide()
+            $('.inbox-bucket').children().hide();
+            $( '#primary' ).removeClass( 'btn-material-blue-grey-100' );
+            $( this ).addClass( 'btn-material-blue-grey-100' );
+            $('#chan_tab').show()
+            $('#chan_mess').show();
+            // this next line is not working.  whyyyyyyyyyy
+            $( '.id_checks' ).prop('checked', false)
+        });
 
-		// select chans to display 
-		$('#chan_ul').on( 'click', 'li.jq-repeat-chans > label', function(){
+        // select chans to display 
+        $('#chan_ul').on( 'click', 'li.jq-repeat-chans > label', function(){
 			var selected_chans = $('#chan_tab').text();
 			var val = '.' + $( this ).parent().attr('data-chan-add');
 			$( val ).toggle();
@@ -430,13 +435,19 @@ var addressLookup;
 			$( val ).toggle();
 		});
 
-		$('#identityDrop').on( 'click', function(){
-			$( this ).addClass( 'btn-material-blue-grey-100' );
-			$( '#chan_tab' ).removeClass( 'btn-material-blue-grey-100' );
-			inboxMessages();
-		} );
+		$('#primary').on( 'click', function(){
+            $('#chan_tab').hide()
+            $( '#secondary' ).removeClass( 'btn-material-blue-grey-100' );
+            $('#identityDrop').show()
+            $( this ).addClass( 'btn-material-blue-grey-100' );
+            inboxMessages();
+        } );
 
-		$('.inbox-nav').on( 'click', 'button#inbox', function(){
+        $('.inbox-nav').on( 'click', 'button#inbox', function(){
+            $('#chan_tab').hide()
+            $( '#secondary' ).removeClass( 'btn-material-blue-grey-100' );
+            $('#identityDrop').show()
+            $( '#primary' ).addClass( 'btn-material-blue-grey-100' );
 			inboxMessages();
 		} );
 
@@ -478,7 +489,19 @@ var addressLookup;
 				}
 			});
 		})
-
+		$('#addressBookModal').on( 'click', 'button.delete', function(){
+			var id = Number( $( this ).parents( '[jq-repeat-index]' ).attr( 'data-id' ) );
+			apiCall({
+				url: 'deleteAddressEntry',
+				data: {
+					id: id
+				},
+				callBack: function(){
+					var index = $.scope.addressBook.indexOf( 'id', id );
+					$.scope.addressBook.splice( index, 1 );
+				}
+			});
+		});
         $('#sent-list').on('click', '.new-message', function(e){
             // what default?
             e.preventDefault();
@@ -507,7 +530,7 @@ var addressLookup;
             processAddy( $("#mess-from").html( toaddress ) )
 
             if( the_message['read'] === 1 ) return ;
-            APIcal({
+            apiCall({
                 url: 'getInboxMessageByID',
                 data: {
                     msgid: messid,
