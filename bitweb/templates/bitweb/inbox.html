@@ -33,7 +33,7 @@
 			<ul class="dropdown-menu" id="id_ul" role="menu" aria-labelledby="dropdownMenu1">
 				{% verbatim %}
 					<li jq-repeat="identities" data-iden-key="{{key}}">
-						<input type="checkbox" id="{{ identity }}">
+						<input class="id_checks" type="checkbox" id="{{ identity }}">
 						<label id="identity_list" for="{{ identity }}" >{{ identity }}
 					</li>
 				{% endverbatim %}  

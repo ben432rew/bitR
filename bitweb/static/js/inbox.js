@@ -381,6 +381,10 @@ var addressLookup;
 
 		// show sent messages
 		$('.inbox-nav').on( 'click', 'button#sent', function(){
+            $('#chan_tab').hide()
+            $( '#secondary' ).removeClass( 'btn-material-blue-grey-100' );
+            $('#identityDrop').show()
+            $( '#primary' ).addClass( 'btn-material-blue-grey-100' );
             $('.inbox-bucket').children().hide();
             $.scope.sent.splice(0);
             apiCall({
@@ -411,7 +415,8 @@ var addressLookup;
             $( this ).addClass( 'btn-material-blue-grey-100' );
             $('#chan_tab').show()
             $('#chan_mess').show();
-       
+            // this next line is not working.  whyyyyyyyyyy
+            $( '.id_checks' ).prop('checked', false)
         });
 
         // select chans to display 
