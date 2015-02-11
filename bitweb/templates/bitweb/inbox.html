@@ -28,8 +28,8 @@
 			<button class="btn btn-material-blue-grey-100" data-toggle="modal" data-target="#addressBookModal">Address Book</button>
 		</div>
 
-		<div class="dropdown btn-group col-md-2" role="group">
-		  <button id="identityDrop" data-toggle="dropdown" class="btn dropdown-toggle btn-material-blue-grey-100">Show By Identity <span class="caret"></span></button>
+		<div class="col-md-2">
+		  <button id="identityDrop" data-toggle="dropdown" class="dropdown btn dropdown-toggle btn-material-blue-grey-100">Show By Identity <span class="caret"></span></button>
 			<ul class="dropdown-menu" id="id_ul" role="menu" aria-labelledby="dropdownMenu1">
 				{% verbatim %}
 					<li jq-repeat="identities" data-iden-key="{{key}}">
