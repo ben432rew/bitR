@@ -111,7 +111,7 @@ class getSentMessageByUser( View ):
 class JoinChan( View ):
     def post( self, request ):
         if request.json['address'] in [ subs.address for subs in  Chan_subscriptions.objects.filter(user=request.json['_user']) ]: return JsonResponse( { 'error': 'already subscribed'})
-        client_response = BMclient.call( 'addSubscription', request.json['address'], BMclient._encode( request.json['label']  ))
+        client_response = BMclient.call( 'joinChan', BMclient._encode( request.json['label'] ), request.json['address'] )
         if client_response['status'] == 200 or client_response['status'] == 16:
             chan = Chan_subscriptions.objects.create( user=request.json['_user'], label=request.json['label'], address=request.json['address'] )
             return JsonResponse( { 'chan_label' : chan.label } )
