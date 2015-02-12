@@ -42,25 +42,12 @@ class Login( View ):
 
 
 class Logout( View ):
-
     def post(self, request ):
         the_jason = json.loads(request.body.decode("utf-8"))
         if the_jason.get("token",False):
             Token.objects.get(token=the_jason['token']).delete()
         logout( request )
         return JsonResponse({'status':'logged out'})
-
-
-class CreateChan( View ):
-    def post( self, request ):
-        passphrase = request.json['form']
-        chan = BMclient.call('createChan', BMclient._encode(passphrase))
-        if chan['status'] != 200:
-            return JsonResponse( { 'error' : chan['status'] } )
-        address = chan['data'][0]['address']
-        chan_obj = Chan_subscriptions.objects.create(label=passphrase, address=address, user=request.json['_user'])
-        return JsonResponse( { 'chan_address' : chan_obj.address, 'chan_label' : chan_obj.label } )
-
 
 
 class CreateId( View ):
@@ -102,7 +89,6 @@ class AllIdentitiesOfUser( View ):
         return JsonResponse( { 'addresses' : addresses } )
 
 
-
 def get_messages( function_name, request, chans=False ):
     bitkeys = BitKey.objects.filter(user=request.json['_user'])
     addresses = [ bk.key for bk in bitkeys ]
@@ -128,9 +114,24 @@ class getSentMessageByUser( View ):
 
 class JoinChan( View ):
     def post( self, request ):
-        chan = Chan_subscriptions.objects.create( user=request.json['_user'], label=request.json['label'], address=request.json['address'] )
-        BMclient.call( 'addSubscription', chan.address, BMclient._encode( chan.label  ))
-        return JsonResponse( { 'chan_label' : chan.label } )
+        if request.json['address'] in [ subs.address for subs in  Chan_subscriptions.objects.filter(user=request.json['_user']) ]: return JsonResponse( { 'error': 'already subscribed'})
+        client_response = BMclient.call( 'joinChan', BMclient._encode( request.json['label'] ), request.json['address'] )
+        if client_response['status'] == 200 or client_response['status'] == 16:
+            chan = Chan_subscriptions.objects.create( user=request.json['_user'], label=request.json['label'], address=request.json['address'] )
+            return JsonResponse( { 'chan_label' : chan.label } )
+        else:
+            return JsonResponse( { 'status': client_response['status'], 'error':client_response['data'] })
+
+
+class CreateChan( View ):
+    def post( self, request ):
+        passphrase = request.json['form']
+        chan = BMclient.call('createChan', BMclient._encode(passphrase))
+        if chan['status'] != 200:
+            return JsonResponse( { 'error' : chan['status'] } )
+        address = chan['data'][0]['address']
+        chan_obj = Chan_subscriptions.objects.create(label=passphrase, address=address, user=request.json['_user'])
+        return JsonResponse( { 'chan_address' : chan_obj.address, 'chan_label' : chan_obj.label } )
 
 
 class AllChans( View ):
