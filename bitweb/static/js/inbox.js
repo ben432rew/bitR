@@ -44,12 +44,7 @@ var addressLookup;
         return String(date).slice(16,21)+"  "+String(date).slice(0,15) ;
     };
 
-    var sortByKey = function(array, key) {
-    return array.sort(function(a, b) {
-        var x = a[key]; var y = b[key];
-        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-    });
-}
+
 
     var inboxMessages = function(){
         $('.inbox-bucket').children().hide();
@@ -332,9 +327,13 @@ var addressLookup;
 			$( '#compose_msg_form' ).trigger('reset');
 			apiCall({
 				url: 'send',
-				data: form_data
-			});
+				data: form_data,
+			callBack:function (data){
+				$("#compose_msg").toggle()
+			}
+
 		});
+	});
 
         // reply to message
         $( '#mess-view-form' ).on("submit", function(event) {
