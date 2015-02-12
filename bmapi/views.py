@@ -12,6 +12,7 @@ from bmapi.models import *
 from pprint import pprint
 import uuid
 import json
+import time
 
 
 def login_token(request, user):
@@ -44,7 +45,8 @@ class Logout( View ):
 
     def post(self, request ):
         the_jason = json.loads(request.body.decode("utf-8"))
-        Token.objects.get(token=the_jason['token']).delete()
+        if the_jason.get("token",False):
+            Token.objects.get(token=the_jason['token']).delete()
         logout( request )
         return JsonResponse({'status':'logged out'})
 
@@ -98,7 +100,7 @@ class AllIdentitiesOfUser( View ):
         bitkeys = BitKey.objects.filter(user=request.json['_user'])
         addresses = [ {'identity':bk.name, 'key':bk.key} for bk in bitkeys ]
         return JsonResponse( { 'addresses' : addresses } )
-# git blame my balls
+
 
 
 def get_messages( function_name, request, chans=False ):
@@ -107,6 +109,8 @@ def get_messages( function_name, request, chans=False ):
     if chans:
         addresses += chans
     data = [ BMclient.call( function_name, address ) for address in addresses ]
+    pprint(data[2])
+    newlist = sorted(data[0]['data'], key=lambda k: k['receivedTime']) 
     return JsonResponse( { 'messages': data, 'chans':chans } )
 
 
