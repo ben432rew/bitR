@@ -1,5 +1,4 @@
 var bitrSchema = {
-  autoSchema: true,  
   stores: [{
     name: 'addressbook',
     indexes: [{
