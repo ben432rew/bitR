@@ -355,7 +355,10 @@ var addressLookup;
             $( '#compose_msg_form' ).trigger('reset');
             apiCall({
                 url: 'send',
-                data: form_data
+                data: form_data,
+                callBack:function (data){
+				$("#mess_view_modal").toggle()
+			}
             });
         });
 
