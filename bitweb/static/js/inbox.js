@@ -18,9 +18,9 @@ var addressLookup;
             statusCode: {
                 401: function(){
                 	var token = JSON.stringify({token:$.cookie("token") })
-                	$.post('/bmapi/logout', token, function(){
+                	$.post('/bmapi/logout', token ).done(function(){
                     	window.location.replace('/');	
-                	})
+                	});
                 },
                 500: function(){
                     alert( "Sever Error" );
@@ -86,7 +86,6 @@ var addressLookup;
                             }
                             value.chan = ($.scope.chans[index]).chan_label;
                             $.scope.chan_inbox.push(value);
-                            console.log($.scope.chan_inbox)
                         } else {
                             $.scope.inbox.push(value);
 						}
@@ -528,12 +527,9 @@ var addressLookup;
 		});
 
         $("#logout-btn").on("click", function(){
-            var info = JSON.stringify($.cookie("token"))
             apiCall({
                 url: 'logout',
-                data: info,
                 callBack: function( data ){
-                	console.log(data)
                     window.location.replace('/')
                 }
             });

@@ -43,10 +43,10 @@ class Login( View ):
 
 class Logout( View ):
     def post(self, request ):
+        logout( request )
         the_jason = json.loads(request.body.decode("utf-8"))
         if the_jason.get("token",False):
             Token.objects.get(token=the_jason['token']).delete()
-        logout( request )
         return JsonResponse({'status':'logged out'})
 
 
@@ -95,7 +95,6 @@ def get_messages( function_name, request, chans=False ):
     if chans:
         addresses += chans
     data = [ BMclient.call( function_name, address ) for address in addresses ]
-    pprint(data[2])
     newlist = sorted(data[0]['data'], key=lambda k: k['receivedTime']) 
     return JsonResponse( { 'messages': data, 'chans':chans } )
 
