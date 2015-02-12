@@ -17,7 +17,10 @@ var addressLookup;
             success: callBack,
             statusCode: {
                 401: function(){
-                    window.location.replace('/bmapi/logout');
+                	var token = JSON.stringify({token:$.cookie("token") })
+                	$.post('/bmapi/logout', token ).done(function(){
+                    	window.location.replace('/');	
+                	});
                 },
                 500: function(){
                     alert( "Sever Error" );
@@ -41,6 +44,13 @@ var addressLookup;
         return String(date).slice(16,21)+"  "+String(date).slice(0,15) ;
     };
 
+    var sortByKey = function(array, key) {
+    return array.sort(function(a, b) {
+        var x = a[key]; var y = b[key];
+        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+    });
+}
+
     var inboxMessages = function(){
         $('.inbox-bucket').children().hide();
         $.scope.inbox.splice(0);
@@ -62,6 +72,7 @@ var addressLookup;
                 chan_addresses = data.chans;
                 data.messages.forEach(function(value) {
                     value.data.forEach(function(value){
+                    	value.receivedUnixTime= value.receivedTime
                         value.receivedTime = convertUnixTime(value.receivedTime);
                         value.fromaddress = value.fromAddress;
                         value.toaddress = value.toAddress;
@@ -515,12 +526,9 @@ var addressLookup;
             });
         });
 
-        $("#logout-btn").on("click", function(e){
-            e.preventDefault();
-            var info = JSON.stringify($.cookie("token"))
+        $("#logout-btn").on("click", function(){
             apiCall({
                 url: 'logout',
-                data: info,
                 callBack: function( data ){
                     window.location.replace('/')
                 }

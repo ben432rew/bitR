@@ -5,7 +5,8 @@ var authorize = function(event, string, form) {
             if (data['token']) {
                 $.cookie( 'token', data['token'], { expires: 1 } );
                 window.location.replace('/inbox');
-            } else {
+            }
+            else {
                 alert('Sorry, that ' + string + ' information is not valid')
                 form.reset()
             }
