@@ -138,6 +138,18 @@ class AllChans( View ):
         chans = [ { 'chan_label' : chan.label, 'chan_address':chan.address } for chan in Chan_subscriptions.objects.filter( user=request.json['_user'] )]
         return JsonResponse( {'chans':chans} )
 
+class LeaveChan( View ):
+    def post( self, request ):
+        label = request.json['label']
+        chan = Chan_subscriptions.objects.filter(user=request.json['_user'], label = request.json['label'])
+        if chan:
+            address = chan[0].address
+            status = BMclient.call( 'leaveChan', address )
+            chan[0].delete()
+        else:
+            status = 'no chan'
+        return JsonResponse({ 'label' : label, 'status' : status })
+
 
 class DeleteInboxMessage( View ):
     def post( self, request ):
