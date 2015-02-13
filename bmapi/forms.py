@@ -2,6 +2,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.admin import UserAdmin
 from bitweb.models import User
 from django import forms
+from django.core.exceptions import ValidationError
+import re
 
 
 class UserCreateForm(UserCreationForm):
@@ -11,6 +13,8 @@ class UserCreateForm(UserCreationForm):
 
    # this redefines the save function to include the fields you added
     def save(self, commit=True):
+        password = self.cleaned_data["password1"]
+        check_password_strenght(password)
         user = super(UserCreateForm, self).save(commit=False)
         if commit:
             user.save()
@@ -25,3 +29,7 @@ class UserCreateForm(UserCreationForm):
         except User.DoesNotExist:
             return username
         raise forms.ValidationError(self.error_messages['duplicate_username'])
+# checks the password strength
+def check_password_strenght(password):
+    if None == re.match("^(?=[^\d_].*?\d)\w(\w|[!@#$%]){1,256}",password):
+        raise ValidationError("Password is not strong enough")
