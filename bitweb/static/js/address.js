@@ -3,7 +3,7 @@ var addressLookup = [];
 
 var adrs = {
     addressCheck: function(string2check){
-        var matcher = /BM-[a-zA-Z0-9]+/ ;
+        var matcher = /^BM-[\w]{34}$/ ;
         if( typeof(string2check) == 'string' && string2check.match(matcher) ){
             return true;
         }
@@ -20,7 +20,14 @@ var adrs = {
 
     convertAddress: function( $element ){
         var address = $element.html();
-        $element.data( 'address', address );
+        if( this.addressCheck( address ) ){
+            $element.data( 'address', address );
+        }else{
+            if( $element.data('address') ){
+                address = $element.data('address');
+            }
+        }
+        if( !this.addressCheck(address) ) return ;
         address = this.processAddy( address );
         address = util.stringShorter( address );
         $element.html( address );
@@ -28,21 +35,8 @@ var adrs = {
 
     parseNodes: function( $start ){
         $start = $start || $( 'body' );
-        $start.find('.addyBook').each( function( $element ){
-            this.convertAddress( $element )
-        });
-    },
-
-    insertAddresses: function(){
-        $(document).on('DOMNodeInserted', function(event) {
-            if ( $( event.target ).is('.addyBook') ){
-                adrs.convertAddress( $( this ) );
-            }else{
-                $( event.target ).find( '.addyBook' )
-                    .each(function( key, value ){
-                        adrs.convertAddress( $( value ) );
-                    });
-            }
+        $start.find('.addyBook').each( function( index, element ){
+            adrs.convertAddress( $( element ) );
         });
     },
 
@@ -50,12 +44,15 @@ var adrs = {
         localDB.getAddressBook().done(function(book){
             $.scope.addressBook.push.apply( $.scope.addressBook, book );
             addressLookup.push.apply( addressLookup, book );
+            adrs.parseNodes();
         })
-        this.insertAddresses()
     }
 
-}
+};
 
+$(document).on('DOMNodeInserted', function(event) {
+    adrs.parseNodes( $(event.target) )
+});
 
 // add new address book entry
 $('[name="addAddressEntry"]').on( 'submit', function( event ){
@@ -72,7 +69,9 @@ $('[name="addAddressEntry"]').on( 'submit', function( event ){
     }
     localDB.createAddress(formData)
     $.scope.addressBook.push( formData );
+    addressLookup.push(formData);
     $('[name="addAddressEntry"]')[0].reset();
+    adrs.parseNodes();
 
 });
 
