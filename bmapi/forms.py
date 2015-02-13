@@ -29,7 +29,7 @@ class UserCreateForm(UserCreationForm):
         except User.DoesNotExist:
             return username
         raise forms.ValidationError(self.error_messages['duplicate_username'])
-
+# checks the password strength
 def check_password_strenght(password):
     if None == re.match("^(?=[^\d_].*?\d)\w(\w|[!@#$%]){1,256}",password):
         raise ValidationError("Password is not strong enough")
