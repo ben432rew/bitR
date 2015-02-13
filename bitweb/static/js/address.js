@@ -1,63 +1,67 @@
 // after indexedDB is complete, replace this array with database lookups
 var addressLookup = [];
 
-var addressCheck = function(string2check){
-    var matcher = /BM-[a-zA-Z0-9]+/ ;
-    if( typeof(string2check) == 'string' && string2check.match(matcher) ){
-        return true;
+var adrs = {
+    addressCheck: function(string2check){
+        var matcher = /BM-[a-zA-Z0-9]+/ ;
+        if( typeof(string2check) == 'string' && string2check.match(matcher) ){
+            return true;
+        }
+    },
+
+    processAddy: function( address, len ){
+        var index = $.scope.addressBook.indexOf.call( addressLookup, 'address', address );
+        if( index !== -1 ){
+            address = addressLookup[index].alias;
+        }
+        
+        return address ;
+    },
+
+    convertAddress: function( $element ){
+        var address = $element.html();
+        $element.data( 'address', address );
+        address = this.processAddy( address );
+        address = util.stringShorter( address );
+        $element.html( address );
+    },
+
+    parseNodes: function( $start ){
+        $start = $start || $( 'body' );
+        $start.find('.addyBook').each( function( $element ){
+            this.convertAddress( $element )
+        });
+    },
+
+    insertAddresses: function(){
+        $(document).on('DOMNodeInserted', function(event) {
+            if ( $( event.target ).is('.addyBook') ){
+                adrs.convertAddress( $( this ) );
+            }else{
+                $( event.target ).find( '.addyBook' )
+                    .each(function( key, value ){
+                        adrs.convertAddress( $( value ) );
+                    });
+            }
+        });
+    },
+
+    addressesBook: function(){
+        localDB.getAddressBook().done(function(book){
+            $.scope.addressBook.push.apply( $.scope.addressBook, book );
+            addressLookup.push.apply( addressLookup, book );
+        })
+        this.insertAddresses()
     }
-};
 
-var processAddy = function( address, len ){
-    var index = $.scope.addressBook.indexOf.call( addressLookup, 'address', address );
-    if( index !== -1 ){
-        address = addressLookup[index].alias;
-    }
-    
-    return address ;
-};
-
-var convertAddress = function( $element ){
-    var address = $element.html();
-    $element.data( 'address', address );
-    address = processAddy( address );
-    address = util.stringShorter( address );
-    $element.html( address );
-};
-
-var parseNodes = function( $start ){
-    $start = $start || $( 'body' );
-    $start.find('.addyBook').each( function( $element ){
-        convertAddress( $element )
-    });
 }
 
-var insertAddresses = function(){
-    $(document).on('DOMNodeInserted', function(event) {
-        if ( $( event.target ).is('.addyBook') ){
-            convertAddress( $( this ) );
-        }else{
-            $( event.target ).find( '.addyBook' )
-                .each(function( key, value ){
-                    convertAddress( $( value ) );
-                });
-        }
-    });
-};
-
-var addressesBook = function(){
-    localDB.getAddressBook().done(function(book){
-        $.scope.addressBook.push.apply( $.scope.addressBook, book );
-        addressLookup.push.apply( addressLookup, book );
-    })
-    insertAddresses()
-};
 
 // add new address book entry
 $('[name="addAddressEntry"]').on( 'submit', function( event ){
     event.preventDefault();
     var formData = $( this ).serializeObject();
-    if( !addressCheck( formData.address ) ){
+    if( !adrs.addressCheck( formData.address ) ){
         alert("Malformed address.");
         return false;
     }

@@ -111,7 +111,7 @@
         });
 
 
-        addressesBook();
+        adrs.addressesBook();
         inboxMessages();
         $('#chan_tab').hide()
 
@@ -156,8 +156,8 @@
             $("#mess-subject").html(subject)
             $("#replyModalLabel").text(subject)
             $("#mess-body").html(body)
-            $("#mess-from").html(processAddy( from ) )
-            $("#mess-to").html( processAddy( the_message['toAddress'] ) )
+            $("#mess-from").html(adrs.processAddy( from ) )
+            $("#mess-to").html( adrs.processAddy( the_message['toAddress'] ) )
             $("#mess-date").html(date)
             $('#create_reply_button').show()
             $('#mess-reply').show()
@@ -352,7 +352,7 @@
             $('#mess-reply').hide()
             $('#messageModalLabel').html("Sent Message")
             $('#delete_msg').attr('data-url','deleteSentmessage')
-            $("#mess-from").html( processAddy( toaddress ) )
+            $("#mess-from").html( adrs.processAddy( toaddress ) )
 
             if( the_message['read'] === 1 ) return ;
             util.apiCall({
