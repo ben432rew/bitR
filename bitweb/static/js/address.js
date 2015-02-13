@@ -64,10 +64,9 @@ var addressesBook = function(){
 };
 
 // add new address book entry
-$('[alias="addAddressEntry"]').on( 'submit', function( event ){
+$('[name="addAddressEntry"]').on( 'submit', function( event ){
     event.preventDefault();
     var formData = $( this ).serializeObject();
-
     if( !addressCheck( formData.address ) ){
         alert("Malformed address.");
         return false;
@@ -79,14 +78,13 @@ $('[alias="addAddressEntry"]').on( 'submit', function( event ){
     }
     localDB.createAddress(formData)
     $.scope.addressBook.push( formData );
-    $('[alias="addAddressEntry"]')[0].reset();
+    $('[name="addAddressEntry"]')[0].reset();
 
 });
 
 // delete address book entry
 $('#addressBookModal').on( 'click', 'button.delete', function(){
     var alias = $( this ).parents( '[jq-repeat-index]' ).attr( 'data-alias' );
-    console.log(alias)
     db.remove('addressbook', alias).done(function(){
         var index = $.scope.addressBook.indexOf( 'alias', alias );
         $.scope.addressBook.splice( index, 1 );
