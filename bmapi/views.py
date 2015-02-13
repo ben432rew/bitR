@@ -117,7 +117,7 @@ class JoinChan( View ):
         client_response = BMclient.call( 'joinChan', BMclient._encode( request.json['label'] ), request.json['address'] )
         if client_response['status'] == 200 or client_response['status'] == 16:
             chan = Chan_subscriptions.objects.create( user=request.json['_user'], label=request.json['label'], address=request.json['address'] )
-            return JsonResponse( { 'chan_label' : chan.label } )
+            return JsonResponse( { 'chan_label' : chan.label, 'chan_address': chan.address } )
         else:
             return JsonResponse( { 'status': client_response['status'], 'error':client_response['data'] })
 
@@ -155,32 +155,3 @@ class getInboxMessageByID( View ):
     def post( self, request ):
         res = BMclient.api.getInboxMessageByID( request.json['msgid'], request.json['read'] )
         return JsonResponse( {} )
-
-
-class addAddressEntry( View ):
-    def post( self, request ):
-        if Address_entry.objects.filter( user=request.json['_user'], address=request.json['address'] ).exists():
-            return JsonResponse( { 'error': 'Address already exists.' } )
-
-        Address_entry.objects.create(
-            user=request.json['_user'],
-            name=request.json['name'],
-            address=request.json['address']
-        )
-
-        return JsonResponse ( {} )
-
-
-class deleteAddressEntry( View ):
-    def post( self, request ):
-        if Address_entry.objects.filter( user=request.json['_user'], id=request.json['id'] ).exists():
-            Address_entry.objects.get( user=request.json['_user'], id=request.json['id'] ).delete()
-
-            return JsonResponse( {} )
-
-        
-class GetAddressBook( View ):
-    def post( self, request ):
-        books = [ {'address': book.address, 'name': book.name, 'id': book.id} for book in Address_entry.objects.filter( user=request.json['_user'] ) ]
-        
-        return JsonResponse( { 'book': books } )

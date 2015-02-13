@@ -1,52 +1,37 @@
-// populate chans list
-util.apiCall({
-    url: 'allchans',
-    callBack: function (data){
-        if (typeof data.chans == "string") {
-            window.location.replace('bmapi/logout');
-        } else {
+// populate chans list on page load
+$(document).ready(function(){
+    localDB.getAllChanSubscriptions().done(function(data){
+        if (data.length > 0){
             data.chans.forEach(function(value) {
                 $.scope.chans.push(value);
                 $.scope.post_chan_list.push(value);
                 addressLookup.push({
-                    name: value.chan_label,
+                    alias: value.chan_label,
                     address: value.chan_address
                 });
             });
-            sessionStorage.setItem('chanNameList', JSON.stringify($.scope.chans));
         }
-    }
-});
+    })
 
-// creates a chan
-$("#chan-form").submit(function(e){
-    e.preventDefault();
-    var info = {};
-    info.form = $("#chan_name").val();
-    $( '#chan-form' ).trigger('reset');
-    util.apiCall({
-        url: 'create_chan',
-        data: info,
-        callBack: function(data){
-            $.scope.chans.push(data);
-            $.scope.post_chan_list.push(data);
-            $('#create_chan').modal('toggle');
 
-        }
-    });            
-});
-
-// post message to chan, DRY out with above
-$( '#post_chan_form' ).on("submit", function(event) {
-    event.preventDefault();
-    var form_data = $(this).serializeObject();
-    form_data.send_addy = 'chan_post';
-    $( '#post_chan_form' ).trigger('reset');
-    util.apiCall({
-        url: 'send',
-        data: form_data
+    // creates a chan
+    $("#chan-form").submit(function(e){
+        e.preventDefault();
+        var info = {};
+        info.form = $("#chan_name").val();
+        $( '#chan-form' ).trigger('reset');
+        util.apiCall({
+            url: 'create_chan',
+            data: info,
+            callBack: function(data){
+                $.scope.chans.push(data);
+                $.scope.post_chan_list.push(data);
+                $('#create_chan').modal('toggle');
+                localDB.addChanSubscription(data)
+            }
+        });            
     });
-});
+})
 
 // join chan
 $( '#sub_chan_btn' ).click(function() { // why not submit
@@ -61,8 +46,21 @@ $( '#sub_chan_btn' ).click(function() { // why not submit
             } else {
                 $.scope.chans.push(data);
                 $.scope.post_chan_list.push(data);
+                localDB.addChanSubscription(data)
             }
         }
+    });
+});
+
+// post message to chan, DRY out with above
+$( '#post_chan_form' ).on("submit", function(event) {
+    event.preventDefault();
+    var form_data = $(this).serializeObject();
+    form_data.send_addy = 'chan_post';
+    $( '#post_chan_form' ).trigger('reset');
+    util.apiCall({
+        url: 'send',
+        data: form_data
     });
 });
 
@@ -72,7 +70,6 @@ $('#chan_ul').on( 'click', 'li.jq-repeat-chans > label', function(){
     var val = '.' + $( this ).parent().attr('data-chan-add');
     $( val ).toggle();
 });
-
 
 // show the chan tab
 $('#secondary').on( 'click', function(){

@@ -35,6 +35,8 @@
                             if(value.toAddress == value.fromAddress){
                                 value.fromAddress = "Anonymous";
                             }
+                            console.log(index)
+                            console.log(value)
                             value.chan = ($.scope.chans[index]).chan_label;
                             $.scope.chan_inbox.push(value);
                         } else {
