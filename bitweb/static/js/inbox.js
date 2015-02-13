@@ -16,19 +16,19 @@
         };
 
         var chan_addresses;
-        
-        apiCall({
+
+        util.apiCall({
             url: 'allmessages',
             callBack: function( data ){
                 chan_addresses = data.chans;
                 data.messages.forEach(function(value) {
                     value.data.forEach(function(value){
                         value.receivedUnixTime= value.receivedTime
-                        value.receivedTime = convertUnixTime(value.receivedTime);
+                        value.receivedTime = util.convertUnixTime(value.receivedTime);
                         value.fromaddress = value.fromAddress;
                         value.toaddress = value.toAddress;
-                        value.inboxmessage = stringShorter( value.message, 12 );
-                        value.inboxsubject = stringShorter( value.subject, 12 );
+                        value.inboxmessage = util.stringShorter( value.message, 12 );
+                        value.inboxsubject = util.stringShorter( value.subject, 12 );
                         value.color = setColor(value.read);
                         if ( chan_addresses.indexOf(value.toAddress) != -1){
                             var index = $.scope.chans.indexOf("chan_address", value.toAddress);
@@ -74,7 +74,8 @@
             });
         };
         
-
+        $.material.ripples();
+        $('.dropdown-toggle').dropdown();
 
         $( 'input.autoAddress' ).each(function(){
 
@@ -115,7 +116,7 @@
         $('#chan_tab').hide()
 
         // populate list of identities
-        apiCall({
+        util.apiCall({
             url: 'identities',
             callBack:function(data){
                 if (data.addresses.length === 0 ){
@@ -164,7 +165,7 @@
             $('#messageModalLabel').html("Reply")
 
             if( the_message.read === 1 ) return ;
-            apiCall({
+            util.apiCall({
                 url: 'getInboxMessageByID',
                 data: {
                     msgid: messid,
@@ -182,7 +183,7 @@
             var info = {};
             info.form = $("#chan_name").val();
             $( '#chan-form' ).trigger('reset');
-            apiCall({
+            util.apiCall({
                 url: 'create_chan',
                 data: info,
                 callBack: function(data){
@@ -195,7 +196,7 @@
         });
 
         // populate chans list
-        apiCall({
+        util.apiCall({
             url: 'allchans',
             callBack: function (data){
                 if (typeof data.chans == "string") {
@@ -216,7 +217,7 @@
 
         // add new identity to list, select it
         $( '#create_id_button' ).click(function() {
-            apiCall({
+            util.apiCall({
                 url: 'create_id',
                 data: {
                     identity: $( '#identity_name' ).val()
@@ -238,7 +239,7 @@
             event.preventDefault();
             var form_data = $(this).serializeObject();
 			$( '#compose_msg_form' ).trigger('reset');
-			apiCall({
+			util.apiCall({
 				url: 'send',
 				data: form_data,
 			callBack:function (data){
@@ -266,7 +267,7 @@
             form_data['subject'] = "Re: " + message['subject']
             form_data['message'] = form_data['reply']
             $( '#compose_msg_form' ).trigger('reset');
-            apiCall({
+            util.apiCall({
                 url: 'send',
                 data: form_data,
                 callBack:function (data){
@@ -281,7 +282,7 @@
             var form_data = $(this).serializeObject();
             form_data.send_addy = 'chan_post';
             $( '#post_chan_form' ).trigger('reset');
-            apiCall({
+            util.apiCall({
                 url: 'send',
                 data: form_data
             });
@@ -289,7 +290,7 @@
 
         // delete inbox message
         $( '#delete_msg' ).click(function() {
-                apiCall({
+                util.apiCall({
                     url: $('#delete_msg').attr('data-url'),
                     data: {
                         msgid: $( '#mess-id' ).val()
@@ -306,7 +307,7 @@
             var info = {} ;
             info.label = $( '#chan_label' ).val();
             info.address = $( '#chan_addy' ).val();
-            apiCall({
+            util.apiCall({
                 url: 'joinchan',
                 data: info,
                 callBack: function (data){
@@ -327,16 +328,16 @@
             $( '#primary' ).addClass( 'btn-material-blue-grey-100' );
             $('.inbox-bucket').children().hide();
             $.scope.sent.splice(0);
-            apiCall({
+            util.apiCall({
                 url: 'allsentmessages',
                 callBack:function( data ){
                     data.messages.forEach( function(value){
                         value.data.forEach( function( value ){
-                            value['receivedTime'] = convertUnixTime(value['lastactiontime'])
+                            value['receivedTime'] = util.convertUnixTime(value['lastactiontime'])
                             value['fromaddress'] = value['fromAddress']
                             value['toaddress'] = value['toAddress']
-                            value['inboxmessage'] = stringShorter(value['message'])
-                            value['inboxsubject'] = stringShorter(value['subject'])
+                            value['inboxmessage'] = util.stringShorter(value['message'])
+                            value['inboxsubject'] = util.stringShorter(value['subject'])
                             $.scope.sent.push( value );
                         });
                     });
@@ -393,7 +394,7 @@
         $('#profile-btn').on('click', function(e){
             e.preventDefault();
             $.scope.profileIdentities.splice(0);
-            apiCall({
+            util.apiCall({
                 url: 'identities',
                 callBack: function( data ){
                     data.addresses.forEach(function(value){
@@ -405,7 +406,7 @@
         })
 
         $("#logout-btn").on("click", function(){
-            apiCall({
+            util.apiCall({
                 url: 'logout',
                 callBack: function( data ){
                     window.location.replace('/')
@@ -439,7 +440,7 @@
             $("#mess-from").html( processAddy( toaddress ) )
 
             if( the_message['read'] === 1 ) return ;
-            apiCall({
+            util.apiCall({
                 url: 'getInboxMessageByID',
                 data: {
                     msgid: messid,

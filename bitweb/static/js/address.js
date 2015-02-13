@@ -21,7 +21,7 @@ var convertAddress = function( $element ){
     var address = $element.html();
     $element.data( 'address', address );
     address = processAddy( address );
-    address = stringShorter( address );
+    address = util.stringShorter( address );
     $element.html( address );
 };
 
