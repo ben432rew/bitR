@@ -4,7 +4,7 @@ var stringShorter = function( string, len ){
     len = ( len || 15 ) - 3;
 
     if ( (string).length >= len ){
-        string = (string.slice(0,15) +"...");
+        string = (string.slice(0,15) + "...");
     }
 
     return string;
@@ -20,7 +20,7 @@ var addressCheck = function(string2check){
 var processAddy = function( address, len ){
     var index = $.scope.addressBook.indexOf.call( addressLookup, 'address', address );
     if( index !== -1 ){
-        address = addressLookup[index].name;
+        address = addressLookup[index].alias;
     }
     
     return address ;
@@ -48,12 +48,12 @@ var addressesBook = function(){
     localDB.getAddresses().done(function(book){
         $.scope.addressBook.push.apply( $.scope.addressBook, book );
         addressLookup.push.apply( addressLookup, book );
+        insertAddresses()
     })
-    insertAddresses()
 };
 
 // add new address book entry
-$('[name="addAddressEntry"]').on( 'submit', function( event ){
+$('[alias="addAddressEntry"]').on( 'submit', function( event ){
     event.preventDefault();
     var formData = $( this ).serializeObject();
 
@@ -68,7 +68,7 @@ $('[name="addAddressEntry"]').on( 'submit', function( event ){
     }
     localDB.createAddress(formData)
     $.scope.addressBook.push( formData );
-    $('[name="addAddressEntry"]')[0].reset();
+    $('[alias="addAddressEntry"]')[0].reset();
 
 });
 

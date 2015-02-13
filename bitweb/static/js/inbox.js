@@ -122,7 +122,7 @@
                     var wordlist = function(){
                         var list = [];
                         addressLookup.forEach(function( value ){
-                            list.push( value.name );
+                            list.push( value.alias );
                         });
 
                         return list;
@@ -136,9 +136,9 @@
 
                     var display = []
                     results.map(function( item ){
-                        var index = $.scope.inbox.indexOf.call( addressLookup, "name", item );
+                        var index = $.scope.inbox.indexOf.call( addressLookup, "alias", item );
                         display.push({
-                            label: addressLookup[index].name,
+                            label: addressLookup[index].alias,
                             value: addressLookup[index].address
                         });
                     });
@@ -166,7 +166,7 @@
                         $.scope.identities.push(value);
                         $.scope.senders.push(value);
                         addressLookup.push({
-                            name: value.identity,
+                            alias: value.identity,
                             address: value.key
                         });
                     });
