@@ -5,5 +5,14 @@
 //  database should be locked and encrypted unless the user the database is 
 // assigned to is signed in
 
+var db = new ydn.db.Storage('practicing', bitrSchema)
 
-db = new ydn.db.Storage('practicing', bitrSchema)
+var localDB = {}
+
+localDB.createAddress = function(entry){
+    db.put('addressbook', {address:entry['address'], alias:entry['alias']})
+}
+
+localDB.getAddresses = function(){
+    return db.values('addressbook').done(function(i){return i})
+}

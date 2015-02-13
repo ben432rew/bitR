@@ -1,9 +1,5 @@
-var addressLookup;
 ( function( $ ){
     "use strict";
-
-    addressLookup = [];
-
 
     var apiCall = function( args ){
         var data = args.data || {};
@@ -44,13 +40,6 @@ var addressLookup;
         return String(date).slice(16,21)+"  "+String(date).slice(0,15) ;
     };
 
-    var sortByKey = function(array, key) {
-    return array.sort(function(a, b) {
-        var x = a[key]; var y = b[key];
-        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-    });
-}
-
     var inboxMessages = function(){
         $('.inbox-bucket').children().hide();
         $.scope.inbox.splice(0);
@@ -72,7 +61,7 @@ var addressLookup;
                 chan_addresses = data.chans;
                 data.messages.forEach(function(value) {
                     value.data.forEach(function(value){
-                    	value.receivedUnixTime= value.receivedTime
+                        value.receivedUnixTime= value.receivedTime
                         value.receivedTime = convertUnixTime(value.receivedTime);
                         value.fromaddress = value.fromAddress;
                         value.toaddress = value.toAddress;
@@ -101,48 +90,6 @@ var addressLookup;
         $('#inbox-list').show();
         $('#table-head').show();
     };
-    var addressCheck = function(string2check){
-        var matcher = /BM-[a-zA-Z0-9]+/ ;
-        if(typeof(string2check) == 'string' && string2check.match(matcher) ){
-            return true;
-        }
-    };
-
-    var processAddy = function( address, len ){
-        var index = $.scope.addressBook.indexOf.call( addressLookup, 'address', address );
-        if( index !== -1 ){
-            address = addressLookup[index].name;
-        }
-        
-        return address ;
-    };
-
-    var addressesBook = function(){
-        apiCall({
-            url: 'GetAddressBook',
-            callBack: function( data ){
-                $.scope.addressBook.push.apply( $.scope.addressBook, data.book );
-                addressLookup.push.apply( addressLookup, data.book );
-            }
-        }).done(function(){
-            var convertAddress = function( $element ){
-                var address = processAddy( $element.html() );
-                address = stringShorter( address );
-                $element.html( address );
-            };
-            $(document).on('DOMNodeInserted', function(event) {
-                if ( $( event.target ).is('.addyBook') ){
-                    convertAddress( $( this ) );
-                }else{
-                    $( event.target ).find( '.addyBook' )
-                        .each(function( key, value ){
-                            convertAddress( $( value ) );
-                        });
-                }
-            });
-        });
-    };
-
 
     $(document).ready(function(){
         $.scope.inbox.__put = function(){
@@ -166,6 +113,7 @@ var addressLookup;
         };
         
         $.material.ripples();
+        $('.dropdown-toggle').dropdown();
 
         $( 'input.autoAddress' ).each(function(){
 
@@ -200,7 +148,6 @@ var addressLookup;
             });
         });
 
-        $('.dropdown-toggle').dropdown();
 
         addressesBook();
         inboxMessages();
@@ -329,12 +276,16 @@ var addressLookup;
         $( '#compose_msg_form' ).on("submit", function(event) {
             event.preventDefault();
             var form_data = $(this).serializeObject();
-            $( '#compose_msg_form' ).trigger('reset');
-            apiCall({
-                url: 'send',
-                data: form_data
-            });
-        });
+			$( '#compose_msg_form' ).trigger('reset');
+			apiCall({
+				url: 'send',
+				data: form_data,
+			callBack:function (data){
+				$("#compose_msg").toggle()
+			}
+
+		});
+	});
 
         // reply to message
         $( '#mess-view-form' ).on("submit", function(event) {
@@ -356,7 +307,10 @@ var addressLookup;
             $( '#compose_msg_form' ).trigger('reset');
             apiCall({
                 url: 'send',
-                data: form_data
+                data: form_data,
+                callBack:function (data){
+				$("#mess_view_modal").toggle()
+			}
             });
         });
 
@@ -475,30 +429,6 @@ var addressLookup;
             inboxMessages();
         } );
 
-        // add new address book entry
-        $('[name="addAddressEntry"]').on( 'submit', function( event ){
-            event.preventDefault();
-            var formData = $( this ).serializeObject();
-
-            if( !addressCheck( formData.address ) ){
-                alert("Malformed address.");
-                return false;
-            }
-
-            if( $.scope.addressBook.indexOf.call( addressLookup, 'address', formData.address ) !== -1 ){
-                alert("Address already in use.");
-                return false;
-            }
-
-            apiCall({
-                url: 'addAddressEntry',
-                data: formData,
-                callBack: function( data ){
-                    $.scope.addressBook.push( formData );
-                    $('[name="addAddressEntry"]')[0].reset();
-                }
-            });
-        });
         $('#profile-btn').on('click', function(e){
             e.preventDefault();
             $.scope.profileIdentities.splice(0);
@@ -512,19 +442,6 @@ var addressLookup;
                 }
             });
         })
-        $('#addressBookModal').on( 'click', 'button.delete', function(){
-            var id = Number( $( this ).parents( '[jq-repeat-index]' ).attr( 'data-id' ) );
-            apiCall({
-                url: 'deleteAddressEntry',
-                data: {
-                    id: id
-                },
-                callBack: function(){
-                    var index = $.scope.addressBook.indexOf( 'id', id );
-                    $.scope.addressBook.splice( index, 1 );
-                }
-            });
-        });
 
         $("#logout-btn").on("click", function(){
             apiCall({

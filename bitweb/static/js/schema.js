@@ -1,19 +1,23 @@
 var bitrSchema = {
+  autoSchema : false,
   stores: [{
     name: 'addressbook',
+    keyPath: 'alias',
     indexes: [{
-            name: 'address'
+            keyPath: 'address'
         }, {
-            name: 'alias'
+            keyPath: 'alias'
     }]}, {
     name: 'chan_subscriptions',
+    keyPath: 'label',
     indexes: [{
-            name: 'label'
+            keyPath: 'label'
         }, {
-            name: 'address'
+            keyPath: 'address'
         }]
     }, {
     name: 'inbox_messages',
+    keyPath: 'msgid',
     indexes: [{
             name: 'message'
         }, {
@@ -27,7 +31,7 @@ var bitrSchema = {
         }, {
             name: 'subject'
         }, {
-            name: 'msgid'
+            keyPath: 'msgid'
         }, {
             name: 'color'
         }, {
@@ -41,6 +45,7 @@ var bitrSchema = {
         }]
     }, {
     name: 'sent_messages',
+    keyPath: 'msgid',
     indexes: [{
             name: 'message'
         }, {
@@ -54,7 +59,7 @@ var bitrSchema = {
         }, {
             name: 'subject'
         }, {
-            name: 'msgid'
+            keyPath: 'msgid'
         }, {
             name: 'inboxMessage'
         }, {
@@ -66,6 +71,7 @@ var bitrSchema = {
         }]
     }, {
     name: 'chanMessages',
+    keyPath: 'msgid',
     indexes: [{
             name: 'message'
         }, {
@@ -79,7 +85,7 @@ var bitrSchema = {
         }, {
             name: 'subject'
         }, {
-            name: 'msgid'
+            keyPath: 'msgid'
         }, {
             name: 'chan'
         }, {
