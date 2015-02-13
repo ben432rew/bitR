@@ -141,14 +141,10 @@ class AllChans( View ):
 class LeaveChan( View ):
     def post( self, request ):
         label = request.json['label']
-        print(label)
         chan = Chan_subscriptions.objects.filter(user=request.json['_user'], label = request.json['label'])
         if chan:
-            print(chan)
             address = chan[0].address
-            print(address)
             status = BMclient.call( 'leaveChan', address )
-            print(status)
             chan[0].delete()
         else:
             status = 'no chan'

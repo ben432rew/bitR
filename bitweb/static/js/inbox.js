@@ -140,12 +140,10 @@
 		$("#rmv_chan_form").submit(function(e){
 			e.preventDefault();
 			var form_data = $(this).serializeObject();
-			console.log(form_data)
 			apiCall({
 				url: 'leave_chan',
 				data: form_data,
 				callBack: function(data){
-					console.log(data)
 					$('#remove_chan').modal('toggle');
 					$("#" + form_data['label']).parent().remove()
 				}
