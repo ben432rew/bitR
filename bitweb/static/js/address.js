@@ -13,7 +13,7 @@ var stringShorter = function( string, len ){
 
 var addressCheck = function(string2check){
     var matcher = /BM-[a-zA-Z0-9]+/ ;
-    if(typeof(string2check) == 'string' && string2check.match(matcher) ){
+    if( typeof(string2check) == 'string' && string2check.match(matcher) ){
         return true;
     }
 };
@@ -27,12 +27,22 @@ var processAddy = function( address, len ){
     return address ;
 };
 
+var convertAddress = function( $element ){
+    var address = $element.html();
+    $element.data( 'address', address );
+    address = processAddy( address );
+    address = stringShorter( address );
+    $element.html( address );
+};
+
+var parseNodes = function( $start ){
+    $start = $start || $( 'body' );
+    $start.find('.addyBook').each( function( $element ){
+        convertAddress( $element )
+    });
+}
+
 var insertAddresses = function(){
-    var convertAddress = function( $element ){
-        var address = processAddy( $element.html() );
-        address = stringShorter( address );
-        $element.html( address );
-    };
     $(document).on('DOMNodeInserted', function(event) {
         if ( $( event.target ).is('.addyBook') ){
             convertAddress( $( this ) );
