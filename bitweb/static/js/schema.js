@@ -1,0 +1,104 @@
+var bitrSchema = {
+  autoSchema : false,
+  stores: [{
+    name: 'addressbook',
+    keyPath: 'alias',
+    indexes: [{
+            keyPath: 'address'
+        }, {
+            keyPath: 'alias'
+    }]}, {
+    name: 'chan_subscriptions',
+    keyPath: 'label',
+    indexes: [{
+            keyPath: 'label'
+        }, {
+            keyPath: 'address'
+        }]
+    }, {
+    name: 'inbox_messages',
+    keyPath: 'msgid',
+    indexes: [{
+            name: 'message'
+        }, {
+            name: 'read'
+        }, {
+            name: 'toAddress'
+        }, {
+            name: 'receivedTime'
+        }, {
+            name: 'fromAddress'
+        }, {
+            name: 'subject'
+        }, {
+            keyPath: 'msgid'
+        }, {
+            name: 'color'
+        }, {
+            name: 'inboxToAddress'
+        }, {
+            name: 'inboxMessage'
+        }, {
+            name: 'inboxSubject'
+        }, {
+            name: 'inboxFromAddress'
+        }]
+    }, {
+    name: 'sent_messages',
+    keyPath: 'msgid',
+    indexes: [{
+            name: 'message'
+        }, {
+            name: 'status'
+        }, {
+            name: 'toAddress'
+        }, {
+            name: 'receivedTime'
+        }, {
+            name: 'fromAddress'
+        }, {
+            name: 'subject'
+        }, {
+            keyPath: 'msgid'
+        }, {
+            name: 'inboxMessage'
+        }, {
+            name: 'inboxSubject'
+        }, {
+            name: 'inboxFromAddress'
+        }, {
+            name: 'inboxToAddress'
+        }]
+    }, {
+    name: 'chanMessages',
+    keyPath: 'msgid',
+    indexes: [{
+            name: 'message'
+        }, {
+            name: 'read'
+        }, {
+            name: 'toAddress'
+        }, {
+            name: 'receivedTime'
+        }, {
+            name: 'fromAddress'
+        }, {
+            name: 'subject'
+        }, {
+            keyPath: 'msgid'
+        }, {
+            name: 'chan'
+        }, {
+            name: 'color'
+        }, {
+            name: 'inboxMessage'
+        }, {
+            name: 'inboxSubject'
+        }, {
+            name: 'inboxFromAddress'
+        }, {
+            name: 'inboxToAddress'
+        }]
+    }
+  ]
+}

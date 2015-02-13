@@ -9,7 +9,7 @@
 				<form name="addAddressEntry">
 					<div class="form-group">
 						<label>Name</label>
-						<input type="text" class="form-control" name="name" placeholder="Enter Name" required />                   
+						<input type="text" class="form-control" name="alias" placeholder="Enter Name" required />                   
 						<label for="Identity Name">Address</label>
 						<input type="text" class="form-control" name="address" placeholder="BM-address" required />
 						<button type="button" class="btn" data-dismiss="modal">Cancel</button>
@@ -18,8 +18,8 @@
 				</form>
 				<ul>
 					{% verbatim %}
-					<li jq-repeat="addressBook" data-id="{{ id }}">
-						<b>{{ name }}<b>:  <i>{{ address }}</i>
+					<li jq-repeat="addressBook" data-alias="{{ alias }}">
+						<b>{{ alias }}<b>:  <i>{{ address }}</i>
 						<button type="button" class="btn btn-danger delete">Delete</button>
 					</li>
 					{% endverbatim %}
