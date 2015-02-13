@@ -136,11 +136,25 @@
             }
         });
 
+		//remove chan
+		$("#rmv_chan_form").submit(function(e){
+			e.preventDefault();
+			var form_data = $(this).serializeObject();
+			apiCall({
+				url: 'leave_chan',
+				data: form_data,
+				callBack: function(data){
+					$('#remove_chan').modal('toggle');
+					$("#" + form_data['label']).parent().remove()
+				}
+			});
+
+		})
+
         //show inbox message
         $('#inbox-list').on('click', '.new-message', function(e){
             var messages = JSON.parse(sessionStorage.getItem('inboxMessages'));
             var messid = $(this).find('#msg-id').text();
-
             // what does this do?
             for(var j in messages){
                 if(messages[j].msgid == messid){
