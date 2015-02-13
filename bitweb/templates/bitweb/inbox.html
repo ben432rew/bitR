@@ -46,14 +46,15 @@
           <button id="chan_tab" data-toggle="dropdown"  class="dropdown btn btn-material-blue-grey-100 dropdown-toggle">Show By Chan <span class="caret"></span></button>
             <ul class="dropdown-menu" id="chan_ul" role="menu" aria-labelledby="dropdownMenu1">
                 {% verbatim %}
-                    <li jq-repeat="chans" data-chan-add="{{chan_address}}">
-                        <input type="checkbox" id="{{ chan_label }}">
+                    <li jq-repeat="chans" class = "chan-select" data-chan-add="{{chan_address}}">
+                        <input  type="checkbox" id="{{ chan_label }}">
                         <label for="{{ chan_label }}">{{ chan_label }}</label>
                     </li>
                 {% endverbatim %}  
                 <li role="presentation" class="divider"></li>
                 <li role="presentation"><a role="menuitem" href="#" data-toggle="modal" data-target="#subscribe_chan">Subscribe to Chan</a></li>                    
                 <li role="presentation"><a role="menuitem" href="#" data-toggle="modal" data-target="#create_chan">Create New Chan</a></li>
+                <li role="presentation"><a role="menuitem" href="#" data-toggle="modal" data-target="#remove_chan">Remove Chan</a></li>
             </ul>
         </div>
     </div>
@@ -95,7 +96,10 @@
     {% include "bitweb/send_modal.html" %}
 
 <!-- chan subscribe modal -->
-    {% include "bitweb/subscribe_chan_modal.html" %}    
+    {% include "bitweb/subscribe_chan_modal.html" %} 
+
+<!-- chan remove modal -->
+    {% include "bitweb/remove_chan.html" %}    
 
 <!-- post to chan modal -->
     {% include "bitweb/post_chan.html" %}
