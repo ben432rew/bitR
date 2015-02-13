@@ -1,3 +1,4 @@
+// after indexedDB is complete, replace this array with database lookups
 var addressLookup = [];
 
 var stringShorter = function( string, len ){
@@ -48,8 +49,8 @@ var addressesBook = function(){
     localDB.getAddresses().done(function(book){
         $.scope.addressBook.push.apply( $.scope.addressBook, book );
         addressLookup.push.apply( addressLookup, book );
-        insertAddresses()
     })
+    insertAddresses()
 };
 
 // add new address book entry
