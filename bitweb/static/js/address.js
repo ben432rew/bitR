@@ -1,16 +1,6 @@
 // after indexedDB is complete, replace this array with database lookups
 var addressLookup = [];
 
-var stringShorter = function( string, len ){
-    len = ( len || 15 ) - 3;
-
-    if ( (string).length >= len ){
-        string = (string.slice(0,15) + "...");
-    }
-
-    return string;
-};
-
 var addressCheck = function(string2check){
     var matcher = /BM-[a-zA-Z0-9]+/ ;
     if( typeof(string2check) == 'string' && string2check.match(matcher) ){
