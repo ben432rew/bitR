@@ -56,7 +56,7 @@ var insertAddresses = function(){
 };
 
 var addressesBook = function(){
-    localDB.getAddresses().done(function(book){
+    localDB.getAddressBook().done(function(book){
         $.scope.addressBook.push.apply( $.scope.addressBook, book );
         addressLookup.push.apply( addressLookup, book );
     })
