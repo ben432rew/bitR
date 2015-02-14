@@ -167,9 +167,9 @@
             var date = the_message['receivedTime']
             $("#mess_view_modal").modal("toggle")
             $("#mess-id").val($(this).find('#msg-id').text())
-            $("#mess-subject").html(subject)
+            $("#mess-subject").text(subject)
             $("#replyModalLabel").text(subject)
-            $("#mess-body").html(body)
+            $("#mess-body").text(body)
             $("#mess-from").html(adrs.processAddy( from ) )
             $("#mess-to").html( adrs.processAddy( the_message['toAddress'] ) )
             $("#mess-date").html(date)
@@ -359,8 +359,8 @@
             var date = the_message['receivedTime']
             $("#mess_view_modal").modal("toggle")
             $("#mess-id").val($(this).find('#msg-id').text())
-            $("#mess-subject").html(subject)
-            $("#mess-body").html(body)
+            $("#mess-subject").text(subject)
+            $("#mess-body").text(body)
             $("#mess-date").html(date)
             $('#create_reply_button').hide()
             $('#mess-reply').hide()
