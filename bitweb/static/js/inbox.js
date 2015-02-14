@@ -359,7 +359,7 @@
             var date = the_message['receivedTime']
             $("#mess_view_modal").modal("toggle")
             $("#mess-id").val($(this).find('#msg-id').text())
-            $("#mess-subject")..text(subject)
+            $("#mess-subject").text(subject)
             $("#mess-body").text(body)
             $("#mess-date").html(date)
             $('#create_reply_button').hide()
