@@ -215,15 +215,16 @@
             event.preventDefault();
             var form_data = $(this).serializeObject();
 			$( '#compose_msg_form' ).trigger('reset');
+
 			util.apiCall({
 				url: 'send',
 				data: form_data,
-			callBack:function (data){
-				$("#compose_msg").toggle()
-			}
+    			callBack:function (data){
+    				$("#compose_msg").toggle()
+    			}
 
-		});
-	});
+    		});
+    	});
 
         // reply to message
         $( '#mess-view-form' ).on("submit", function(event) {
