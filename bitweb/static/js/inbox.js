@@ -53,6 +53,14 @@
         $('#table-head').show();
     };
 
+    var sendersUpdate = function(){
+        var options = $("#compose_msg_form > div > select");
+        options.html('');
+        $.each( $.scope.identities , function() {
+            options.append($("<option />").val(this.key).text(this.identity));
+        });
+    };
+
     $(document).ready(function(){
         $.scope.inbox.__put = function(){
             this.slideDown();
@@ -126,7 +134,8 @@
                 } else */{
                     data.addresses.forEach(function(value){
                         $.scope.identities.push(value);
-                        $.scope.senders.push(value);
+                        // $.scope.senders.push(value);
+                        sendersUpdate()
                         addressLookup.push({
                             alias: value.identity,
                             address: value.key
@@ -204,6 +213,7 @@
                     if ( 'error' in data ){
                     } else {
                         $.scope.identities.push( { identity: $( '#identity_name' ).val() } );
+
                     }
                     $( '#create_id_form' ).trigger('reset');
                 }
@@ -215,15 +225,16 @@
             event.preventDefault();
             var form_data = $(this).serializeObject();
 			$( '#compose_msg_form' ).trigger('reset');
+
 			util.apiCall({
 				url: 'send',
 				data: form_data,
-			callBack:function (data){
-				$("#compose_msg").toggle()
-			}
+    			callBack:function (data){
+    				$("#compose_msg").toggle()
+    			}
 
-		});
-	});
+    		});
+    	});
 
         // reply to message
         $( '#mess-view-form' ).on("submit", function(event) {
