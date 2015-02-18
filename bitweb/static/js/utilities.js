@@ -27,7 +27,7 @@ var util = {
     stringShorter: function( string, len ){
         len = ( len || 15 ) - 3;
 
-        if ( (string).length >= len ){
+        if ( string != undefined && (string).length >= len ){
             string = (string.slice(0,15) +"...");
         }
 
