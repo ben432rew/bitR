@@ -69,7 +69,8 @@ class Send ( View ):
             from_add = request.json['from_address']
         else:
             to_address = request.json['to_address']
-            from_add = BitKey.objects.get(name=from_name, user=request.json['_user']).key
+            from_add = request.json['from_address']
+            # from_add = BitKey.objects.get(name=from_name, user=request.json['_user']).key
         subject = request.json['subject']
         message = request.json['message']
         sent = BMclient.call(

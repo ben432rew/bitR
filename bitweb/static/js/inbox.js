@@ -56,6 +56,14 @@
         $('#table-head').show();
     };
 
+    var sendersUpdate = function(){
+        var options = $("#compose_msg_form > div > select");
+        options.html('');
+        $.each( $.scope.identities , function() {
+            options.append($("<option />").val(this.key).text(this.identity));
+        });
+    };
+
     $(document).ready(function(){
         $.scope.inbox.__put = function(){
             this.slideDown();
@@ -129,7 +137,8 @@
                 } else */{
                     data.addresses.forEach(function(value){
                         $.scope.identities.push(value);
-                        $.scope.senders.push(value);
+                        // $.scope.senders.push(value);
+                        sendersUpdate()
                         addressLookup.push({
                             alias: value.identity,
                             address: value.key
@@ -170,9 +179,9 @@
             var date = the_message['receivedTime']
             $("#mess_view_modal").modal("toggle")
             $("#mess-id").val($(this).find('#msg-id').text())
-            $("#mess-subject").html(subject)
+            $("#mess-subject").text(subject)
             $("#replyModalLabel").text(subject)
-            $("#mess-body").html(body)
+            $("#mess-body").text(body)
             $("#mess-from").html(adrs.processAddy( from ) )
             $("#mess-to").html( adrs.processAddy( the_message['toAddress'] ) )
             $("#mess-date").html(date)
@@ -207,6 +216,7 @@
                     if ( 'error' in data ){
                     } else {
                         $.scope.identities.push( { identity: $( '#identity_name' ).val() } );
+
                     }
                     $( '#create_id_form' ).trigger('reset');
                 }
@@ -218,15 +228,16 @@
             event.preventDefault();
             var form_data = $(this).serializeObject();
 			$( '#compose_msg_form' ).trigger('reset');
+
 			util.apiCall({
 				url: 'send',
 				data: form_data,
-			callBack:function (data){
-				$("#compose_msg").toggle()
-			}
+    			callBack:function (data){
+    				$("#compose_msg").toggle()
+    			}
 
-		});
-	});
+    		});
+    	});
 
         // reply to message
         $( '#mess-view-form' ).on("submit", function(event) {
@@ -362,8 +373,8 @@
             var date = the_message['receivedTime']
             $("#mess_view_modal").modal("toggle")
             $("#mess-id").val($(this).find('#msg-id').text())
-            $("#mess-subject").html(subject)
-            $("#mess-body").html(body)
+            $("#mess-subject").text(subject)
+            $("#mess-body").text(body)
             $("#mess-date").html(date)
             $('#create_reply_button').hide()
             $('#mess-reply').hide()
