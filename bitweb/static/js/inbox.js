@@ -15,42 +15,43 @@
             }
         };
 
-        var chan_addresses;
-
-        util.apiCall({
-            url: 'allmessages',
-            callBack: function( data ){
-                chan_addresses = data.chans;
-                data.messages.forEach(function(value) {
-                    value.data.forEach(function(value){
-                        value.receivedUnixTime= value.receivedTime
-                        value.receivedTime = util.convertUnixTime(value.receivedTime);
-                        value.fromaddress = value.fromAddress;
-                        value.toaddress = value.toAddress;
-                        value.inboxmessage = util.stringShorter( value.message, 12 );
-                        value.inboxsubject = util.stringShorter( value.subject, 12 );
-                        value.color = setColor(value.read);
-                        if ( chan_addresses.indexOf(value.toAddress) != -1){
-                            var index = $.scope.chans.indexOf("chan_address", value.toAddress);
-                            if(value.toAddress == value.fromAddress){
-                                value.fromAddress = "Anonymous";
-                            }
-                            console.log(index)
-                            console.log(value)
-                            value.chan = ($.scope.chans[index]).chan_label;
-                            $.scope.chan_inbox.push(value);
-                        } else {
-                            $.scope.inbox.push(value);
-                        }
-                    });
-                });
-
-                $.scope.chan_inbox.reverse()
-                sessionStorage.setItem('inboxMessages', JSON.stringify($.scope.inbox));
-                sessionStorage.setItem('chanMessages', JSON.stringify($.scope.chan_inbox));
+        var chan_addresses_only = [];
+        var chan_addresses = localDB.getAllChanSubscriptions().done(function(){ 
+            for (var i = 0; i < chan_addresses.e.length; i++) {
+              chan_addresses_only.push(chan_addresses.e[i]['address']);
             }
-        });
+            util.apiCall({
+                url: 'allmessages',
+                data:{'chans':chan_addresses_only},
+                callBack: function( data ){
+                    data.messages.forEach(function(value) {
+                        value.data.forEach(function(value){
+                            value.receivedUnixTime= value.receivedTime
+                            value.receivedTime = util.convertUnixTime(value.receivedTime);
+                            value.fromaddress = value.fromAddress;
+                            value.toaddress = value.toAddress;
+                            value.inboxmessage = util.stringShorter( value.message, 12 );
+                            value.inboxsubject = util.stringShorter( value.subject, 12 );
+                            value.color = setColor(value.read);
+                            if ( chan_addresses_only.indexOf(value.toAddress) != -1){
+                                var index = $.scope.chans.indexOf("address", value.toAddress);
+                                if(value.toAddress == value.fromAddress){
+                                    value.fromAddress = "Anonymous";
+                                }
+                                value.chan = ($.scope.chans[index]).chan_label;
+                                $.scope.chan_inbox.push(value);
+                            } else {
+                            $.scope.inbox.push(value);
+                            }
+                        });
+                    });
 
+                    $.scope.chan_inbox.reverse()
+                    sessionStorage.setItem('inboxMessages', JSON.stringify($.scope.inbox));
+                    sessionStorage.setItem('chanMessages', JSON.stringify($.scope.chan_inbox));
+                }
+            })
+        });
         $('#inbox-list').show();
         $('#table-head').show();
     };
@@ -142,7 +143,7 @@
 		$("#rmv_chan_form").submit(function(e){
 			e.preventDefault();
 			var form_data = $(this).serializeObject();
-			apiCall({
+			util.apiCall({
 				url: 'leave_chan',
 				data: form_data,
 				callBack: function(data){

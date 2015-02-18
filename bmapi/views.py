@@ -95,14 +95,12 @@ def get_messages( function_name, request, chans=False ):
     if chans:
         addresses += chans
     data = [ BMclient.call( function_name, address ) for address in addresses ]
-    # newlist = sorted(data[0]['data'], key=lambda k: k['receivedTime']) 
     return JsonResponse( { 'messages': data, 'chans':chans } )
 
 
 class getInboxMessagesByUser( View ):
     def post( self, request ):
-        chans = Chan_subscriptions.objects.filter(user=request.json['_user']).values('address')
-        chan_addresses = [ c['address'] for c in chans]
+        chan_addresses = request.json['chans']
         return get_messages( 'getInboxMessagesByToAddress', request, chan_addresses)
 
 
@@ -132,11 +130,6 @@ class CreateChan( View ):
         chan_obj = Chan_subscriptions.objects.create(label=passphrase, address=address, user=request.json['_user'])
         return JsonResponse( { 'chan_address' : chan_obj.address, 'chan_label' : chan_obj.label } )
 
-
-class AllChans( View ):
-    def post( self, request ):
-        chans = [ { 'chan_label' : chan.label, 'chan_address':chan.address } for chan in Chan_subscriptions.objects.filter( user=request.json['_user'] )]
-        return JsonResponse( {'chans':chans} )
 
 class LeaveChan( View ):
     def post( self, request ):

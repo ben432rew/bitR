@@ -51,9 +51,9 @@
           <button id="chan_tab" data-toggle="dropdown"  class="dropdown btn btn-material-blue-grey-100 dropdown-toggle">Show By Chan <span class="caret"></span></button>
             <ul class="dropdown-menu" id="chan_ul" role="menu" aria-labelledby="dropdownMenu1">
                 {% verbatim %}
-                    <li jq-repeat="chans" class = "chan-select" data-chan-add="{{chan_address}}">
-                        <input  type="checkbox" id="{{ chan_label }}">
-                        <label for="{{ chan_label }}">{{ chan_label }}</label>
+                    <li jq-repeat="chans" class = "chan-select" data-chan-add="{{address}}">
+                        <input  type="checkbox" id="{{ label }}">
+                        <label for="{{ label }}">{{ label }}</label>
                     </li>
                 {% endverbatim %}  
                 <li role="presentation" class="divider"></li>

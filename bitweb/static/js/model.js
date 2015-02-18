@@ -22,11 +22,23 @@ var localDB = {
         
     },
 
+    addInboxMessage: function(entry){
+
+    },
+
+    getInboxMessage: function(msgid){
+
+    },
+
+    getAllInboxMessages: function(){
+        
+    },
+
     addChanSubscription: function(entry){
         db.put('chan_subscriptions', {address:entry['chan_address'], label:entry['chan_label']})
     },
 
     getAllChanSubscriptions: function(){
-        return db.values('chan_subscriptions').done(function(i){return i})        
+        return db.values('chan_subscriptions').done(function(i){return i})
     }
 }

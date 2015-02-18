@@ -12,6 +12,7 @@ var authorize = function(event, string, form) {
             }
         })
     };
+    
 // code from website : http://validate.718it.biz/js/validate.js
 var passwordStrength = function( value ){
             //simple password check must have 1 number 1 up case
