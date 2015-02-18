@@ -83,4 +83,19 @@ $(document).ready(function(){
         // this next line is not working.  whyyyyyyyyyy
         $( '.id_checks' ).prop('checked', false)
     });
+
+    //remove chan
+    $("#rmv_chan_form").submit(function(e){
+        e.preventDefault();
+        var form_data = $(this).serializeObject();
+        util.apiCall({
+            url: 'leave_chan',
+            data: form_data,
+            callBack: function(data){
+                $('#remove_chan').modal('toggle');
+                $("#" + form_data['label']).parent().remove()
+            }
+        });
+
+    })
 })
