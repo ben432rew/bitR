@@ -24,16 +24,5 @@ class Profile( View ):
 
 
 class About( View ):
-    pass
-
-
-class FAQ( View ):
-    pass
-
-
-class Press( View ):
-    pass
-
-
-class Blog ( View ):
-    pass
+    def get(self, request):
+        return render ( request, 'bitweb/about.html' )
