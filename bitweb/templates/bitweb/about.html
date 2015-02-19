@@ -22,12 +22,22 @@
     </head>
     <body>
         <div class = "container">
-            What is BitR?
-
-            What Does That Mean?
-
-            <p> <a href={% url 'bitweb:index' %} class="text-muted">Home</a></p>  
-
+            <h3>What is BitR?</h3>
+            <p>BitR is a Web portal to a Bitmessage client.</p>
+            <h3>Bitmessage?</h3>
+            <p>Bitmessage is an encrypted, anonymizing, decentralized, and trustless kind of email communication.</p>
+            <h3>What Does That Even Mean?</h3>
+            <p>There is no email server that stores all the messages. No email server to that can crash, be hacked, monitored, or corrupted.  Everyone who uses the Bitmessage client stores all of the messages of the Bitmessage network.</p>
+            <h3>How?</h3>
+            <p>Bitmessage uses blockchain technology.  This means that all the computers running Bitmessage are connected to each other in a big network, and everybody has a copy of the message blockchain.  Everytime someone wants to send a message, they send it out to all of the computers they're connected to in the network, and everyone adds the message to their blockchain.  All of the computers are constantly checking with their neighbors for new messages.</p>
+            <h3>Can't someone just read everyone else's messages then?</h3>
+            <p>All of the messages are asymmetrically encrypted, even the headers, so noone can read the messages, or even tell who they are for.</p>
+            <h3>So how do you receive a message then if you can't even tell who the messages are for?</h3>
+            <p>The Bitmessage client on your computer tries to unencrypt <i>every</i> new message that gets added to the blockchain, and if it does unencrypt it, that means it was encrypted with your public key, so it was meant for you!</p>
+            <br>
+            <br>
+            <br>
+            <a href={% url 'bitweb:index' %} class="text-muted">Home</a>
         </div>
     </body>
 </html>

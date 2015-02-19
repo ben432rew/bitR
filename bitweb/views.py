@@ -17,12 +17,6 @@ class Inbox( View ):
         return render (request, 'bitweb/inbox.html')
 
 
-class Profile( View ):
-    def get(self, request):
-        identities = request.user.bitkey_set.all()
-        return render (request, 'bitweb/profile.html', {'identities':identities})
-
-
 class About( View ):
     def get(self, request):
         return render ( request, 'bitweb/about.html' )
