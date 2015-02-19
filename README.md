@@ -1,3 +1,5 @@
+## deployed alpha at [bitr.us](https://bitr.us/)
+
 ## Setup
 
 `git clone https://github.com/himleyb85/bitR`
