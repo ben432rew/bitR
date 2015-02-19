@@ -21,26 +21,21 @@
         <script src="{%static 'js/index.js' %}"></script>
     </head>
     <body>
-    <br/>
-    <br/>
-    <br/>
-    <div class = "container">
+    <div class="jumbotron" style="background-image:url({%static 'images/phone_lines.jpeg' %})">
         <div class="row">
-            <div class="col-md-8">
-                <img src="{%static 'images/phone_lines.jpeg' %}" class="img-responsive" alt="Sailboat" />
-                <br />
-                <br />
-                <p>
-                    Join private our messanging service that you can feel safe with knowing your communications are secure
-                </p>
-            </div>
 
-        <div class="col-md-1"></div>
+        <div class="col-md-5 col-md-offset-7">
+            <p class="signup">
+                Already have a BitR account?  <button id="login" class="btn btn-material-blue-grey-500">Login</button>
+            </p>
+            <p class="login">
+                Don't have a BitR account?  <button id="signup" class="btn btn-material-blue-grey-500">Sign up now</button>
+            </p>
+        </div>
+        </div>
+        <div class="row">
 
         <div class="col-md-3">
-            <a href={% url 'bitweb:index' %}><img src="{%static 'images/bitrmail.png' %}" class="img-responsive" alt="bitrmail"></a>
-            <br>
-            <br>
             <p>{{ error }} </p>
             <form id="signup_form" class="signup form-horizontal">
                 {% csrf_token %}
@@ -66,17 +61,13 @@
             <br/>
             <br/>
             <br/>
-            <p class="signup">
-                Already have a BitR account?  <button id="login" class="btn btn-material-blue-grey-500">Login</button>
-            </p>
-            <p class="login">
-                Don't have a BitR account?  <button id="signup" class="btn btn-material-blue-grey-500">Sign up now</button>
-            </p>
         </div>
         <div class="col-md-1"></div>
         </div>
-        <div height="60px" style="display: inline-block;"></div> 
+        <div class="row">
+            <div class="col-md-2 col-md-offset-10">
+                <a href={% url 'bitweb:about' %} class="text-muted">About Us</a>
+            </div>
+        </div>
     </div>
-            <p>New to BitR?  Check <a href={% url 'bitweb:about' %} class="text-muted">here</a> first.  </p>
-    </body>
 </html>
