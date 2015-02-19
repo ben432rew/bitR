@@ -1,4 +1,4 @@
-## deployed alpha at [bitr.us](bitr.us)
+## deployed alpha at [bitr.us](https://bitr.us/)
 
 ## Setup
 
