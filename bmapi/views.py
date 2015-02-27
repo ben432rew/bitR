@@ -116,7 +116,7 @@ class JoinChan( View ):
         client_response = BMclient.call( 'joinChan', BMclient._encode( request.json['label'] ), request.json['address'] )
         if client_response['status'] == 200 or client_response['status'] == 16:
             chan = Chan_subscriptions.objects.create( user=request.json['_user'], label=request.json['label'], address=request.json['address'] )
-            return JsonResponse( { 'chan_label' : chan.label, 'chan_address': chan.address } )
+            return JsonResponse( { 'label' : chan.label, 'address': chan.address } )
         else:
             return JsonResponse( { 'status': client_response['status'], 'error':client_response['data'] })
 
@@ -129,7 +129,7 @@ class CreateChan( View ):
             return JsonResponse( { 'error' : chan['status'] } )
         address = chan['data'][0]['address']
         chan_obj = Chan_subscriptions.objects.create(label=passphrase, address=address, user=request.json['_user'])
-        return JsonResponse( { 'chan_address' : chan_obj.address, 'chan_label' : chan_obj.label } )
+        return JsonResponse( { 'address' : chan_obj.address, 'label' : chan_obj.label } )
 
 
 class LeaveChan( View ):
