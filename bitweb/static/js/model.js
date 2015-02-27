@@ -35,7 +35,7 @@ var localDB = {
     },
 
     addChanSubscription: function(entry){
-        db.put('chan_subscriptions', {address:entry['chan_address'], label:entry['chan_label']})
+        db.put('chan_subscriptions', {address:entry['address'], label:entry['label']})
     },
 
     getAllChanSubscriptions: function(){

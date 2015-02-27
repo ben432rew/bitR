@@ -5,6 +5,7 @@ $(document).ready(function(){
             data.forEach(function(value) {
                 $.scope.chans.push(value);
                 $.scope.post_chan_list.push(value);
+                $.scope.profileChans.push(value);
                 addressLookup.push({
                     alias: value.label,
                     address: value.address
@@ -25,6 +26,7 @@ $(document).ready(function(){
             callBack: function(data){
                 $.scope.chans.push(data);
                 $.scope.post_chan_list.push(data);
+                $.scope.profileChans.push(data);
                 $('#create_chan').modal('toggle');
                 localDB.addChanSubscription(data)
             }
@@ -43,10 +45,9 @@ $(document).ready(function(){
                 if ( 'error' in data ){
                     console.log(data)
                 } else {
-                    console.log('here')
-                    console.log(data)
                     $.scope.chans.push(data);
                     $.scope.post_chan_list.push(data);
+                    $.scope.profileChans.push(data);
                     localDB.addChanSubscription(data)
                 }
             }
