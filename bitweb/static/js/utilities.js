@@ -18,7 +18,7 @@ var util = {
                     });
                 },
                 500: function(){
-                    alert( "Sever Error" );
+                    alert( "Server Error" );
                 }
             }
         });

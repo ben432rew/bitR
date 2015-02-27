@@ -1,39 +1,42 @@
 <div class="modal fade" id="compose_msg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-				<h4 class="modal-title" id="myModalLabel">New Message</h4>
-			</div>
-			<div class="modal-body">
-				<form id="compose_msg_form" class="eventInsForm">
-				  <div class="form-group">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                <h4 class="modal-title" id="myModalLabel">New Message</h4>
+            </div>
+            <div class="modal-body">
+                <form id="compose_msg_form" class="eventInsForm">
+                  <div class="form-group">
 
-					  <label class="control-label" for="From">From:</label>
-						<select class="form-control" name="from_address" required>
-						</select>
+                      <label class="control-label" for="From">From:</label>
+                        <select class="form-control" name="from_address" required>
+                            {% verbatim %}
+                                <option jq-repeat="senders">{{ identity }}</option>
+                            {% endverbatim %} 
+                        </select>
 
-						<label class="control-label" for="To">To:</label>
-						<div class="ui-front">
-							<input type="text" class="form-control autoAddress" name="to_address" placeholder="Enter sender's address here" />
-						</div>
+                        <label class="control-label" for="To">To:</label>
+                        <div class="ui-front">
+                            <input type="text" class="form-control autoAddress" name="to_address" placeholder="Enter sender's address here" />
+                        </div>
 
-						<label class="control-label" for="Subject">Subject:</label>
-						<input type="text" class="form-control" name="subject" placeholder="Enter subject here" />
+                        <label class="control-label" for="Subject">Subject:</label>
+                        <input type="text" class="form-control" name="subject" placeholder="Enter subject here" />
 
-						<label class="control-label" for="message">Message</label>
-						<textarea name="message" class="form-control" rows="10" id="message" placeholder="Enter message here"></textarea>
+                        <label class="control-label" for="message">Message</label>
+                        <textarea name="message" class="form-control" rows="10" id="message" placeholder="Enter message here"></textarea>
 
-						<button type="button" class="btn" data-dismiss="modal">
-							Cancel
-						</button>
-						<button type="submit" id="send_message_btn" class="btn btn-material-blue-grey-500">
-							Send
-						</button>
+                        <button type="button" class="btn" data-dismiss="modal">
+                            Cancel
+                        </button>
+                        <button type="submit" id="send_message_btn" class="btn btn-material-blue-grey-500">
+                            Send
+                        </button>
 
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
