@@ -132,12 +132,9 @@
             callBack:function(data){
                 if (data.addresses.length === 0 ){
                     $( '#create_identity' ).modal();
-                } else/* if (typeof data.addresses == "string"){
-                    window.location.replace('bmapi/logout');
-                } else */{
+                } else {
                     data.addresses.forEach(function(value){
                         $.scope.identities.push(value);
-                        // $.scope.senders.push(value);
                         sendersUpdate()
                         addressLookup.push({
                             alias: value.identity,
@@ -201,6 +198,7 @@
                     if ( 'error' in data ){
                     } else {
                         $.scope.identities.push( { identity: $( '#identity_name' ).val() } );
+                        $.scope.senders.push( { identity: $( '#identity_name' ).val() } );
 
                     }
                     $( '#create_id_form' ).trigger('reset');
