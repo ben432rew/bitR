@@ -45,7 +45,6 @@ $(document).ready(function(){
                 if ( 'error' in data ){
                     console.log(data)
                 } else {
-                    console.log(data)
                     $.scope.chans.push(data);
                     $.scope.post_chan_list.push(data);
                     $.scope.profileChans.push(data);
