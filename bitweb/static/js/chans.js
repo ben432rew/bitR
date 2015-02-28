@@ -58,12 +58,15 @@ $(document).ready(function(){
     $( '#post_chan_form' ).on("submit", function(event) {
         event.preventDefault();
         var form_data = $(this).serializeObject();
-        form_data.send_addy = 'chan_post';
+        localDB.getChanAddress(form_data.chan_post_list).done(function(addy){
+            form_data.to_address = form_data.from_address = addy;
+            util.apiCall({
+                url: 'send',
+                data: form_data
+            });
+        })
+        $("#compose_chan_post").toggle()
         $( '#post_chan_form' ).trigger('reset');
-        util.apiCall({
-            url: 'send',
-            data: form_data
-        });
     });
 
     // select chans to display 
