@@ -2,14 +2,15 @@ from django.contrib.auth import authenticate, login, logout
 from django.core import serializers
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
-from datetime import datetime, timedelta
 from bmapi.forms import UserCreateForm
 from django.views.generic import View
 from django.http import JsonResponse
 from bmapi.wrapper import BMclient
 from bitweb.models import User
 from bmapi.models import *
+
 from pprint import pprint
+from datetime import datetime, timedelta
 import uuid
 import json
 import time
@@ -126,15 +127,9 @@ class CreateChan( View ):
 
 class LeaveChan( View ):
     def post( self, request ):
-        label = request.json['label']
-        chan = Chan_subscriptions.objects.filter(user=request.json['_user'], label = request.json['label'])
-        if chan:
-            address = chan[0].address
-            status = BMclient.call( 'leaveChan', address )
-            chan[0].delete()
-        else:
-            status = 'no chan'
-        return JsonResponse({ 'label' : label, 'status' : status })
+        address = request.json['address']
+        status = BMclient.call( 'leaveChan', address )
+        return JsonResponse({ 'status' : status })
 
 
 class DeleteInboxMessage( View ):
