@@ -47,4 +47,9 @@ var localDB = {
                 return addy['address']
             })
     },
+
+    removeChanSubscription: function(chan_label){
+        db.remove('chan_subscriptions', chan_label)
+    },
+
 }

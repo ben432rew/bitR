@@ -2,14 +2,15 @@ from django.contrib.auth import authenticate, login, logout
 from django.core import serializers
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
-from datetime import datetime, timedelta
 from bmapi.forms import UserCreateForm
 from django.views.generic import View
 from django.http import JsonResponse
 from bmapi.wrapper import BMclient
 from bitweb.models import User
 from bmapi.models import *
+
 from pprint import pprint
+from datetime import datetime, timedelta
 import uuid
 import json
 import time
@@ -104,37 +105,32 @@ class getSentMessageByUser( View ):
 
 class JoinChan( View ):
     def post( self, request ):
-        if request.json['address'] in [ subs.address for subs in  Chan_subscriptions.objects.filter(user=request.json['_user']) ]: return JsonResponse( { 'error': 'already subscribed'})
         client_response = BMclient.call( 'joinChan', BMclient._encode( request.json['label'] ), request.json['address'] )
         if client_response['status'] == 200 or client_response['status'] == 16:
-            chan = Chan_subscriptions.objects.create( user=request.json['_user'], label=request.json['label'], address=request.json['address'] )
-            return JsonResponse( { 'label' : chan.label, 'address': chan.address } )
+            return JsonResponse( { 'label' : request.json['label'], 'address': request.json['address'] } )
         else:
             return JsonResponse( { 'status': client_response['status'], 'error':client_response['data'] })
 
 
 class CreateChan( View ):
     def post( self, request ):
-        passphrase = request.json['form']
-        chan = BMclient.call('createChan', BMclient._encode(passphrase))
-        if chan['status'] != 200:
-            return JsonResponse( { 'error' : chan['status'] } )
-        address = chan['data'][0]['address']
-        chan_obj = Chan_subscriptions.objects.create(label=passphrase, address=address, user=request.json['_user'])
-        return JsonResponse( { 'address' : chan_obj.address, 'label' : chan_obj.label } )
+        client_response = BMclient.call('createChan', BMclient._encode(request.json['form']))
+        if client_response['status'] == 24:
+            pass
+            # here we have to deal with multiple users trying to create a chan
+            # with the same name
+        elif client_response['status'] != 200:
+            return JsonResponse( { 'error' : client_response['status'] } )
+        else:
+            address = client_response['data'][0]['address']
+            return JsonResponse( { 'address' : address, 'label' : request.json['form'] } )
 
 
 class LeaveChan( View ):
     def post( self, request ):
-        label = request.json['label']
-        chan = Chan_subscriptions.objects.filter(user=request.json['_user'], label = request.json['label'])
-        if chan:
-            address = chan[0].address
-            status = BMclient.call( 'leaveChan', address )
-            chan[0].delete()
-        else:
-            status = 'no chan'
-        return JsonResponse({ 'label' : label, 'status' : status })
+        address = request.json['address']
+        status = BMclient.call( 'leaveChan', address )
+        return JsonResponse({ 'status' : status })
 
 
 class DeleteInboxMessage( View ):

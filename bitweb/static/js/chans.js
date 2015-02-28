@@ -92,14 +92,17 @@ $(document).ready(function(){
     $("#rmv_chan_form").submit(function(e){
         e.preventDefault();
         var form_data = $(this).serializeObject();
-        util.apiCall({
-            url: 'leave_chan',
-            data: form_data,
-            callBack: function(data){
-                $('#remove_chan').modal('toggle');
-                $("#" + form_data['label']).parent().remove()
-            }
-        });
-
+        localDB.getChanAddress(form_data['label']).done(function(addy){
+            form_data.address = addy;
+            util.apiCall({
+                url: 'leave_chan',
+                data: form_data,
+                callBack: function(data){
+                    $("#" + form_data['label']).parent().remove()
+                }
+            });
+        })
+        localDB.removeChanSubscription(form_data['label'])
+        $('#remove_chan').modal('toggle');
     })
 })
