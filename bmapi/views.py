@@ -128,7 +128,7 @@ class CreateChan( View ):
 
 class LeaveChan( View ):
     def post( self, request ):
-        address = request.json['address']
+        address = request.json['chan_remove_list']
         status = BMclient.call( 'leaveChan', address )
         return JsonResponse({ 'status' : status })
 

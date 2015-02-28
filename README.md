@@ -1,4 +1,7 @@
-## deployed alpha at [bitr.us](https://bitr.us/)
+## Alpha site at [bitr.us](https://bitr.us/)
+
+
+### for a broad overview of the project: [About](https://bitr.us/about)
 
 ## Setup
 

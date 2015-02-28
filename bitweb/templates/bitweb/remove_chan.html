@@ -8,9 +8,12 @@
             <div class="modal-body">
                 <form id = "rmv_chan_form">
                   <div class="form-group">
-                    <label for="Chan Name">Label</label>
-                    <input type="text" class="form-control" name = 'label' id="chan_label" placeholder="Enter Chan Label/Passphrase">
-                    <p class="help-block">This is the label, which some use as a passphrase, for the chan</p>                    
+                    <label for="chan_remove_list">Label</label>
+                    <select class="form-control" name="chan_remove_list">
+                        {% verbatim %}
+                        <option jq-repeat="remove_chan_list">{{ label }}</option>
+                        {% endverbatim %}
+                    </select>
                     <button type="button" class="btn" data-dismiss="modal">Cancel</button>
                     <button type="submit" id="rmv_chan_btn" class="btn btn-material-blue-grey-500" >Remove</button>
                   </div>
