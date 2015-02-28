@@ -1,60 +1,61 @@
+var inboxMessages = function(){
+    $('.inbox-bucket').children().hide();
+    $.scope.inbox.splice(0);
+    $.scope.chan_inbox.splice(0);
+
+    var setColor = function(read){
+        if (read === 1){
+            return("#cfd8dc");
+        }
+        else {
+            return('#eee');
+        }
+    };
+
+    var chan_addresses_only = [];
+    var chan_addresses = localDB.getAllChanSubscriptions().done(function(){ 
+        for (var i = 0; i < chan_addresses.e.length; i++) {
+          chan_addresses_only.push(chan_addresses.e[i]['address']);
+        }
+        util.apiCall({
+            url: 'allmessages',
+            data:{'chans':chan_addresses_only},
+            callBack: function( data ){
+                data.messages.forEach(function(value) {
+                    value.data.forEach(function(value){
+                        value.receivedUnixTime= value.receivedTime
+                        value.receivedTime = util.convertUnixTime(value.receivedTime);
+                        value.fromaddress = value.fromAddress;
+                        value.toaddress = value.toAddress;
+                        value.inboxmessage = util.stringShorter( value.message, 12 );
+                        value.inboxsubject = util.stringShorter( value.subject, 12 );
+                        value.color = setColor(value.read);
+                        if ( chan_addresses_only.indexOf(value.toAddress) != -1){
+                            var index = $.scope.chans.indexOf("address", value.toAddress);
+                            if(value.toAddress == value.fromAddress){
+                                value.fromAddress = "Anonymous";
+                            }
+                            value.chan = ($.scope.chans[index]).chan_label;
+                            $.scope.chan_inbox.push(value);
+                        } else {
+                        $.scope.inbox.push(value);
+                        }
+                    });
+                });
+
+                $.scope.chan_inbox.reverse()
+                sessionStorage.setItem('inboxMessages', JSON.stringify($.scope.inbox));
+                sessionStorage.setItem('chanMessages', JSON.stringify($.scope.chan_inbox));
+            }
+        })
+    });
+    $('#inbox-list').show();
+    $('#table-head').show();
+};
+
 ( function( $ ){
     "use strict";
 
-    var inboxMessages = function(){
-        $('.inbox-bucket').children().hide();
-        $.scope.inbox.splice(0);
-        $.scope.chan_inbox.splice(0);
-    
-        var setColor = function(read){
-            if (read === 1){
-                return("#cfd8dc");
-            }
-            else {
-                return('#eee');
-            }
-        };
-
-        var chan_addresses_only = [];
-        var chan_addresses = localDB.getAllChanSubscriptions().done(function(){ 
-            for (var i = 0; i < chan_addresses.e.length; i++) {
-              chan_addresses_only.push(chan_addresses.e[i]['address']);
-            }
-            util.apiCall({
-                url: 'allmessages',
-                data:{'chans':chan_addresses_only},
-                callBack: function( data ){
-                    data.messages.forEach(function(value) {
-                        value.data.forEach(function(value){
-                            value.receivedUnixTime= value.receivedTime
-                            value.receivedTime = util.convertUnixTime(value.receivedTime);
-                            value.fromaddress = value.fromAddress;
-                            value.toaddress = value.toAddress;
-                            value.inboxmessage = util.stringShorter( value.message, 12 );
-                            value.inboxsubject = util.stringShorter( value.subject, 12 );
-                            value.color = setColor(value.read);
-                            if ( chan_addresses_only.indexOf(value.toAddress) != -1){
-                                var index = $.scope.chans.indexOf("address", value.toAddress);
-                                if(value.toAddress == value.fromAddress){
-                                    value.fromAddress = "Anonymous";
-                                }
-                                value.chan = ($.scope.chans[index]).chan_label;
-                                $.scope.chan_inbox.push(value);
-                            } else {
-                            $.scope.inbox.push(value);
-                            }
-                        });
-                    });
-
-                    $.scope.chan_inbox.reverse()
-                    sessionStorage.setItem('inboxMessages', JSON.stringify($.scope.inbox));
-                    sessionStorage.setItem('chanMessages', JSON.stringify($.scope.chan_inbox));
-                }
-            })
-        });
-        $('#inbox-list').show();
-        $('#table-head').show();
-    };
 
     var sendersUpdate = function(){
         var options = $("#compose_msg_form > div > select");
@@ -205,61 +206,6 @@
                 }
             });
         });
-
-        // send a message
-        $( '#compose_msg_form' ).on("submit", function(event) {
-            event.preventDefault();
-            var form_data = $(this).serializeObject();
-            $( '#compose_msg_form' ).trigger('reset');
-            $("#compose_msg").toggle()
-            util.apiCall({
-                url: 'send',
-                data: form_data,
-            });
-        });
-
-        // reply to message
-        $( '#mess-view-form' ).on("submit", function(event) {
-            event.preventDefault();
-            var messages = JSON.parse(sessionStorage.getItem('inboxMessages'));
-            var message;
-            var msgid = $( '#mess-id' ).val();
-            // this is repeating another loop, can be dried out
-            for (var i=0; i<messages.length; i++ ){
-                if (messages[i]['msgid'] == msgid){
-                    message = messages[i];
-                }
-            }
-            var form_data = $(this).serializeObject();
-            form_data['to_address'] = message['fromAddress']
-            form_data['from_address'] = message['toAddress']
-            form_data['subject'] = "Re: " + message['subject']
-            form_data['message'] = form_data['reply']
-            $( '#compose_msg_form' ).trigger('reset');
-            util.apiCall({
-                url: 'send',
-                data: form_data,
-                callBack:function (data){
-                $("#mess_view_modal").toggle()
-            }
-            });
-        });
-
-
-        // delete inbox message
-        $( '#delete_msg' ).click(function() {
-                util.apiCall({
-                    url: $('#delete_msg').attr('data-url'),
-                    data: {
-                        msgid: $( '#mess-id' ).val()
-                    },
-                    callBack: function(){
-                        // update inbox
-                        inboxMessages();
-                    }
-                });
-        });
-
 
         // show sent messages
         $('.inbox-nav').on( 'click', 'button#sent', function(){
