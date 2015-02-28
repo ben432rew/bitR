@@ -12,6 +12,15 @@ var inboxMessages = function(){
         }
     };
 
+    var setBold = function(read){
+        if (read === 1){
+            return("normal");
+        }
+        else {
+            return('bold');
+        }
+    };
+
     var chan_addresses_only = [];
     var chan_addresses = localDB.getAllChanSubscriptions().done(function(){ 
         for (var i = 0; i < chan_addresses.e.length; i++) {
@@ -30,6 +39,7 @@ var inboxMessages = function(){
                         value.inboxmessage = util.stringShorter( value.message, 12 );
                         value.inboxsubject = util.stringShorter( value.subject, 12 );
                         value.color = setColor(value.read);
+                        value.font_weight = setBold(value.read)
                         if ( chan_addresses_only.indexOf(value.toAddress) != -1){
                             var index = $.scope.chans.indexOf("address", value.toAddress);
                             if(value.toAddress == value.fromAddress){

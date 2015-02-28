@@ -12,7 +12,7 @@
 		</div>
 		<ul id='inbox-list'>
 			{% verbatim %}
-			<li jq-repeat="inbox" class="new-message row {{toAddress}}" style="background-color:{{ color }}">
+			<li jq-repeat="inbox" class="new-message row {{toAddress}}" style="background-color:{{ color }};font-weight: {{ font_weight }} ">
 				<div>
 					<p hidden id="msg-id">{{ msgid }}</p>
 					<div class="col-xs-3 addyBook">{{ fromaddress }}</div>
