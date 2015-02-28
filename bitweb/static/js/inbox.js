@@ -210,17 +210,13 @@
         $( '#compose_msg_form' ).on("submit", function(event) {
             event.preventDefault();
             var form_data = $(this).serializeObject();
-			$( '#compose_msg_form' ).trigger('reset');
-
-			util.apiCall({
-				url: 'send',
-				data: form_data,
-    			callBack:function (data){
-    				$("#compose_msg").toggle()
-    			}
-
-    		});
-    	});
+            $( '#compose_msg_form' ).trigger('reset');
+            $("#compose_msg").toggle()
+            util.apiCall({
+                url: 'send',
+                data: form_data,
+            });
+        });
 
         // reply to message
         $( '#mess-view-form' ).on("submit", function(event) {
@@ -244,8 +240,8 @@
                 url: 'send',
                 data: form_data,
                 callBack:function (data){
-				$("#mess_view_modal").toggle()
-			}
+                $("#mess_view_modal").toggle()
+            }
             });
         });
 

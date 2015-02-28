@@ -40,5 +40,11 @@ var localDB = {
 
     getAllChanSubscriptions: function(){
         return db.values('chan_subscriptions').done(function(i){return i})
-    }
+    },
+
+    getChanAddress: function(chan_label){
+        return db.get('chan_subscriptions', chan_label).done(function(addy){
+                return addy['address']
+            })
+    },
 }
