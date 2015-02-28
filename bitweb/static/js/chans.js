@@ -5,6 +5,7 @@ $(document).ready(function(){
             data.forEach(function(value) {
                 $.scope.chans.push(value);
                 $.scope.post_chan_list.push(value);
+                $.scope.remove_chan_list.push(value);
                 $.scope.profileChans.push(value);
                 addressLookup.push({
                     alias: value.label,
@@ -92,17 +93,17 @@ $(document).ready(function(){
     $("#rmv_chan_form").submit(function(e){
         e.preventDefault();
         var form_data = $(this).serializeObject();
-        localDB.getChanAddress(form_data['label']).done(function(addy){
+        localDB.getChanAddress(form_data.chan_remove_list).done(function(addy){
             form_data.address = addy;
             util.apiCall({
                 url: 'leave_chan',
                 data: form_data,
                 callBack: function(data){
-                    $("#" + form_data['label']).parent().remove()
+                    $("#" + form_data.chan_remove_list).parent().remove()
                 }
             });
         })
-        localDB.removeChanSubscription(form_data['label'])
+        localDB.removeChanSubscription(form_data.chan_remove_list)
         $('#remove_chan').modal('toggle');
     })
 })

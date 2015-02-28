@@ -1,4 +1,3 @@
-// after indexedDB is complete, replace this array with database lookups
 var addressLookup = [];
 
 var adrs = {
