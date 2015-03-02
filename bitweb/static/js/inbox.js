@@ -1,3 +1,5 @@
+var addressLookup = [];
+
 var inboxMessages = function(){
     $('.inbox-bucket').children().hide();
     $.scope.inbox.splice(0);
@@ -147,10 +149,6 @@ var inboxMessages = function(){
                     data.addresses.forEach(function(value){
                         $.scope.identities.push(value);
                         sendersUpdate()
-                        addressLookup.push({
-                            alias: value.identity,
-                            address: value.key
-                        });
                     });
                 }
             }

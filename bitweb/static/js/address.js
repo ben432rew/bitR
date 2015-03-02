@@ -1,5 +1,3 @@
-var addressLookup = [];
-
 var adrs = {
     addressCheck: function(string2check){
         var matcher = /^BM-[\w]{34}$/ ;
@@ -8,13 +6,14 @@ var adrs = {
         }
     },
 
-    processAddy: function( address, len ){
-        var index = $.scope.addressBook.indexOf.call( addressLookup, 'address', address );
-        if( index !== -1 ){
-            address = addressLookup[index].alias;
-        }
-        
-        return address ;
+    processAddy: function( address ){
+        return localDB.getAliasFromAddressBook(address).done(function(alias){
+            if( alias ){
+                return alias
+            } else {
+                return address
+            }
+        })
     },
 
     convertAddress: function( $element ){
@@ -43,7 +42,6 @@ var adrs = {
     addressesBook: function(){
         localDB.getAddressBook().done(function(book){
             $.scope.addressBook.push.apply( $.scope.addressBook, book );
-            addressLookup.push.apply( addressLookup, book );
             adrs.parseNodes();
         })
     }
@@ -64,14 +62,14 @@ $(document).ready(function(){
             alert("Malformed address.");
             return false;
         }
-
-        if( $.scope.addressBook.indexOf.call( addressLookup, 'address', formData.address ) !== -1 ){
-            alert("Address already in use.");
-            return false;
+        for ( entry in $.scope.addressBook ) {
+            if ( entry['address'] == formData.address ){
+                alert("Address already in use.");
+                return false;
+            }
         }
         localDB.createAddress(formData)
         $.scope.addressBook.push( formData );
-        addressLookup.push(formData);
         $('[name="addAddressEntry"]')[0].reset();
         adrs.parseNodes();
 

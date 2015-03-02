@@ -10,6 +10,18 @@ var localDB = {
         return db.values('addressbook').done(function(i){return i})
     },
 
+    getAliasFromAddressBook: function(address){
+        return db.get('addressbook', address).done(function(alias){
+            if (typeof alias === 'undefined'){
+                console.log(alias)
+                return false
+            } else {
+                console.log(alias['alias'])
+                return alias['alias']
+            }
+        })
+    },
+
     addSentMessage: function(entry){
 
     },
