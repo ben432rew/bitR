@@ -1,5 +1,3 @@
-var addressLookup = [];
-
 var inboxMessages = function(){
     $('.inbox-bucket').children().hide();
     $.scope.inbox.splice(0);
@@ -107,7 +105,7 @@ var inboxMessages = function(){
                 source: function( req, response ) {
                     var wordlist = function(){
                         var list = [];
-                        addressLookup.forEach(function( value ){
+                        $.scope.addressBook.forEach(function( value ){
                             list.push( value.alias );
                         });
 
@@ -119,17 +117,8 @@ var inboxMessages = function(){
                     var results = $.grep( wordlist, function( item,index ){
                         return matcher.test( item );
                     });
-
-                    var display = []
-                    results.map(function( item ){
-                        var index = $.scope.inbox.indexOf.call( addressLookup, "alias", item );
-                        display.push({
-                            label: addressLookup[index].alias,
-                            value: addressLookup[index].address
-                        });
-                    });
-
-                    response( display );
+                    var book = localDB.getAddressBook()
+                    response( book.e );
                 }
             });
         });

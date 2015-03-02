@@ -19,6 +19,12 @@ var adrs = {
         localDB.getAliasFromAddressBook(address).done(function(lookUp){
             $element.html( util.stringShorter( lookUp ) );
         })
+        // DOESN'T WORK
+        for ( identity in $.scope.identities ) {
+            if ( address == identity.key ) {
+                $element.html( util.stringShorter( identity.identity ) );
+            }
+        }
     },
 
     // goes through nodes, checks for addyBook class, adds address book entry
@@ -66,9 +72,9 @@ $(document).ready(function(){
 
     // delete address book entry
     $('#addressBookModal').on( 'click', 'button.delete', function(){
-        var alias = $( this ).parents( '[jq-repeat-index]' ).attr( 'data-alias' );
-        db.remove('addressbook', alias).done(function(){
-            var index = $.scope.addressBook.indexOf( 'alias', alias );
+        var address = $( this ).parents( '[jq-repeat-index]' ).attr( 'data-address' );
+        localDB.removeAddress(address).done(function(){
+            var index = $.scope.addressBook.indexOf( 'address', address );
             $.scope.addressBook.splice( index, 1 );
         })
     });
