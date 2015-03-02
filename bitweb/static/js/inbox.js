@@ -116,8 +116,9 @@ var inboxMessages = function(){
                     var results = $.grep( wordlist, function( item,index ){
                         return matcher.test( item );
                     });
-                    var book = localDB.getAddressBook()
-                    response( book.e );
+                    localDB.getAddressBook().done(function(book){
+                        response( book.e );
+                    })
                 }
             });
         });
