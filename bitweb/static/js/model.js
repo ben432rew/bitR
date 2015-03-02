@@ -58,12 +58,11 @@ var localDB = {
 
     getChanAddress: function(chan_label){
         return db.get('chan_subscriptions', chan_label).done(function(addy){
-                return addy['address']
-            })
+            return addy['address']
+        })
     },
 
     removeChanSubscription: function(chan_label){
         db.remove('chan_subscriptions', chan_label)
     },
-
 }

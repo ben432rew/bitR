@@ -52,7 +52,6 @@ var inboxMessages = function(){
                         }
                     });
                 });
-
                 $.scope.chan_inbox.reverse()
                 sessionStorage.setItem('inboxMessages', JSON.stringify($.scope.inbox));
                 sessionStorage.setItem('chanMessages', JSON.stringify($.scope.chan_inbox));

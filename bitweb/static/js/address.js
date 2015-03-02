@@ -18,13 +18,13 @@ var adrs = {
         if( !this.addressCheck(address) ) return ;
         localDB.getAliasFromAddressBook(address).done(function(lookUp){
             $element.html( util.stringShorter( lookUp ) );
-        })
-        // DOESN'T WORK
-        for ( identity in $.scope.identities ) {
-            if ( address == identity.key ) {
-                $element.html( util.stringShorter( identity.identity ) );
+            for ( var i=0; i<$.scope.identities.length; i++ ) {
+                if ( lookUp == $.scope.identities[i].key ) {
+                    bool = false
+                    $element.html( util.stringShorter( $.scope.identities[i].identity ) );
+                }
             }
-        }
+        })
     },
 
     // goes through nodes, checks for addyBook class, adds address book entry
@@ -57,8 +57,8 @@ $(document).ready(function(){
             alert("Malformed address.");
             return false;
         }
-        for ( entry in $.scope.addressBook ) {
-            if ( entry['address'] == formData.address ){
+        for ( var i=0; i<$.scope.addressBook.length; i++ ) {
+            if ( $.scope.addressBook.length[i]['address'] == formData.address ){
                 alert("Address already in use.");
                 return false;
             }
