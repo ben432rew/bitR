@@ -11,13 +11,11 @@ var localDB = {
     },
 
     getAliasFromAddressBook: function(address){
-        return db.get('addressbook', address).done(function(alias){
-            if (typeof alias === 'undefined'){
-                console.log(alias)
-                return false
+        return db.get('addressbook', address).done(function(entry){
+            if (typeof entry === 'undefined'){
+                return address
             } else {
-                console.log(alias['alias'])
-                return alias['alias']
+                return entry['alias']
             }
         })
     },

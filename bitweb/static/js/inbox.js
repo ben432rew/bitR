@@ -173,8 +173,12 @@ var inboxMessages = function(){
             $("#mess-subject").text(subject)
             $("#replyModalLabel").text(subject)
             $("#mess-body").text(body)
-            $("#mess-from").html(adrs.processAddy( from ) )
-            $("#mess-to").html( adrs.processAddy( the_message['toAddress'] ) )
+            localDB.getAliasFromAddressBook( from ).done(function(lookUp){
+                $("#mess-from").html( lookUp )
+            })
+            localDB.getAliasFromAddressBook( the_message['toAddress'] ).done(function(lookUp){
+                $("#mess-to").html( lookUp  )
+            })
             $("#mess-date").html(date)
             $('#create_reply_button').show()
             $('#mess-reply').show()
@@ -313,7 +317,9 @@ var inboxMessages = function(){
             $('#mess-reply').hide()
             $('#messageModalLabel').html("Sent Message")
             $('#delete_msg').attr('data-url','deleteSentmessage')
-            $("#mess-from").html( adrs.processAddy( toaddress ) )
+            localDB.getAliasFromAddressBook( toaddress ).done(function(lookUp){
+                $("#mess-from").html( lookUp )
+            })
 
             if( the_message['read'] === 1 ) return ;
             util.apiCall({

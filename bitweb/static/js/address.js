@@ -6,16 +6,6 @@ var adrs = {
         }
     },
 
-    processAddy: function( address ){
-        return localDB.getAliasFromAddressBook(address).done(function(alias){
-            if( alias ){
-                return alias
-            } else {
-                return address
-            }
-        })
-    },
-
     convertAddress: function( $element ){
         var address = $element.html();
         if( this.addressCheck( address ) ){
@@ -26,9 +16,9 @@ var adrs = {
             }
         }
         if( !this.addressCheck(address) ) return ;
-        address = this.processAddy( address );
-        address = util.stringShorter( address );
-        $element.html( address );
+        localDB.getAliasFromAddressBook(address).done(function(lookUp){
+            $element.html( util.stringShorter( lookUp ) );
+        })
     },
 
     // goes through nodes, checks for addyBook class, adds address book entry
@@ -45,7 +35,6 @@ var adrs = {
             adrs.parseNodes();
         })
     }
-
 };
 
 // calls parseNodes if new elements are added to the DOM
