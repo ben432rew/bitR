@@ -20,7 +20,6 @@ var adrs = {
             $element.html( util.stringShorter( lookUp ) );
             for ( var i=0; i<$.scope.identities.length; i++ ) {
                 if ( lookUp == $.scope.identities[i].key ) {
-                    bool = false
                     $element.html( util.stringShorter( $.scope.identities[i].identity ) );
                 }
             }
@@ -58,7 +57,7 @@ $(document).ready(function(){
             return false;
         }
         for ( var i=0; i<$.scope.addressBook.length; i++ ) {
-            if ( $.scope.addressBook.length[i]['address'] == formData.address ){
+            if ( $.scope.addressBook[i]['address'] == formData.address ){
                 alert("Address already in use.");
                 return false;
             }
@@ -73,7 +72,7 @@ $(document).ready(function(){
     // delete address book entry
     $('#addressBookModal').on( 'click', 'button.delete', function(){
         var address = $( this ).parents( '[jq-repeat-index]' ).attr( 'data-address' );
-        localDB.removeAddress(address).done(function(){
+        localDB.removeAddress(address).done(function(returned){
             var index = $.scope.addressBook.indexOf( 'address', address );
             $.scope.addressBook.splice( index, 1 );
         })
