@@ -6,8 +6,22 @@ var localDB = {
         db.put('addressbook', {address:entry['address'], alias:entry['alias']})
     },
 
+    removeAddress: function(address){
+        db.remove('addressbook', address)
+    },
+
     getAddressBook: function(){
         return db.values('addressbook').done(function(i){return i})
+    },
+
+    getAliasFromAddressBook: function(address){
+        return db.get('addressbook', address).done(function(entry){
+            if (typeof entry === 'undefined'){
+                return address
+            } else {
+                return entry['alias']
+            }
+        })
     },
 
     addSentMessage: function(entry){
@@ -44,12 +58,11 @@ var localDB = {
 
     getChanAddress: function(chan_label){
         return db.get('chan_subscriptions', chan_label).done(function(addy){
-                return addy['address']
-            })
+            return addy['address']
+        })
     },
 
     removeChanSubscription: function(chan_label){
         db.remove('chan_subscriptions', chan_label)
     },
-
 }

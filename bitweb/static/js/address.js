@@ -1,20 +1,9 @@
-var addressLookup = [];
-
 var adrs = {
     addressCheck: function(string2check){
         var matcher = /^BM-[\w]{34}$/ ;
         if( typeof(string2check) == 'string' && string2check.match(matcher) ){
             return true;
         }
-    },
-
-    processAddy: function( address, len ){
-        var index = $.scope.addressBook.indexOf.call( addressLookup, 'address', address );
-        if( index !== -1 ){
-            address = addressLookup[index].alias;
-        }
-        
-        return address ;
     },
 
     convertAddress: function( $element ){
@@ -27,9 +16,14 @@ var adrs = {
             }
         }
         if( !this.addressCheck(address) ) return ;
-        address = this.processAddy( address );
-        address = util.stringShorter( address );
-        $element.html( address );
+        localDB.getAliasFromAddressBook(address).done(function(lookUp){
+            $element.html( util.stringShorter( lookUp ) );
+            for ( var i=0; i<$.scope.identities.length; i++ ) {
+                if ( lookUp == $.scope.identities[i].key ) {
+                    $element.html( util.stringShorter( $.scope.identities[i].identity ) );
+                }
+            }
+        })
     },
 
     // goes through nodes, checks for addyBook class, adds address book entry
@@ -43,11 +37,9 @@ var adrs = {
     addressesBook: function(){
         localDB.getAddressBook().done(function(book){
             $.scope.addressBook.push.apply( $.scope.addressBook, book );
-            addressLookup.push.apply( addressLookup, book );
             adrs.parseNodes();
         })
     }
-
 };
 
 // calls parseNodes if new elements are added to the DOM
@@ -64,14 +56,14 @@ $(document).ready(function(){
             alert("Malformed address.");
             return false;
         }
-
-        if( $.scope.addressBook.indexOf.call( addressLookup, 'address', formData.address ) !== -1 ){
-            alert("Address already in use.");
-            return false;
+        for ( var i=0; i<$.scope.addressBook.length; i++ ) {
+            if ( $.scope.addressBook[i]['address'] == formData.address ){
+                alert("Address already in use.");
+                return false;
+            }
         }
         localDB.createAddress(formData)
         $.scope.addressBook.push( formData );
-        addressLookup.push(formData);
         $('[name="addAddressEntry"]')[0].reset();
         adrs.parseNodes();
 
@@ -79,9 +71,9 @@ $(document).ready(function(){
 
     // delete address book entry
     $('#addressBookModal').on( 'click', 'button.delete', function(){
-        var alias = $( this ).parents( '[jq-repeat-index]' ).attr( 'data-alias' );
-        db.remove('addressbook', alias).done(function(){
-            var index = $.scope.addressBook.indexOf( 'alias', alias );
+        var address = $( this ).parents( '[jq-repeat-index]' ).attr( 'data-address' );
+        localDB.removeAddress(address).done(function(returned){
+            var index = $.scope.addressBook.indexOf( 'address', address );
             $.scope.addressBook.splice( index, 1 );
         })
     });

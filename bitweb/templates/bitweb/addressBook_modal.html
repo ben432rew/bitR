@@ -18,7 +18,7 @@
 				</form>
 				<ul>
 					{% verbatim %}
-					<li jq-repeat="addressBook" data-alias="{{ alias }}">
+					<li jq-repeat="addressBook" data-address="{{ address }}">
 						<b>{{ alias }}<b>:  <i>{{ address }}</i>
 						<button type="button" class="btn btn-danger delete">Delete</button>
 					</li>

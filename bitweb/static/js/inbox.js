@@ -52,7 +52,6 @@ var inboxMessages = function(){
                         }
                     });
                 });
-
                 $.scope.chan_inbox.reverse()
                 sessionStorage.setItem('inboxMessages', JSON.stringify($.scope.inbox));
                 sessionStorage.setItem('chanMessages', JSON.stringify($.scope.chan_inbox));
@@ -105,7 +104,7 @@ var inboxMessages = function(){
                 source: function( req, response ) {
                     var wordlist = function(){
                         var list = [];
-                        addressLookup.forEach(function( value ){
+                        $.scope.addressBook.forEach(function( value ){
                             list.push( value.alias );
                         });
 
@@ -117,17 +116,9 @@ var inboxMessages = function(){
                     var results = $.grep( wordlist, function( item,index ){
                         return matcher.test( item );
                     });
-
-                    var display = []
-                    results.map(function( item ){
-                        var index = $.scope.inbox.indexOf.call( addressLookup, "alias", item );
-                        display.push({
-                            label: addressLookup[index].alias,
-                            value: addressLookup[index].address
-                        });
-                    });
-
-                    response( display );
+                    localDB.getAddressBook().done(function(book){
+                        response( book.e );
+                    })
                 }
             });
         });
@@ -147,10 +138,6 @@ var inboxMessages = function(){
                     data.addresses.forEach(function(value){
                         $.scope.identities.push(value);
                         sendersUpdate()
-                        addressLookup.push({
-                            alias: value.identity,
-                            address: value.key
-                        });
                     });
                 }
             }
@@ -175,8 +162,12 @@ var inboxMessages = function(){
             $("#mess-subject").text(subject)
             $("#replyModalLabel").text(subject)
             $("#mess-body").text(body)
-            $("#mess-from").html(adrs.processAddy( from ) )
-            $("#mess-to").html( adrs.processAddy( the_message['toAddress'] ) )
+            localDB.getAliasFromAddressBook( from ).done(function(lookUp){
+                $("#mess-from").html( lookUp )
+            })
+            localDB.getAliasFromAddressBook( the_message['toAddress'] ).done(function(lookUp){
+                $("#mess-to").html( lookUp  )
+            })
             $("#mess-date").html(date)
             $('#create_reply_button').show()
             $('#mess-reply').show()
@@ -315,7 +306,9 @@ var inboxMessages = function(){
             $('#mess-reply').hide()
             $('#messageModalLabel').html("Sent Message")
             $('#delete_msg').attr('data-url','deleteSentmessage')
-            $("#mess-from").html( adrs.processAddy( toaddress ) )
+            localDB.getAliasFromAddressBook( toaddress ).done(function(lookUp){
+                $("#mess-from").html( lookUp )
+            })
 
             if( the_message['read'] === 1 ) return ;
             util.apiCall({

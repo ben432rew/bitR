@@ -7,10 +7,6 @@ $(document).ready(function(){
                 $.scope.post_chan_list.push(value);
                 $.scope.remove_chan_list.push(value);
                 $.scope.profileChans.push(value);
-                addressLookup.push({
-                    alias: value.label,
-                    address: value.address
-                });
             });
         }
     })

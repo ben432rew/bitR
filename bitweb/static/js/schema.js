@@ -2,7 +2,7 @@ var bitrSchema = {
   autoSchema : false,
   stores: [{
     name: 'addressbook',
-    keyPath: 'alias',
+    keyPath: 'address',
     indexes: [{
             keyPath: 'address'
         }, {
