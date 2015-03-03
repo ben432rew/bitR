@@ -72,9 +72,8 @@ $(document).ready(function(){
     // delete address book entry
     $('#addressBookModal').on( 'click', 'button.delete', function(){
         var address = $( this ).parents( '[jq-repeat-index]' ).attr( 'data-address' );
-        localDB.removeAddress(address).done(function(returned){
-            var index = $.scope.addressBook.indexOf( 'address', address );
-            $.scope.addressBook.splice( index, 1 );
-        })
+        localDB.removeAddress(address)
+        var index = $.scope.addressBook.indexOf( 'address', address );
+        $.scope.addressBook.splice( index, 1 );
     });
 })
