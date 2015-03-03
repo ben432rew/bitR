@@ -98,6 +98,12 @@ var inboxMessages = function(){
         $.material.ripples();
         $('.dropdown-toggle').dropdown();
 
+        var address_book;
+
+        localDB.getAddressBook().done(function(book){
+            address_book = book
+            })
+
         $( 'input.autoAddress' ).each(function(){
 
             $(this).autocomplete({
@@ -116,9 +122,8 @@ var inboxMessages = function(){
                     var results = $.grep( wordlist, function( item,index ){
                         return matcher.test( item );
                     });
-                    localDB.getAddressBook().done(function(book){
-                        response( book.e );
-                    })
+                    console.log(address_book)
+                    response( address_book );
                 }
             });
         });
