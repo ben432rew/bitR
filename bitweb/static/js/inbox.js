@@ -98,6 +98,14 @@ var inboxMessages = function(){
         $.material.ripples();
         $('.dropdown-toggle').dropdown();
 
+        var address_book_for_autocomplete;
+
+        localDB.getAddressBook().done(function(book){
+            address_book_for_autocomplete = book
+        })
+
+
+        // autocomplete, dynamically adds and removes names from a dropdown
         $( 'input.autoAddress' ).each(function(){
 
             $(this).autocomplete({
@@ -116,9 +124,16 @@ var inboxMessages = function(){
                     var results = $.grep( wordlist, function( item,index ){
                         return matcher.test( item );
                     });
-                    localDB.getAddressBook().done(function(book){
-                        response( book.e );
-                    })
+
+                    var display = []
+                    results.map(function( item ){
+                        var index = $.scope.inbox.indexOf.call( address_book_for_autocomplete, "alias", item );
+                        display.push({
+                            label: address_book_for_autocomplete[index].alias,
+                            value: address_book_for_autocomplete[index].address
+                        });
+                    });
+                    response( display );
                 }
             });
         });
