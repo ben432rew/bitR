@@ -98,54 +98,14 @@ var inboxMessages = function(){
         $.material.ripples();
         $('.dropdown-toggle').dropdown();
 
-        var address_book_for_autocomplete = [];
+        var address_book_for_autocomplete;
 
         localDB.getAddressBook().done(function(book){
-            book.forEach(function(element, index, array){
-                address_book_for_autocomplete.push({
-                    value: element.address,                 
-                    label: element.alias
-                })
-            })
+            address_book_for_autocomplete = book
         })
 
 
-// OLD WORKING FUNCTION: 
-
-// IT'S LABEL AND VALUE, NOT ADDRESS AND ALIAS
-
-
-// $( 'input.autoAddress' ).each(function(){
-//     $(this).autocomplete({
-//         source: function( req, response ) {
-//             var wordlist = function(){
-//                 var list = [];
-//                 addressLookup.forEach(function( value ){
-//                     list.push( value.alias );
-//                 });
-//                 return list;
-//             }();
-
-//             var re = $.ui.autocomplete.escapeRegex( req.term );
-//             var matcher = new RegExp( re, "i" );
-//             var results = $.grep( wordlist, function( item,index ){
-//                 return matcher.test( item );
-//             });
-//             var display = []
-//             results.map(function( item ){
-//                 var index = $.scope.inbox.indexOf.call( addressLookup, "alias", item );
-//                 display.push({
-//                     label: addressLookup[index].alias,
-//                     value: addressLookup[index].address
-//                 });
-//             });
-//             response( display );
-//         }
-//     });
-// });
-
-
-
+        // autocomplete, dynamically adds and removes names from a dropdown
         $( 'input.autoAddress' ).each(function(){
 
             $(this).autocomplete({
@@ -164,7 +124,16 @@ var inboxMessages = function(){
                     var results = $.grep( wordlist, function( item,index ){
                         return matcher.test( item );
                     });
-                    response( address_book_for_autocomplete );
+
+                    var display = []
+                    results.map(function( item ){
+                        var index = $.scope.inbox.indexOf.call( address_book_for_autocomplete, "alias", item );
+                        display.push({
+                            label: address_book_for_autocomplete[index].alias,
+                            value: address_book_for_autocomplete[index].address
+                        });
+                    });
+                    response( display );
                 }
             });
         });
