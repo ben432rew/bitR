@@ -98,11 +98,53 @@ var inboxMessages = function(){
         $.material.ripples();
         $('.dropdown-toggle').dropdown();
 
-        var address_book;
+        var address_book_for_autocomplete = [];
 
         localDB.getAddressBook().done(function(book){
-            address_book = book
+            book.forEach(function(element, index, array){
+                address_book_for_autocomplete.push({
+                    value: element.address,                 
+                    label: element.alias
+                })
             })
+        })
+
+
+// OLD WORKING FUNCTION: 
+
+// IT'S LABEL AND VALUE, NOT ADDRESS AND ALIAS
+
+
+// $( 'input.autoAddress' ).each(function(){
+//     $(this).autocomplete({
+//         source: function( req, response ) {
+//             var wordlist = function(){
+//                 var list = [];
+//                 addressLookup.forEach(function( value ){
+//                     list.push( value.alias );
+//                 });
+//                 return list;
+//             }();
+
+//             var re = $.ui.autocomplete.escapeRegex( req.term );
+//             var matcher = new RegExp( re, "i" );
+//             var results = $.grep( wordlist, function( item,index ){
+//                 return matcher.test( item );
+//             });
+//             var display = []
+//             results.map(function( item ){
+//                 var index = $.scope.inbox.indexOf.call( addressLookup, "alias", item );
+//                 display.push({
+//                     label: addressLookup[index].alias,
+//                     value: addressLookup[index].address
+//                 });
+//             });
+//             response( display );
+//         }
+//     });
+// });
+
+
 
         $( 'input.autoAddress' ).each(function(){
 
@@ -122,8 +164,7 @@ var inboxMessages = function(){
                     var results = $.grep( wordlist, function( item,index ){
                         return matcher.test( item );
                     });
-                    console.log(address_book)
-                    response( address_book );
+                    response( address_book_for_autocomplete );
                 }
             });
         });
