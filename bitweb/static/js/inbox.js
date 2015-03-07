@@ -203,19 +203,22 @@ var inboxMessages = function(){
         });
 
         // add new identity to list, select it
-        $( '#create_id_button' ).click(function() {
+        $( '#create_id_form' ).on( 'submit', function( event ) {
+            event.preventDefault();
+            var newIdentity = $( '#identity_name' ).val();
+
             util.apiCall({
                 url: 'create_id',
                 data: {
-                    identity: $( '#identity_name' ).val()
+                    identity: newIdentity
                 },
 
                 callBack:function (data){
                     // error check might not be needed...
                     if ( 'error' in data ){
                     } else {
-                        $.scope.identities.push( { identity: $( '#identity_name' ).val() } );
-                        $.scope.senders.push( { identity: $( '#identity_name' ).val() } );
+                        $.scope.identities.push( { identity: newIdentity } );
+                        $.scope.senders.push( { identity: newIdentity } );
 
                     }
                     $( '#create_id_form' ).trigger('reset');
