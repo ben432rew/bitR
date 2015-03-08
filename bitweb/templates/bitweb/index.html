@@ -12,136 +12,172 @@
 
         <script src="{% static "js/jquery.min.js" %}"></script>
         <script src="{% static "js/mustache.min.js" %}"></script>        
-        <script src="{% static "js/django_ajax.js" %}"></script>
         <script src="{% static "js/bootstrap.min.js" %}"></script>
         <script src="{% static "js/jquery.cookie.js" %}"></script>
         <!-- Material Design for Bootstrap -->
         <script src="{% static "js/material.min.js" %}"></script>
         <script src="{% static "js/ripples.min.js" %}"></script>
+        
+        <script src="{% static "js/django_ajax.js" %}"></script>
         <script src="{% static "js/index.js" %}"></script>
         <style type="text/css">
-            div#land { 
+            /* Should be moved to its own file, index.css */
+            header { 
                 height: 100vh;
-                background: url({%static 'images/phone_lines.jpeg' %}) no-repeat center center fixed; 
-                -webkit-background-size: cover;
-                -moz-background-size: cover;
-                -o-background-size: cover;
+                width: 100vw;
+                background: url({% static 'images/phone_lines.jpeg' %}) center fixed; 
+                position: fixed;
+                z-index: -100;
                 background-size: cover;
+                /*-webkit-background-size: cover;
+                -moz-background-size: cover;
+                -o-background-size: cover;*/
             }
-            #about > div:nth-child(even){
+            main{
+                top: 91vh;
+                width: 100%;
+                padding: 0 10em;
+                position: absolute;
+                background-color: #eee;
+                margin-bottom: 33vh;
+            }
+            selection.well{
+                display: block;
+            }
+            selection.well:nth-child(even){ /* fix this! */
                 text-align: right;
             }
         </style>
     </head>
     <body>
-        <div class="container-fluid" id="land">
-                <div class="row">
-                    <div class="col-md-1" style="margin:.5em;">
-                        <img src="{%static 'images/bitrmail.png' %}" class="img-responsive" alt="bitrmail">
-                    </div>
-
-                    <div class="col-md-3 col-md-offset-7">
-                        <p class="signup">
-                            Already have a BitR account?  <button id="login" class="btn btn-material-blue-grey-500">Login</button>
-                        </p>
-                        <p class="login">
-                            Don't have a BitR account?  <button id="signup" class="btn btn-material-blue-grey-500">Sign up now</button>
-                        </p>
-                    </div>
+        <header class="container-fluid">
+            <nav class="row">
+                <div class="col-md-1" style="margin:.5em;">
+                    <img src="{% static 'images/bitrmail.png' %}" class="img-responsive" alt="bitrmail">
                 </div>
 
-                <div class="row">
-                    <div class="col-md-4 col-md-offset-4" style="margin-top:10%;">
-                        <p>{{ error }} </p>
-                        <form id="signup_form" class="signup form-horizontal">
-                            {% csrf_token %}
-                            
-                            {{ signup|as_bootstrap }}
+                <div class="col-md-3 pull-right">
+                    <p class="signup" style="display:none;">
+                        Already have a BitR account?
+                        <button id="login" class="btn btn-material-blue-grey-500">
+                            Login
+                        </button>
+                    </p>
 
-                            <button type="submit" class="btn btn-material-blue-grey-100 pull-right">
-                                Sign Up
-                            </button>
-                        </form>
+                    <p class="login">
+                        Don't have a BitR account? 
+                        <button id="signup" class="btn btn-material-blue-grey-500">
+                            Sign up now
+                        </button>
+                    </p>
+                </div>
+            </nav>
+            
+            <div class="row">
+                <div class="col-md-4 col-md-offset-4">
+                    <p>{{ error }}</p>
+                    <form id="signup_form" class="signup form-horizontal" style="display:none;">
 
-                        <form id="login_form" class="login form-horizontal">
-                            {% csrf_token %}
+                        {{ signup|as_bootstrap }}
 
-                            {{ login|as_bootstrap }}
+                        <button type="submit" class="btn btn-material-blue-grey-100 pull-right">
+                            Sign Up
+                        </button>
+                    </form>
 
-                            <button type="submit" class="btn btn-material-blue-grey-100 pull-right">
-                                Login
-                            </button>
-                        </form>
+                    <form id="login_form" class="login form-horizontal">
 
-                    </div>
+                        {{ login|as_bootstrap }}
+
+                        <button type="submit" class="btn btn-material-blue-grey-100 pull-right">
+                            Login
+                        </button>
+                    </form>
+
+                </div>
             </div>
-        </div>
-        <br />
-        <div class="container" id="about">
-            <div class="row well">
-                <h3>
-                    What is BitR?
-                </h3>
-                <p>
-                    BitR is a Web portal to a Bitmessage client.
-                </p>
+
+        </header>
+
+        <main class="container-fluid">
+            <div class="container">
+                <h1>
+                    About
+                </h1>
+
+                <selection class="row well">
+                    <h2>
+                        What is BitR?
+                    </h2>
+                    <p>
+                        BitR is a Web portal to a Bitmessage client.
+                    </p>
+                </selection>
+
+                <selection class="row well">
+                    <h2>
+                        Bitmessage?
+                    </h2>
+                    <p>
+                        Bitmessage is an encrypted, anonymizing, decentralized, and trustless kind of email communication.
+                    </p>
+                </selection>
+
+                <selection class="row well">
+                    <h2>
+                        What Does That Even Mean?
+                    </h2>
+                    <p>
+                        There is no email server that stores all the messages. No email server to that can crash, be hacked, monitored, or corrupted.  Everyone who uses the Bitmessage client stores all of the messages of the Bitmessage network.
+                    </p>
+                </selection>
+
+                <selection class="row well">
+                    <h2>
+                        How?
+                    </h2>
+                    <p>
+                        Bitmessage uses blockchain technology.  This means that all the computers running Bitmessage are connected to each other in a big network, and everybody has a copy of the message blockchain.  Everytime someone wants to send a message, they send it out to all of the computers they're connected to in the network, and everyone adds the message to their blockchain.  All of the computers are constantly checking with their neighbors for new messages.
+                    </p>
+                </selection>
+
+                <selection class="row well">
+                    <h2>
+                        Can't someone just read everyone else's messages then?
+                    </h2>
+                    <p>
+                        All of the messages are asymmetrically encrypted, even the headers, so noone can read the messages, or even tell who they are for.
+                    </p>
+                </selection>
+
+                <selection class="row well">
+                    <h2>
+                        So how do you receive a message then if you can't even tell who the messages are for?
+                    </h2>
+                    <p>
+                        The Bitmessage client on your computer tries to unencrypt <i>every</i> new message that gets added to the blockchain, and if it does unencrypt it, that means it was encrypted with your public key, so it was meant for you!
+                    </p>
+                </selection>
+
+                <selection class="row well">
+                    <h2>
+                        So if I create an account on BitR then my communications are fully end-to-end encrypted, anonymous and secure?
+                    </h2>
+                    <p>
+                        No, this is just a beta version of the website.  Right now, your emails are only encrypted by ssl between your browser and our server, where they are unencrypted then encrypted again with Bitmessage's encryption.  So it's not end-to-end encrypted right now, but we're working on that.  Our server isn't totally secure quite yet, so I wouldn't trust it with your darkest secrets right now ;)
+                    </p>
+                </selection>
+
+                <selection class="row well">
+                    <h2>
+                        What are these "Chans"?
+                    </h2>
+                    <p>
+                        A chan is a 'channel' where you can post things, sort of like a blog, but you can post anonymously.  The 'To' and 'From' will both be from the chan's address.  To sign up to see what is being posted in a chan, you need both the chan label/passphrase and the address.
+                    </p>
+                </selection>
+
             </div>
-            <div class="row well">
-                <h3>
-                    Bitmessage?
-                </h3>
-                <p>
-                    Bitmessage is an encrypted, anonymizing, decentralized, and trustless kind of email communication.
-                </p>
-            </div>
-            <div class="row well">
-                <h3>
-                    What Does That Even Mean?
-                </h3>
-                <p>
-                    There is no email server that stores all the messages. No email server to that can crash, be hacked, monitored, or corrupted.  Everyone who uses the Bitmessage client stores all of the messages of the Bitmessage network.
-                </p>
-            </div>
-            <div class="row well">
-                <h3>
-                    How?
-                </h3>
-                <p>
-                    Bitmessage uses blockchain technology.  This means that all the computers running Bitmessage are connected to each other in a big network, and everybody has a copy of the message blockchain.  Everytime someone wants to send a message, they send it out to all of the computers they're connected to in the network, and everyone adds the message to their blockchain.  All of the computers are constantly checking with their neighbors for new messages.
-                </p>
-            </div>
-            <div class="row well">
-                <h3>
-                    Can't someone just read everyone else's messages then?
-                </h3>
-                <p>
-                    All of the messages are asymmetrically encrypted, even the headers, so noone can read the messages, or even tell who they are for.
-                </p>
-            </div>
-            <div class="row well">
-                <h3>
-                    So how do you receive a message then if you can't even tell who the messages are for?
-                </h3>
-                <p>
-                    The Bitmessage client on your computer tries to unencrypt <i>every</i> new message that gets added to the blockchain, and if it does unencrypt it, that means it was encrypted with your public key, so it was meant for you!
-                </p>
-            </div>
-            <div class="row well">
-                <h3>
-                    So if I create an account on BitR then my communications are fully end-to-end encrypted, anonymous and secure?
-                </h3>
-                <p>
-                    No, this is just a beta version of the website.  Right now, your emails are only encrypted by ssl between your browser and our server, where they are unencrypted then encrypted again with Bitmessage's encryption.  So it's not end-to-end encrypted right now, but we're working on that.  Our server isn't totally secure quite yet, so I wouldn't trust it with your darkest secrets right now ;)
-                </p>
-            </div>
-            <div class="row well">
-                <h3>
-                    What are these "Chans"?
-                </h3>
-                <p>
-                    A chan is a 'channel' where you can post things, sort of like a blog, but you can post anonymously.  The 'To' and 'From' will both be from the chan's address.  To sign up to see what is being posted in a chan, you need both the chan label/passphrase and the address.
-                </p>
-            </div>
-        </div>
+        </main>
     </body>
 </html>
