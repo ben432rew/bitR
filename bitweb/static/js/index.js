@@ -18,13 +18,13 @@
         
     // code from website : http://validate.718it.biz/js/validate.js
     var passwordStrength = function( value ){
-                //simple password check must have 1 number 1 up case
-                var reg = /^(?=[^\d_].*?\d)\w(\w|[!@#$%]){1,256}/;
-                if ( !reg.test( value ) ) {
-                    return [false,'Password is not strong enough'];
-                }
-                return [true,""]
-            }
+        //simple password check must have 1 number 1 up case
+        var reg = /^(?=[^\d_].*?\d)\w(\w|[!@#$%]){1,256}/;
+        if ( !reg.test( value ) ) {
+            return [false,'Password is not strong enough'];
+        }
+        return [true,""];
+    }
     var passwordMatch = function(pass1,pass2){
         if (pass1 !== pass2){
             return [false,"Password does not match"];
