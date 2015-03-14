@@ -11,7 +11,10 @@
         <link media="all" type="text/css" rel="stylesheet" href="{% static "css/ripples.css" %}" />
 
         <script src="{% static "js/jquery.min.js" %}"></script>
-        <script src="{% static "js/mustache.min.js" %}"></script>        
+        <script src="{% static "js/jquery-ui.js" %}" defer></script>
+        <script src="{% static "js/jquery-scrollspy.js" %}" defer></script>
+        
+        <!-- <script src="{% static "js/mustache.min.js" %}"></script> -->       
         <script src="{% static "js/bootstrap.min.js" %}"></script>
         <script src="{% static "js/jquery.cookie.js" %}"></script>
         <!-- Material Design for Bootstrap -->
@@ -22,39 +25,49 @@
         <script src="{% static "js/index.js" %}"></script>
         <style type="text/css">
             /* Should be moved to its own file, index.css */
-            header { 
-                height: 100vh;
-                width: 100vw;
-                background: url({% static 'images/phone_lines.jpeg' %}) center fixed; 
-                position: fixed;
-                z-index: -100;
+            html {
+                overflow: -moz-scrollbars-vertical; 
+                overflow-y: scroll;
+                background: url( {% static 'images/phone_lines.jpeg' %} ) center fixed; 
                 background-size: cover;
                 /*-webkit-background-size: cover;
                 -moz-background-size: cover;
                 -o-background-size: cover;*/
             }
-            main{
+
+            header { 
+                height: 100vh;
+                width: 100vw;
+                position: fixed;
+                z-index: -100;
+            }
+
+            main {
                 top: 91vh;
                 width: 100%;
                 padding: 0 10em;
                 position: absolute;
                 background-color: #eee;
                 margin-bottom: 33vh;
+                opacity: .3;
             }
-            selection.well{
+
+            selection.well {
                 display: block;
             }
-            selection.well:nth-child(even){ /* fix this! */
+
+            selection.well:nth-child(even) {
                 text-align: right;
             }
+
         </style>
     </head>
     <body>
         <header class="container-fluid">
             <nav class="row">
-                <div class="col-md-1" style="margin:.5em;">
+                <!-- <div class="col-md-1" style="margin:.5em;">
                     <img src="{% static 'images/bitrmail.png' %}" class="img-responsive" alt="bitrmail">
-                </div>
+                </div> -->
 
                 <div class="col-md-3 pull-right">
                     <p class="signup" style="display:none;">
@@ -72,8 +85,13 @@
                     </p>
                 </div>
             </nav>
-            
             <div class="row">
+                <div class="col-md-4 col-md-offset-4" style="text-align: center; height: 300px;">
+                    <img id="lg_logo" src="{% static 'images/bitrmail.png' %}" class="img-responsive" alt="bitrmail" style="display:none">
+                </div>
+            </div>
+
+            <div id="forms" class="row" style="display:none">
                 <div class="col-md-4 col-md-offset-4">
                     <p>{{ error }}</p>
                     <form id="signup_form" class="signup form-horizontal" style="display:none;">
@@ -99,7 +117,7 @@
 
         </header>
 
-        <main class="container-fluid">
+        <main class="container-fluid" style="display:none;">
             <div class="container">
                 <h1>
                     About
