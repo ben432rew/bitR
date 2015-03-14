@@ -34,6 +34,28 @@
 
     $(document).ready(function(){
         $.material.ripples();
+
+        /*$( 'header' ).scrollspy({
+            onEnter: function(){
+                console.log( 'header enter', this, arguments);
+            },
+            onLeave: function(){
+                console.log( 'header leave', this, arguments);
+            }
+        });*/
+
+        $( $( 'selection.well' )[6] ).scrollspy({
+            onEnter: function( element ){
+                $('main').fadeTo( 'slow', .6 );
+            }
+        });
+
+        $( $( 'selection.well' )[7] ).scrollspy({
+            onEnter: function( element ){
+                $('main').fadeTo( 'slow', 1 );
+                //$('#forms').hide();
+            }
+        });
         
         $('#signup').on('click', function(e) {
             $( ".login" ).hide();
@@ -45,22 +67,30 @@
             $( ".login" ).show();
         });
 
+        $( '#lg_logo' ).show( 1500, function(){
+            $( '#forms' ).slideDown( 1000, function(){
+                $( 'main' ).show( 'slide', { direction: 'left' }, 1000 )
+            } );
+        });
+
         $('#signup_form').on( 'submit', function(event) {
             event.preventDefault();
             var pass1 = $('#id_password1').val();
             var pass2 = $('#id_password2').val();
             var match = passwordMatch(pass1,pass2);
             var strength = passwordStrength(pass1);
-            if(match[0]==true && strength[0]==true){
-                authorize(event, 'signup', this)
+            if( match[0]==true && strength[0]==true ){
+                authorize( event, 'signup', this );
             }else{
-                alert(match[1] +" \n" +strength[1]);
+                alert(match[1] +" \n" +strength[1] );
             }
         });
 
-        $('#login_form').on( 'submit', function(event){
-            authorize(event, 'login', this);
+        $('#login_form').on( 'submit', function( event ){
+            authorize( event, 'login', this );
         });
+
+
         
     });
 
