@@ -35,50 +35,26 @@
     $(document).ready(function(){
         $.material.ripples();
 
-        /*$( 'header' ).scrollspy({
-            onEnter: function(){
-                console.log( 'header enter', this, arguments);
-            },
-            onLeave: function(){
-                console.log( 'header leave', this, arguments);
-            }
-        });*/
-
-        /*$( $( 'selection.well' )[6] ).scrollspy({
-            onEnter: function( element ){
-                $('main').fadeTo( 'slow', .6 );
-            }
-        });
-
-        $( $( 'selection.well' )[7] ).scrollspy({
-            onEnter: function( element ){
-                $('main').fadeTo( 'slow', 1 );
-                //$('#forms').hide();
-            }
-        });*/
-
-        var current_scroll = .3;
-        $( window ).scroll( function(){
-            var c = window.scrollY/(window.innerHeight/2);
+        $( window ).on( 'scroll', function(){
+            var scrollPercent = window.scrollY / ( window.innerHeight / 1.25 );
 
             var $main = $( 'main' );
             var $header = $( 'header' );
 
-            
-                // $header.fadeTo( 1, 1 );
-            if( c < 1 ){
-                if( c < .3){
+            if( scrollPercent < 1 ){
+                if( scrollPercent < .3){
                     $main.fadeTo( 1, .3 );
                 } else{
-                    $main.fadeTo( 1, c );
+                    $main.fadeTo( 1, scrollPercent );
                 }
-                $header.fadeTo( 1, 1-c );
+                $header.fadeTo( 1, 1-scrollPercent );
             }else{
+                $header.fadeTo( 1, 0 );
                 $main.fadeTo( 1, 1 );
             }
 
         } );
-        
+
         $('#signup').on('click', function(e) {
             $( ".login" ).hide();
             $( ".signup" ).show();
@@ -89,9 +65,9 @@
             $( ".login" ).show();
         });
 
-        $( '#lg_logo' ).show( 1500, function(){
-            $( '#forms' ).slideDown( 1000, function(){
-                $( 'main' ).show( 'slide', { direction: 'left' }, 1000 )
+        $( '#lg_logo' ).show( 1000 , function(){
+            $( '#forms' ).slideDown( 500, function(){
+                $( 'main' ).show( 'slide', { direction: 'left' }, 1000 );
             } );
         });
 
