@@ -1,16 +1,16 @@
 (function( $ ){
 'use strict';
 
-    var authorize = function(event, string, form) {
+    var authorize = function( event, action, form ) {
         event.preventDefault();
         var loginInfo = $( form ).serializeObject();
-        $.post('/bmapi/' + string, JSON.stringify(loginInfo), function (data){
+        $.post( '/bmapi/' + action, JSON.stringify(loginInfo), function (data){
             if (data['token']) {
                 $.cookie( 'token', data['token'], { expires: 1 } );
                 window.location.replace('/inbox');
             }
             else {
-                alert('Sorry, that ' + string + ' information is not valid');
+                alert('Sorry, that ' + action + ' information is not valid');
                 form.reset();
             }
         })
@@ -21,15 +21,15 @@
         //simple password check must have 1 number 1 up case
         var reg = /^(?=[^\d_].*?\d)\w(\w|[!@#$%]){1,256}/;
         if ( !reg.test( value ) ) {
-            return [false,'Password is not strong enough'];
+            return [ false,'Password is not strong enough' ];
         }
-        return [true,""];
+        return [ true,"" ];
     }
-    var passwordMatch = function(pass1,pass2){
-        if (pass1 !== pass2){
-            return [false,"Password does not match"];
+    var passwordMatch = function( pass1,pass2 ){
+        if ( pass1 !== pass2 ){
+            return [ false, "Password does not match" ];
         }
-        return [true,""];
+        return [ true,"" ];
     } 
 
     $(document).ready(function(){
@@ -44,7 +44,7 @@
             }
         });*/
 
-        $( $( 'selection.well' )[6] ).scrollspy({
+        /*$( $( 'selection.well' )[6] ).scrollspy({
             onEnter: function( element ){
                 $('main').fadeTo( 'slow', .6 );
             }
@@ -55,7 +55,29 @@
                 $('main').fadeTo( 'slow', 1 );
                 //$('#forms').hide();
             }
-        });
+        });*/
+
+        var current_scroll = .3;
+        $( window ).scroll( function(){
+            var c = window.scrollY/(window.innerHeight/2);
+
+            var $main = $( 'main' );
+            var $header = $( 'header' );
+
+            
+                // $header.fadeTo( 1, 1 );
+            if( c < 1 ){
+                if( c < .3){
+                    $main.fadeTo( 1, .3 );
+                } else{
+                    $main.fadeTo( 1, c );
+                }
+                $header.fadeTo( 1, 1-c );
+            }else{
+                $main.fadeTo( 1, 1 );
+            }
+
+        } );
         
         $('#signup').on('click', function(e) {
             $( ".login" ).hide();
@@ -90,8 +112,6 @@
             authorize( event, 'login', this );
         });
 
-
-        
     });
 
 })( jQuery );

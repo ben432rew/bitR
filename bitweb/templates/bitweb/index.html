@@ -10,19 +10,19 @@
         <link media="all" type="text/css" rel="stylesheet" href="{% static "css/material-wfont.min.css" %}" />
         <link media="all" type="text/css" rel="stylesheet" href="{% static "css/ripples.css" %}" />
 
-        <script src="{% static "js/jquery.min.js" %}"></script>
+        <script src="{% static "js/jquery.min.js" %}" defer></script>
         <script src="{% static "js/jquery-ui.js" %}" defer></script>
         <script src="{% static "js/jquery-scrollspy.js" %}" defer></script>
         
         <!-- <script src="{% static "js/mustache.min.js" %}"></script> -->       
-        <script src="{% static "js/bootstrap.min.js" %}"></script>
-        <script src="{% static "js/jquery.cookie.js" %}"></script>
+        <script src="{% static "js/bootstrap.min.js" %}" defer></script>
+        <script src="{% static "js/jquery.cookie.js" %}" defer></script>
         <!-- Material Design for Bootstrap -->
-        <script src="{% static "js/material.min.js" %}"></script>
-        <script src="{% static "js/ripples.min.js" %}"></script>
+        <script src="{% static "js/material.min.js" %}" defer></script>
+        <script src="{% static "js/ripples.min.js" %}" defer></script>
         
-        <script src="{% static "js/django_ajax.js" %}"></script>
-        <script src="{% static "js/index.js" %}"></script>
+        <script src="{% static "js/django_ajax.js" %}" defer></script>
+        <script src="{% static "js/index.js" %}" defer></script>
         <style type="text/css">
             /* Should be moved to its own file, index.css */
             html {
@@ -48,7 +48,7 @@
                 padding: 0 10em;
                 position: absolute;
                 background-color: #eee;
-                margin-bottom: 33vh;
+                margin-bottom: 23vh;
                 opacity: .3;
             }
 
