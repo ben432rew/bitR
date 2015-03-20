@@ -1,16 +1,16 @@
 (function( $ ){
 'use strict';
 
-    var authorize = function(event, string, form) {
+    var authorize = function( event, action, form ) {
         event.preventDefault();
         var loginInfo = $( form ).serializeObject();
-        $.post('/bmapi/' + string, JSON.stringify(loginInfo), function (data){
+        $.post( '/bmapi/' + action, JSON.stringify(loginInfo), function (data){
             if (data['token']) {
                 $.cookie( 'token', data['token'], { expires: 1 } );
                 window.location.replace('/inbox');
             }
             else {
-                alert('Sorry, that ' + string + ' information is not valid');
+                alert('Sorry, that ' + action + ' information is not valid');
                 form.reset();
             }
         })
@@ -21,42 +21,40 @@
         //simple password check must have 1 number 1 up case
         var reg = /^(?=[^\d_].*?\d)\w(\w|[!@#$%]){1,256}/;
         if ( !reg.test( value ) ) {
-            return [false,'Password is not strong enough'];
+            return [ false,'Password is not strong enough' ];
         }
-        return [true,""];
+        return [ true,"" ];
     }
-    var passwordMatch = function(pass1,pass2){
-        if (pass1 !== pass2){
-            return [false,"Password does not match"];
+    var passwordMatch = function( pass1,pass2 ){
+        if ( pass1 !== pass2 ){
+            return [ false, "Password does not match" ];
         }
-        return [true,""];
+        return [ true,"" ];
     } 
 
     $(document).ready(function(){
         $.material.ripples();
 
-        /*$( 'header' ).scrollspy({
-            onEnter: function(){
-                console.log( 'header enter', this, arguments);
-            },
-            onLeave: function(){
-                console.log( 'header leave', this, arguments);
-            }
-        });*/
+        $( window ).on( 'scroll', function(){
+            var scrollPercent = window.scrollY / ( window.innerHeight / 1.25 );
 
-        $( $( 'selection.well' )[6] ).scrollspy({
-            onEnter: function( element ){
-                $('main').fadeTo( 'slow', .6 );
-            }
-        });
+            var $main = $( 'main' );
+            var $header = $( 'header' );
 
-        $( $( 'selection.well' )[7] ).scrollspy({
-            onEnter: function( element ){
-                $('main').fadeTo( 'slow', 1 );
-                //$('#forms').hide();
+            if( scrollPercent < 1 ){
+                if( scrollPercent < .3){
+                    $main.fadeTo( 1, .3 );
+                } else{
+                    $main.fadeTo( 1, scrollPercent );
+                }
+                $header.fadeTo( 1, 1-scrollPercent );
+            }else{
+                $header.fadeTo( 1, 0 );
+                $main.fadeTo( 1, 1 );
             }
-        });
-        
+
+        } );
+
         $('#signup').on('click', function(e) {
             $( ".login" ).hide();
             $( ".signup" ).show();
@@ -67,9 +65,9 @@
             $( ".login" ).show();
         });
 
-        $( '#lg_logo' ).show( 1500, function(){
-            $( '#forms' ).slideDown( 1000, function(){
-                $( 'main' ).show( 'slide', { direction: 'left' }, 1000 )
+        $( '#lg_logo' ).show( 1000 , function(){
+            $( '#forms' ).slideDown( 500, function(){
+                $( 'main' ).show( 'slide', { direction: 'left' }, 1000 );
             } );
         });
 
@@ -90,8 +88,6 @@
             authorize( event, 'login', this );
         });
 
-
-        
     });
 
 })( jQuery );
