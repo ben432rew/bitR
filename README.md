@@ -63,7 +63,7 @@ to create the function and trigger that clears out old token in database
 type i to enter insert mode
 
 copy and paste this:
-``` 
+```sql
 CREATE FUNCTION delete_old_token() RETURNS trigger
         LANGUAGE plpgsql
         as $$
